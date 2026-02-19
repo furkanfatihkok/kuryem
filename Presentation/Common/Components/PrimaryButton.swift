@@ -27,11 +27,11 @@ final class PrimaryButton: UIButton {
         setTitle(title, for: .normal)
         setTitleColor(AppColor.buttonText, for: .normal)
         setTitleColor(AppColor.buttonText.withAlphaComponent(0.6), for: .disabled)
-        titleLabel?.font = UIFont.systemFont(ofSize: Dimens.fontSizeMedium, weight: .semibold)
+        titleLabel?.font = UIFont.systemFont(ofSize: AppLayout.fontSizeMedium, weight: .semibold)
         
         backgroundColor = AppColor.buttonPrimary
         originalBackgroundColor = AppColor.buttonPrimary
-        layer.cornerRadius = Dimens.buttonCornerRadius
+        layer.cornerRadius = AppLayout.buttonCornerRadius
         
         translatesAutoresizingMaskIntoConstraints = false
         
@@ -63,7 +63,6 @@ final class PrimaryButton: UIButton {
     }
     
     // MARK: - Public Method
-    
     func setLoading(_ isLoading: Bool) {
         isEnabled = !isLoading
         if isLoading {

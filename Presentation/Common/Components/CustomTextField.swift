@@ -7,12 +7,12 @@
 
 import UIKit
 
-final class CustomTextField: UITextField {
+final class CustomTextField: UIView {
     
     // MARK: - Properties
     private let textField: UITextField = {
         let textField = UITextField()
-        textField.font = UIFont.systemFont(ofSize: Dimens.fontSizeMedium)
+        textField.font = UIFont.systemFont(ofSize: AppLayout.fontSizeMedium)
         textField.textColor = AppColor.textPrimary
         textField.translatesAutoresizingMaskIntoConstraints = false
         return textField
@@ -21,16 +21,16 @@ final class CustomTextField: UITextField {
     private let containerView : UIView = {
        let view = UIView()
         view.backgroundColor = AppColor.background
-        view.layer.borderWidth = Dimens.textFieldBorderWidth
+        view.layer.borderWidth = AppLayout.textFieldBorderWidth
         view.layer.borderColor = AppColor.border.cgColor
-        view.layer.cornerRadius = Dimens.textFieldCornerRadius
+        view.layer.cornerRadius = AppLayout.textFieldCornerRadius
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
     
     private let prefixLabel: UILabel = {
         let label = UILabel()
-        label.font = UIFont.systemFont(ofSize: Dimens.fontSizeMedium)
+        label.font = UIFont.systemFont(ofSize: AppLayout.fontSizeMedium)
         label.textColor = AppColor.textPrimary
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
@@ -106,14 +106,14 @@ final class CustomTextField: UITextField {
             containerView.leadingAnchor.constraint(equalTo: leadingAnchor),
             containerView.trailingAnchor.constraint(equalTo: trailingAnchor),
             containerView.bottomAnchor.constraint(equalTo: bottomAnchor),
-            containerView.heightAnchor.constraint(equalToConstant: Dimens.textFieldHeight),
+            containerView.heightAnchor.constraint(equalToConstant: AppLayout.textFieldHeight),
             
-            prefixLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: Dimens.paddingHorizontal),
+            prefixLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: AppLayout.paddingHorizontal),
             prefixLabel.centerYAnchor.constraint(equalTo: containerView.centerYAnchor),
             prefixLabelWidthConstraint!,
             
-            textField.leadingAnchor.constraint(equalTo: prefixLabel.trailingAnchor, constant: Dimens.spacingSmall),
-            textField.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -Dimens.paddingHorizontal),
+            textField.leadingAnchor.constraint(equalTo: prefixLabel.trailingAnchor, constant: AppLayout.spacingSmall),
+            textField.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -AppLayout.paddingHorizontal),
             textField.centerYAnchor.constraint(equalTo: containerView.centerYAnchor)
         ])
         
