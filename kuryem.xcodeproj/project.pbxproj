@@ -56,6 +56,11 @@
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
+		020886B32F472AA60054E125 /* Core */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = Core;
+			sourceTree = "<group>";
+		};
 		0292B9732F46FD7D0095BB50 /* kuryem */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
@@ -137,6 +142,7 @@
 				0292BA072F47138F0095BB50 /* App */,
 				0292BA092F4713D90095BB50 /* Domain */,
 				0292BA0A2F4713E30095BB50 /* Data */,
+				020886B32F472AA60054E125 /* Core */,
 				0292BA0B2F4713EC0095BB50 /* Presentation */,
 				0292BA2E2F47155C0095BB50 /* Resources */,
 				0292B98A2F46FD7E0095BB50 /* kuryemTests */,
@@ -171,6 +177,7 @@
 			dependencies = (
 			);
 			fileSystemSynchronizedGroups = (
+				020886B32F472AA60054E125 /* Core */,
 				0292B9732F46FD7D0095BB50 /* kuryem */,
 				0292BA072F47138F0095BB50 /* App */,
 				0292BA092F4713D90095BB50 /* Domain */,
@@ -258,6 +265,7 @@
 			knownRegions = (
 				en,
 				Base,
+				tr,
 			);
 			mainGroup = 0292B9682F46FD7D0095BB50;
 			minimizedProjectReferenceProxies = 1;
@@ -465,6 +473,7 @@
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
 			name = Debug;
@@ -522,6 +531,7 @@
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;
 				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_EMIT_LOC_STRINGS = YES;
 				VALIDATE_PRODUCT = YES;
 			};
 			name = Release;
