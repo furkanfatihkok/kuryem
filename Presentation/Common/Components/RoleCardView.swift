@@ -22,9 +22,9 @@ final class RoleCardView: UIView {
     private let containerView: UIView = {
         let view = UIView()
         view.backgroundColor = AppColor.cardBackground
-        view.layer.borderWidth = Dimens.borderWidthMedium
+        view.layer.borderWidth = AppLayout.borderWidthMedium
         view.layer.borderColor = AppColor.border.cgColor
-        view.layer.cornerRadius = Dimens.cornerRadiusLarge
+        view.layer.cornerRadius = AppLayout.cornerRadiusLarge
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
@@ -38,7 +38,7 @@ final class RoleCardView: UIView {
     
     private let titleLabel: UILabel = {
         let label = UILabel()
-        label.font = UIFont.systemFont(ofSize: Dimens.fontSizeLarge, weight: .semibold)
+        label.font = UIFont.systemFont(ofSize: AppLayout.fontSizeLarge, weight: .semibold)
         label.textColor = AppColor.textPrimary
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
@@ -46,7 +46,7 @@ final class RoleCardView: UIView {
     
     private let descriptionLabel: UILabel = {
         let label = UILabel()
-        label.font = UIFont.systemFont(ofSize: Dimens.fontSizeSmall)
+        label.font = UIFont.systemFont(ofSize: AppLayout.fontSizeSmall)
         label.textColor = AppColor.textSecondary
         label.numberOfLines = 0
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -90,24 +90,24 @@ final class RoleCardView: UIView {
             containerView.trailingAnchor.constraint(equalTo: trailingAnchor),
             containerView.bottomAnchor.constraint(equalTo: bottomAnchor),
             
-            iconImageView.topAnchor.constraint(equalTo: containerView.topAnchor, constant: Dimens.spacingLarge),
-            iconImageView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: Dimens.spacingLarge),
+            iconImageView.topAnchor.constraint(equalTo: containerView.topAnchor, constant: AppLayout.spacingLarge),
+            iconImageView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: AppLayout.spacingLarge),
             iconImageView.widthAnchor.constraint(equalToConstant: 48),
             iconImageView.heightAnchor.constraint(equalToConstant: 48),
             
-            checkmarkImageView.topAnchor.constraint(equalTo: containerView.topAnchor, constant: Dimens.spacingMedium),
-            checkmarkImageView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -Dimens.spacingMedium),
-            checkmarkImageView.widthAnchor.constraint(equalToConstant: Dimens.iconMedium),
-            checkmarkImageView.heightAnchor.constraint(equalToConstant: Dimens.iconMedium),
+            checkmarkImageView.topAnchor.constraint(equalTo: containerView.topAnchor, constant: AppLayout.spacingMedium),
+            checkmarkImageView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -AppLayout.spacingMedium),
+            checkmarkImageView.widthAnchor.constraint(equalToConstant: AppLayout.iconMedium),
+            checkmarkImageView.heightAnchor.constraint(equalToConstant: AppLayout.iconMedium),
             
-            titleLabel.topAnchor.constraint(equalTo: iconImageView.bottomAnchor, constant: Dimens.spacingMedium),
-            titleLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: Dimens.spacingLarge),
-            titleLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -Dimens.spacingLarge),
+            titleLabel.topAnchor.constraint(equalTo: iconImageView.bottomAnchor, constant: AppLayout.spacingMedium),
+            titleLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: AppLayout.spacingLarge),
+            titleLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -AppLayout.spacingLarge),
             
-            descriptionLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: Dimens.spacingSmall),
-            descriptionLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: Dimens.spacingLarge),
-            descriptionLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -Dimens.spacingLarge),
-            descriptionLabel.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -Dimens.spacingLarge)
+            descriptionLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: AppLayout.spacingSmall),
+            descriptionLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: AppLayout.spacingLarge),
+            descriptionLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -AppLayout.spacingLarge),
+            descriptionLabel.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -AppLayout.spacingLarge)
         ])
         
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(cardTapped))
@@ -131,7 +131,7 @@ final class RoleCardView: UIView {
         
         UIView.animate(withDuration: 0.2) {
             self.containerView.layer.borderColor = selected ? AppColor.primary.cgColor : AppColor.border.cgColor
-            self.containerView.layer.borderWidth = selected ? Dimens.borderWidthMedium : Dimens.borderWidthThin
+            self.containerView.layer.borderWidth = selected ? AppLayout.borderWidthMedium : AppLayout.borderWidthThin
             self.checkmarkImageView.isHidden = !selected
         }
     }

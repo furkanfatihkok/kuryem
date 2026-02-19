@@ -1,5 +1,5 @@
 //
-//  Dimens.swift
+//  AppLayout.swift
 //  kuryem
 //
 //  Created by FFK on 19.02.2026.
@@ -7,7 +7,7 @@
 
 import UIKit
 
-struct Dimens {
+struct AppLayout {
     // MARK: - Spacing
     static let spacingXSmall: CGFloat = 4
     static let spacingSmall: CGFloat = 8
