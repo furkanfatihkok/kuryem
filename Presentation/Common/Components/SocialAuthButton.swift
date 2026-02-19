@@ -16,9 +16,9 @@ final class SocialAuthButton: UIButton {
         var icon: UIImage? {
             switch self {
             case .google:
-                return UIImage(systemName: "g.circle.fill")
+                return UIImage(systemName: AppIcons.google)
             case .apple:
-                return UIImage(systemName: "apple.logo")
+                return UIImage(systemName: AppIcons.apple)
             }
         }
         
@@ -60,7 +60,7 @@ final class SocialAuthButton: UIButton {
         var configuration = UIButton.Configuration.filled()
         configuration.title = title
         configuration.image = authType.icon
-        configuration.imagePadding = Dimens.spacingSmall
+        configuration.imagePadding = AppLayout.spacingSmall
         configuration.imagePlacement = .leading
         configuration.baseBackgroundColor = authType.backgroundColor
         configuration.baseForegroundColor = authType.textColor
@@ -68,9 +68,9 @@ final class SocialAuthButton: UIButton {
         
         self.configuration = configuration
         
-        layer.borderWidth = authType == .google ? Dimens.borderWidthThin : 0
+        layer.borderWidth = authType == .google ? AppLayout.borderWidthThin : 0
         layer.borderColor = AppColor.border.cgColor
-        layer.cornerRadius = Dimens.buttonCornerRadius
+        layer.cornerRadius = AppLayout.buttonCornerRadius
         
         translatesAutoresizingMaskIntoConstraints = false
         

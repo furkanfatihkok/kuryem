@@ -61,6 +61,11 @@
 			path = Core;
 			sourceTree = "<group>";
 		};
+		020887612F474DEA0054E125 /* Extensions */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = Extensions;
+			sourceTree = "<group>";
+		};
 		0292B9732F46FD7D0095BB50 /* kuryem */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
@@ -140,6 +145,7 @@
 			children = (
 				0292B9732F46FD7D0095BB50 /* kuryem */,
 				0292BA072F47138F0095BB50 /* App */,
+				020887612F474DEA0054E125 /* Extensions */,
 				0292BA092F4713D90095BB50 /* Domain */,
 				0292BA0A2F4713E30095BB50 /* Data */,
 				020886B32F472AA60054E125 /* Core */,
@@ -178,6 +184,7 @@
 			);
 			fileSystemSynchronizedGroups = (
 				020886B32F472AA60054E125 /* Core */,
+				020887612F474DEA0054E125 /* Extensions */,
 				0292B9732F46FD7D0095BB50 /* kuryem */,
 				0292BA072F47138F0095BB50 /* App */,
 				0292BA092F4713D90095BB50 /* Domain */,
