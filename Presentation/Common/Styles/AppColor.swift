@@ -7,7 +7,7 @@
 
 import UIKit
 
-struct AppColors {
+struct AppColor {
     // MARK: - Primary Colors
     static let primary = UIColor(hex: "#FDB913")
     static let primaryDark = UIColor(hex: "#F5A200")
