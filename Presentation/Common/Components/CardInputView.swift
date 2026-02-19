@@ -8,11 +8,11 @@
 import UIKit
 
 protocol CodeInputViewDelegate: AnyObject {
-    func codeInputView(_ view: CodeInputView, didEnterCode code: String)
-    func codeInputView(_ view: CodeInputView, didChangeCode code: String)
+    func codeInputView(_ view: CardInputView, didEnterCode code: String)
+    func codeInputView(_ view: CardInputView, didChangeCode code: String)
 }
 
-final class CodeInputView: UIView {
+final class CardInputView: UIView {
     
     // MARK: - Properties
     weak var delegate: CodeInputViewDelegate?
@@ -25,7 +25,7 @@ final class CodeInputView: UIView {
         let stack = UIStackView()
         stack.axis = .horizontal
         stack.distribution = .fillEqually
-        stack.spacing = Dimens.codeInputSpacing
+        stack.spacing = AppLayout.codeInputSpacing
         stack.translatesAutoresizingMaskIntoConstraints = false
         return stack
     }()
@@ -64,7 +64,7 @@ final class CodeInputView: UIView {
             stackView.leadingAnchor.constraint(equalTo: leadingAnchor),
             stackView.trailingAnchor.constraint(equalTo: trailingAnchor),
             stackView.bottomAnchor.constraint(equalTo: bottomAnchor),
-            stackView.heightAnchor.constraint(equalToConstant: Dimens.codeInputBoxSize)
+            stackView.heightAnchor.constraint(equalToConstant: AppLayout.codeInputBoxSize)
         ])
         
         for _ in 0..<numberOfDigits {
@@ -82,17 +82,17 @@ final class CodeInputView: UIView {
     private func createDigitLabel() -> UILabel {
         let label = UILabel()
         label.textAlignment = .center
-        label.font = UIFont.systemFont(ofSize: Dimens.fontSizeXLarge, weight: .medium)
+        label.font = UIFont.systemFont(ofSize: AppLayout.fontSizeXLarge, weight: .medium)
         label.textColor = AppColor.textPrimary
         label.backgroundColor = AppColor.background
-        label.layer.borderWidth = Dimens.borderWidthMedium
+        label.layer.borderWidth = AppLayout.borderWidthMedium
         label.layer.borderColor = AppColor.border.cgColor
-        label.layer.cornerRadius = Dimens.cornerRadiusMedium
+        label.layer.cornerRadius = AppLayout.cornerRadiusMedium
         label.translatesAutoresizingMaskIntoConstraints = false
         
         NSLayoutConstraint.activate([
-            label.widthAnchor.constraint(equalToConstant: Dimens.codeInputBoxSize),
-            label.heightAnchor.constraint(equalToConstant: Dimens.codeInputBoxSize)
+            label.widthAnchor.constraint(equalToConstant: AppLayout.codeInputBoxSize),
+            label.heightAnchor.constraint(equalToConstant: AppLayout.codeInputBoxSize)
         ])
         
         return label
@@ -147,7 +147,7 @@ final class CodeInputView: UIView {
 }
 
 // MARK: - UITextFieldDelegate
-extension CodeInputView: UITextFieldDelegate {
+extension CardInputView: UITextFieldDelegate {
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
         let currentText = textField.text ?? ""
         guard let stringRange = Range(range, in: currentText) else { return false }
