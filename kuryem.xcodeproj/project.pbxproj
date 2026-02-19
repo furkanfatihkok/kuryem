@@ -37,6 +37,22 @@
 			);
 			target = 0292B9702F46FD7D0095BB50 /* kuryem */;
 		};
+		0292BA272F4714C70095BB50 /* Exceptions for "kuryemUITests" folder in "kuryemTests" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				kuryemUITests.swift,
+				kuryemUITestsLaunchTests.swift,
+			);
+			target = 0292B9862F46FD7E0095BB50 /* kuryemTests */;
+		};
+		0292BA282F4714C70095BB50 /* Exceptions for "kuryemUITests" folder in "kuryemUITests" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				kuryemUITests.swift,
+				kuryemUITestsLaunchTests.swift,
+			);
+			target = 0292B9902F46FD7E0095BB50 /* kuryemUITests */;
+		};
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -53,9 +69,38 @@
 			path = kuryemTests;
 			sourceTree = "<group>";
 		};
-		0292B9942F46FD7E0095BB50 /* kuryemUITests */ = {
+		0292BA072F47138F0095BB50 /* App */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			path = App;
+			sourceTree = "<group>";
+		};
+		0292BA092F4713D90095BB50 /* Domain */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = Domain;
+			sourceTree = "<group>";
+		};
+		0292BA0A2F4713E30095BB50 /* Data */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = Data;
+			sourceTree = "<group>";
+		};
+		0292BA0B2F4713EC0095BB50 /* Presentation */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = Presentation;
+			sourceTree = "<group>";
+		};
+		0292BA242F4714C70095BB50 /* kuryemUITests */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				0292BA272F4714C70095BB50 /* Exceptions for "kuryemUITests" folder in "kuryemTests" target */,
+				0292BA282F4714C70095BB50 /* Exceptions for "kuryemUITests" folder in "kuryemUITests" target */,
+			);
 			path = kuryemUITests;
+			sourceTree = "<group>";
+		};
+		0292BA2E2F47155C0095BB50 /* Resources */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = Resources;
 			sourceTree = "<group>";
 		};
 /* End PBXFileSystemSynchronizedRootGroup section */
@@ -89,8 +134,13 @@
 			isa = PBXGroup;
 			children = (
 				0292B9732F46FD7D0095BB50 /* kuryem */,
+				0292BA072F47138F0095BB50 /* App */,
+				0292BA092F4713D90095BB50 /* Domain */,
+				0292BA0A2F4713E30095BB50 /* Data */,
+				0292BA0B2F4713EC0095BB50 /* Presentation */,
+				0292BA2E2F47155C0095BB50 /* Resources */,
 				0292B98A2F46FD7E0095BB50 /* kuryemTests */,
-				0292B9942F46FD7E0095BB50 /* kuryemUITests */,
+				0292BA242F4714C70095BB50 /* kuryemUITests */,
 				0292B9722F46FD7D0095BB50 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -122,6 +172,11 @@
 			);
 			fileSystemSynchronizedGroups = (
 				0292B9732F46FD7D0095BB50 /* kuryem */,
+				0292BA072F47138F0095BB50 /* App */,
+				0292BA092F4713D90095BB50 /* Domain */,
+				0292BA0A2F4713E30095BB50 /* Data */,
+				0292BA0B2F4713EC0095BB50 /* Presentation */,
+				0292BA2E2F47155C0095BB50 /* Resources */,
 			);
 			name = kuryem;
 			packageProductDependencies = (
@@ -145,6 +200,7 @@
 			);
 			fileSystemSynchronizedGroups = (
 				0292B98A2F46FD7E0095BB50 /* kuryemTests */,
+				0292BA242F4714C70095BB50 /* kuryemUITests */,
 			);
 			name = kuryemTests;
 			packageProductDependencies = (
@@ -165,9 +221,6 @@
 			);
 			dependencies = (
 				0292B9932F46FD7E0095BB50 /* PBXTargetDependency */,
-			);
-			fileSystemSynchronizedGroups = (
-				0292B9942F46FD7E0095BB50 /* kuryemUITests */,
 			);
 			name = kuryemUITests;
 			packageProductDependencies = (
