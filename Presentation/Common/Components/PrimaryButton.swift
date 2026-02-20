@@ -8,7 +8,6 @@
 import UIKit
 
 final class PrimaryButton: UIButton {
-    
     // MARK: - Properties
     private var originalBackgroundColor: UIColor?
     
@@ -27,7 +26,7 @@ final class PrimaryButton: UIButton {
         setTitle(title, for: .normal)
         setTitleColor(AppColor.buttonText, for: .normal)
         setTitleColor(AppColor.buttonText.withAlphaComponent(0.6), for: .disabled)
-        titleLabel?.font = UIFont.systemFont(ofSize: AppLayout.fontSizeMedium, weight: .semibold)
+        titleLabel?.font = AppFonts.button
         
         backgroundColor = AppColor.buttonPrimary
         originalBackgroundColor = AppColor.buttonPrimary

@@ -7,9 +7,9 @@
 
 import Foundation
 
-struct Localized {
+enum Localized {
     // MARK: - Onboarding
-    struct Onboarding {
+    enum Onboarding {
         static var lightningFastDeliveryTitle: String { String(localized: "onboarding_title_fast_delivery") }
         static var lightningFastDeliveryDescription: String { String(localized: "onboarding_desc_fast_delivery") }
         
@@ -24,7 +24,7 @@ struct Localized {
     }
     
     // MARK: - Role Selection
-    struct RoleSelection {
+    enum RoleSelection {
         static var chooseYourRole: String { String(localized: "role_title_choose") }
         static var selectRoleDescription: String { String(localized: "role_desc_select") }
         
@@ -36,7 +36,7 @@ struct Localized {
     }
     
     // MARK: - Signup
-    struct Signup {
+    enum Signup {
         static var createYourAccount: String { String(localized: "signup_title_main") }
         static var signupDescription: String { String(localized: "signup_desc_main") }
         
@@ -54,7 +54,7 @@ struct Localized {
     }
     
     // MARK: - Login
-    struct Login {
+    enum Login {
         static var loginToYourAccount: String { String(localized: "login_title_main") }
         static var loginDescription: String { String(localized: "login_desc_main") }
         
@@ -70,7 +70,7 @@ struct Localized {
     }
     
     // MARK: - Forgot Password
-    struct ForgotPassword {
+    enum ForgotPassword {
         static var forgotPassword: String { String(localized: "forgot_password_title") }
         static var forgotPasswordDescription: String { String(localized: "forgot_password_desc") }
         
@@ -81,7 +81,7 @@ struct Localized {
     }
     
     // MARK: - Code Verification
-    struct CodeVerification {
+    enum CodeVerification {
         static var verifyYourNumber: String { String(localized: "verify_title") }
         static var verifyDescription: String { String(localized: "verify_desc") }
         
@@ -94,7 +94,7 @@ struct Localized {
     }
     
     // MARK: - Create New Password
-    struct CreateNewPassword {
+    enum CreateNewPassword {
         static var createNewPassword: String { String(localized: "create_password_title") }
         static var createPasswordDescription: String { String(localized: "create_password_desc") }
         
@@ -105,7 +105,7 @@ struct Localized {
     }
     
     // MARK: - OTP Verification
-    struct OTPVerification {
+    enum OTPVerification {
         static var verifyYourNumber: String { String(localized: "otp_title") }
         static var otpDescription: String { String(localized: "otp_desc") }
         
@@ -116,7 +116,7 @@ struct Localized {
     }
     
     // MARK: - Validation Messages
-    struct Validation {
+    enum Validation {
         static var emailRequired: String { String(localized: "validation_email_required") }
         static var emailInvalid: String { String(localized: "validation_email_invalid") }
         static var passwordRequired: String { String(localized: "validation_password_required") }
@@ -130,7 +130,7 @@ struct Localized {
     }
     
     // MARK: - Errors
-    struct Error {
+    enum Error {
         static var genericError: String { String(localized: "error_generic") }
         static var networkError: String { String(localized: "error_network") }
         static var authenticationFailed: String { String(localized: "error_auth_failed") }
