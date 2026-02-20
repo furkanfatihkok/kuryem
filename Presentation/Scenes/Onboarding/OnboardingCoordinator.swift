@@ -27,7 +27,7 @@ final class OnboardingCoordinator: Coordinator {
         let viewModel = factory.makeOnboardingViewModel()
         viewModel.delegate = self
 
-        let viewController = OnboardingViewController()
+        let viewController = OnboardingViewController(viewModel: viewModel)
         navigationController.setViewControllers(
             [viewController],
             animated: true

@@ -7,9 +7,15 @@
 
 import Foundation
 
-struct AppIcons {
-    static let google = "g.circle.fill"
-    static let apple = "apple.logo"
-    static let email = "envelope.fill"
-    static let lock = "lock.fill"
+enum AppIcons {
+    enum SocialMedia {
+        static let google = "g.circle.fill"
+        static let apple = "apple.logo"
+    }
+    
+    enum Onboarding {
+        static let delivery = "onboarding_delivery"
+        static let tracking = "onboarding_tracking"
+        static let secure = "onboarding_secure"
+    }
 }
