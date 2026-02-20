@@ -8,14 +8,14 @@
 import UIKit
 
 protocol RoleCardViewDelegate: AnyObject {
-    func roleCardViewDidTap(_ view: RoleCardView, role: UserRole)
+    func roleCardViewDidTap(_ view: RoleCardView, /*role: UserRole*/)
 }
 
 final class RoleCardView: UIView {
     
     // MARK: - Properties
     weak var delegate: RoleCardViewDelegate?
-    private let roleOption: RoleOption
+//    private let roleOption: RoleOption
     private var isSelected: Bool = false
     
     // MARK: - UI Components
@@ -63,12 +63,13 @@ final class RoleCardView: UIView {
     }()
     
     // MARK: - Initialization
-    init(roleOption: RoleOption) {
+  /*  init(roleOption: RoleOption) {
         self.roleOption = roleOption
         super.init(frame: .zero)
         setupView()
         configure()
     }
+   */
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
@@ -110,11 +111,11 @@ final class RoleCardView: UIView {
             descriptionLabel.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -AppLayout.spacingLarge)
         ])
         
-        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(cardTapped))
-        addGestureRecognizer(tapGesture)
+//        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(cardTapped))
+//        addGestureRecognizer(tapGesture)
     }
     
-    private func configure() {
+ /*   private func configure() {
         iconImageView.image = UIImage(named: roleOption.imageName)
         titleLabel.text = roleOption.title
         descriptionLabel.text = roleOption.description
@@ -124,7 +125,7 @@ final class RoleCardView: UIView {
     @objc private func cardTapped() {
         delegate?.roleCardViewDidTap(self, role: roleOption.role)
     }
-    
+    */
     // MARK: - Public Methods
     func setSelected(_ selected: Bool) {
         isSelected = selected
