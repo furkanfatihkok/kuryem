@@ -7,7 +7,7 @@
 
 import UIKit
 
-struct AppColor {
+enum AppColor {
     // MARK: - Primary Colors
     static let primary = UIColor(hex: "#FDB913")
     static let primaryDark = UIColor(hex: "#F5A200")
@@ -17,8 +17,8 @@ struct AppColor {
     static let cardBackground = UIColor(hex: "#F8F8F8")
     
     // MARK: - Text Colors
-    static let textPrimary = UIColor(hex: "#1A1A1A")
-    static let textSecondary = UIColor(hex: "#666666")
+    static let textPrimary = UIColor(hex: "#000000")
+    static let textSecondary = UIColor(hex: "#6B7280")
     static let textTertiary = UIColor(hex: "#999999")
     static let textPlaceholder = UIColor(hex: "#CCCCCC")
     
@@ -33,7 +33,7 @@ struct AppColor {
     // MARK: - Button Colors
     static let buttonPrimary = UIColor(hex: "#FDB913")
     static let buttonDisabled = UIColor(hex: "#FFE4A3")
-    static let buttonText = UIColor(hex: "#1A1A1A")
+    static let buttonText = UIColor(hex: "#FFFFFF")
     
     // MARK: - Social Auth Colors
     static let google = UIColor(hex: "#FFFFFF")

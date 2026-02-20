@@ -7,8 +7,7 @@
 
 import UIKit
 
-struct AppFonts {
-    
+enum AppFonts {
     // MARK: - Titles
     static var title: UIFont {
         return .poppins(.bold, size: AppLayout.fontSizeXXLarge)
@@ -29,7 +28,7 @@ struct AppFonts {
     
     // MARK: - Actions
     static var button: UIFont {
-        return .poppins(.semiBold, size: AppLayout.fontSizeMedium)
+        return .poppins(.medium, size: AppLayout.fontSizeMedium)
     }
     
     // MARK: - Helper

@@ -8,7 +8,6 @@
 import UIKit
 
 final class CustomTextField: UIView {
-    
     // MARK: - Properties
     private let textField: UITextField = {
         let textField = UITextField()

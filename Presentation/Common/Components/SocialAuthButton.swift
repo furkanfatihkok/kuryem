@@ -8,7 +8,6 @@
 import UIKit
 
 final class SocialAuthButton: UIButton {
-    
     enum AuthType {
         case google
         case apple
@@ -16,9 +15,9 @@ final class SocialAuthButton: UIButton {
         var icon: UIImage? {
             switch self {
             case .google:
-                return UIImage(systemName: AppIcons.google)
+                return UIImage(systemName: AppIcons.SocialMedia.google)
             case .apple:
-                return UIImage(systemName: AppIcons.apple)
+                return UIImage(systemName: AppIcons.SocialMedia.apple)
             }
         }
         

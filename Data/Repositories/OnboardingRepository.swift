@@ -10,23 +10,22 @@ import Foundation
 final class OnboardingRepository: OnboardingRepositoryProtocol {
     func getOnboardingPages() -> [OnboardingPage] {
         return [
-            
             OnboardingPage(
-                imageName: "onboarding_1",
-                title: "Привет, ФФК!",
-                description: "Я умею помочь вам с доставкой товаров. Чтобы начать, пройдите по шагам ниже."
+                imageName: AppIcons.Onboarding.delivery,
+                title: Localized.Onboarding.lightningFastDeliveryTitle,
+                description: Localized.Onboarding.lightningFastDeliveryDescription
             ),
             
             OnboardingPage(
-                imageName: "onboarding_2",
-                title: "Выберите товар",
-                description: "Выберите товар, который хотите доставить. Я найду самый ближайший склад."
+                imageName: AppIcons.Onboarding.tracking,
+                title: Localized.Onboarding.realTimeTrackingTitle,
+                description: Localized.Onboarding.realTimeTrackingDescription
             ),
             
             OnboardingPage(
-                imageName: "onboarding_3",
-                title: "Выберите товар",
-                description: "Выберите товар, который хотите доставить. Я найду самый ближайший склад."
+                imageName: AppIcons.Onboarding.secure,
+                title: Localized.Onboarding.safeSecureTitle,
+                description: Localized.Onboarding.safeSecureDescription
                 ),
         ]
     }

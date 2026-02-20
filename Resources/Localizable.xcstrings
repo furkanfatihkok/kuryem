@@ -92,13 +92,13 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Next"
+            "value" : "Next >"
           }
         },
         "tr" : {
           "stringUnit" : {
             "state" : "needs_review",
-            "value" : "İleri"
+            "value" : "İleri >"
           }
         }
       }
@@ -358,13 +358,13 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Get your packages delivered to desired locations in your city with utmost ease and accuracy 24/7."
+            "value" : "Get your packages delivered in record time with our network of reliable couriers across the city."
           }
         },
         "tr" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Işık Hızında Teslimat"
+            "state" : "translated",
+            "value" : "Paketlerinizin şehrinizdeki istediğiniz konumlara 7/24 en yüksek kolaylık ve doğrulukla teslim edilmesini sağlayın."
           }
         }
       }
@@ -375,7 +375,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Your packages are handled with care to keep them safe throughout the shipping process."
+            "value" : "Your Packages are protected with our verified couriers and secure handling protocols."
           }
         },
         "tr" : {
@@ -392,7 +392,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Know exactly where your packages are at every moment with GPS tracking in real time."
+            "value" : "Know exactly where your package is at every moment with live GPS tracking and instant updates."
           }
         },
         "tr" : {
@@ -414,8 +414,8 @@
         },
         "tr" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Paketlerinizin şehrinizdeki istediğiniz konumlara 7/24 en yüksek kolaylık ve doğrulukla teslim edilmesini sağlayın."
+            "state" : "translated",
+            "value" : "Işık Hızında Teslimat"
           }
         }
       }
