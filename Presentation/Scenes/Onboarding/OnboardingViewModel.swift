@@ -11,7 +11,6 @@ protocol OnboardingViewModelDelegate: AnyObject {
     func onboardingViewModelDidComplete(_ viewModel: OnboardingViewModel)
 }
 
-
 final class OnboardingViewModel {
     
     // MARK: - Properties
@@ -22,6 +21,7 @@ final class OnboardingViewModel {
     // MARK: - Initialization
     init(service: OnboardingRepositoryProtocol) {
         self.service = service
+        loadPages()
     }
     
     // MARK: - Private Methods

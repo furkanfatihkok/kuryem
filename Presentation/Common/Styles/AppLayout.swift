@@ -7,7 +7,7 @@
 
 import UIKit
 
-struct AppLayout {
+enum AppLayout {
     // MARK: - Spacing
     static let spacingXSmall: CGFloat = 4
     static let spacingSmall: CGFloat = 8
@@ -28,7 +28,7 @@ struct AppLayout {
     
     // MARK: - Button
     static let buttonHeight: CGFloat = 52
-    static let buttonCornerRadius: CGFloat = 12
+    static let buttonCornerRadius: CGFloat = 5
     
     // MARK: - TextField
     static let textFieldHeight: CGFloat = 52
@@ -41,8 +41,10 @@ struct AppLayout {
     static let iconLarge: CGFloat = 32
     
     // MARK: - Onboarding
-    static let onboardingImageHeight: CGFloat = 280
-    static let onboardingIndicatorSize: CGFloat = 8
+    static let onboardingImageAspectRatio: CGFloat = 250 / 375
+    static let onboardingImageWidthMultiplier: CGFloat = 0.9
+    static let onboardingIndicatorWidth: CGFloat = 20
+    static let onboardingIndicatorHeight: CGFloat = 4 
     static let onboardingIndicatorSpacing: CGFloat = 8
     
     // MARK: - Code Input
@@ -53,7 +55,7 @@ struct AppLayout {
     static let fontSizeXSmall: CGFloat = 12
     static let fontSizeSmall: CGFloat = 14
     static let fontSizeMedium: CGFloat = 16
-    static let fontSizeLarge: CGFloat = 18
+    static let fontSizeLarge: CGFloat = 20
     static let fontSizeXLarge: CGFloat = 24
     static let fontSizeXXLarge: CGFloat = 28
     
