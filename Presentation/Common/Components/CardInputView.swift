@@ -13,7 +13,6 @@ protocol CodeInputViewDelegate: AnyObject {
 }
 
 final class CardInputView: UIView {
-    
     // MARK: - Properties
     weak var delegate: CodeInputViewDelegate?
     

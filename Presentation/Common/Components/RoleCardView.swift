@@ -12,7 +12,6 @@ protocol RoleCardViewDelegate: AnyObject {
 }
 
 final class RoleCardView: UIView {
-    
     // MARK: - Properties
     weak var delegate: RoleCardViewDelegate?
 //    private let roleOption: RoleOption
