@@ -20,7 +20,7 @@ enum Localized {
         static var safeSecureDescription: String { String(localized: "onboarding_desc_safe") }
         
         static var next: String { String(localized: "common_next") }
-        static var skip: String { String(localized: "common_skip") }
+        static var getStarted: String { String(localized: "common_get_started") }
     }
     
     // MARK: - Role Selection
