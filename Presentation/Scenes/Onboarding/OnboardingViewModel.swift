@@ -15,18 +15,18 @@ final class OnboardingViewModel {
     
     // MARK: - Properties
     weak var delegate: OnboardingViewModelDelegate?
-    private let service: OnboardingRepositoryProtocol
+    private let repository: OnboardingRepositoryProtocol
     private(set) var pages: [OnboardingPage] = []
     
     // MARK: - Initialization
-    init(service: OnboardingRepositoryProtocol) {
-        self.service = service
+    init(repository: OnboardingRepositoryProtocol) {
+        self.repository = repository
         loadPages()
     }
     
     // MARK: - Private Methods
     private func loadPages() {
-        self.pages = service.getOnboardingPages()
+        self.pages = repository.getOnboardingPages()
     }
     
     private func comlepteOnboarding() {

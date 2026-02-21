@@ -9,13 +9,16 @@ import Foundation
 
 protocol DependencyFactoryProtocol: AnyObject {
     func makeOnboardingRepository() -> OnboardingRepositoryProtocol
+    func makeRoleSelectionRepository() -> RoleSelectionRepositoryProtocol
 }
 
 final class DependencyFactory: DependencyFactoryProtocol {
     private let onboardingRepository: OnboardingRepositoryProtocol
+    private let roleSelectionRepository: RoleSelectionRepositoryProtocol
     
-    init(onboardingRepository: OnboardingRepositoryProtocol) {
+    init(onboardingRepository: OnboardingRepositoryProtocol, roleSelectionRepository: RoleSelectionRepositoryProtocol) {
         self.onboardingRepository = onboardingRepository
+        self.roleSelectionRepository = roleSelectionRepository
     }
     
     func makeOnboardingRepository() -> OnboardingRepositoryProtocol {
@@ -23,6 +26,14 @@ final class DependencyFactory: DependencyFactoryProtocol {
     }
     
     func makeOnboardingViewModel() -> OnboardingViewModel {
-        return OnboardingViewModel(service: onboardingRepository)
+        return OnboardingViewModel(repository: onboardingRepository)
+    }
+    
+    func makeRoleSelectionRepository() -> RoleSelectionRepositoryProtocol {
+        return roleSelectionRepository
+    }
+    
+    func makeRoleSelectionViewModel() -> RoleSelectionViewModel {
+        return RoleSelectionViewModel(repository: roleSelectionRepository)
     }
 }
