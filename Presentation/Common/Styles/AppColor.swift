@@ -14,7 +14,9 @@ enum AppColor {
     
     // MARK: - Background Colors
     static let background = UIColor(hex: "#FFFFFF")
-    static let cardBackground = UIColor(hex: "#F8F8F8")
+    static let cardBackground = UIColor(hex: "#FFFCF3")
+    static let iconCardBackground = UIColor(hex: "#F9F9F9")
+    static let iconInActiveCardBackground = UIColor(hex: "#FDF7E5")
     
     // MARK: - Text Colors
     static let textPrimary = UIColor(hex: "#000000")
@@ -23,8 +25,8 @@ enum AppColor {
     static let textPlaceholder = UIColor(hex: "#CCCCCC")
     
     // MARK: - Border Colors
-    static let border = UIColor(hex: "#E5E5E5")
-    static let borderActive = UIColor(hex: "#FDB913")
+    static let border = UIColor(hex: "#6B7280")
+    static let borderActive = UIColor(hex: "#F4B400")
     
     // MARK: - Status Colors
     static let error = UIColor(hex: "#FF3B30")

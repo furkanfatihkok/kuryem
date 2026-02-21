@@ -22,5 +22,6 @@ enum AppIcons {
     enum RoleSelection {
         static let roleSender = "role_sender"
         static let roleDelivery = "role_delivery"
+        static let profile = "profile"
     }
 }
