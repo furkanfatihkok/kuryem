@@ -31,7 +31,7 @@ final class OnboardingCell: UICollectionViewCell {
 
     private let descriptionLabel: UILabel = {
         let label = UILabel()
-        label.font = AppFonts.caption.withSize(AppLayout.fontSizeXSmall)
+        label.font = AppFonts.caption.withSize(AppLayout.fontSizeSmall)
         label.textColor = AppColor.textSecondary
         label.textAlignment = .center
         label.numberOfLines = 0

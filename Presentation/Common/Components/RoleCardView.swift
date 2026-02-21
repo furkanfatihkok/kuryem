@@ -8,13 +8,13 @@
 import UIKit
 
 protocol RoleCardViewDelegate: AnyObject {
-    func roleCardViewDidTap(_ view: RoleCardView, /*role: UserRole*/)
+    func roleCardViewDidTap(_ view: RoleCardView, role: UserRole)
 }
 
 final class RoleCardView: UIView {
     // MARK: - Properties
     weak var delegate: RoleCardViewDelegate?
-//    private let roleOption: RoleOption
+    private let roleOption: RoleOption
     private var isSelected: Bool = false
     
     // MARK: - UI Components
@@ -37,7 +37,7 @@ final class RoleCardView: UIView {
     
     private let titleLabel: UILabel = {
         let label = UILabel()
-        label.font = UIFont.systemFont(ofSize: AppLayout.fontSizeLarge, weight: .semibold)
+        label.font = AppFonts.input.withSize(AppLayout.fontSizeLarge)
         label.textColor = AppColor.textPrimary
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
@@ -45,30 +45,20 @@ final class RoleCardView: UIView {
     
     private let descriptionLabel: UILabel = {
         let label = UILabel()
-        label.font = UIFont.systemFont(ofSize: AppLayout.fontSizeSmall)
+        label.font = AppFonts.caption.withSize(AppLayout.fontSizeXSmall)
         label.textColor = AppColor.textSecondary
         label.numberOfLines = 0
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
     
-    private let checkmarkImageView: UIImageView = {
-        let imageView = UIImageView()
-        imageView.image = UIImage(systemName: "checkmark.circle.fill")
-        imageView.tintColor = AppColor.primary
-        imageView.isHidden = true
-        imageView.translatesAutoresizingMaskIntoConstraints = false
-        return imageView
-    }()
-    
     // MARK: - Initialization
-  /*  init(roleOption: RoleOption) {
+    init(roleOption: RoleOption) {
         self.roleOption = roleOption
         super.init(frame: .zero)
         setupView()
         configure()
     }
-   */
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
@@ -82,7 +72,6 @@ final class RoleCardView: UIView {
         containerView.addSubview(iconImageView)
         containerView.addSubview(titleLabel)
         containerView.addSubview(descriptionLabel)
-        containerView.addSubview(checkmarkImageView)
         
         NSLayoutConstraint.activate([
             containerView.topAnchor.constraint(equalTo: topAnchor),
@@ -95,11 +84,6 @@ final class RoleCardView: UIView {
             iconImageView.widthAnchor.constraint(equalToConstant: 48),
             iconImageView.heightAnchor.constraint(equalToConstant: 48),
             
-            checkmarkImageView.topAnchor.constraint(equalTo: containerView.topAnchor, constant: AppLayout.spacingMedium),
-            checkmarkImageView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -AppLayout.spacingMedium),
-            checkmarkImageView.widthAnchor.constraint(equalToConstant: AppLayout.iconMedium),
-            checkmarkImageView.heightAnchor.constraint(equalToConstant: AppLayout.iconMedium),
-            
             titleLabel.topAnchor.constraint(equalTo: iconImageView.bottomAnchor, constant: AppLayout.spacingMedium),
             titleLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: AppLayout.spacingLarge),
             titleLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -AppLayout.spacingLarge),
@@ -110,11 +94,11 @@ final class RoleCardView: UIView {
             descriptionLabel.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -AppLayout.spacingLarge)
         ])
         
-//        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(cardTapped))
-//        addGestureRecognizer(tapGesture)
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(cardTapped))
+        addGestureRecognizer(tapGesture)
     }
     
- /*   private func configure() {
+    private func configure() {
         iconImageView.image = UIImage(named: roleOption.imageName)
         titleLabel.text = roleOption.title
         descriptionLabel.text = roleOption.description
@@ -124,7 +108,7 @@ final class RoleCardView: UIView {
     @objc private func cardTapped() {
         delegate?.roleCardViewDidTap(self, role: roleOption.role)
     }
-    */
+    
     // MARK: - Public Methods
     func setSelected(_ selected: Bool) {
         isSelected = selected
@@ -132,7 +116,6 @@ final class RoleCardView: UIView {
         UIView.animate(withDuration: 0.2) {
             self.containerView.layer.borderColor = selected ? AppColor.primary.cgColor : AppColor.border.cgColor
             self.containerView.layer.borderWidth = selected ? AppLayout.borderWidthMedium : AppLayout.borderWidthThin
-            self.checkmarkImageView.isHidden = !selected
         }
     }
 }
