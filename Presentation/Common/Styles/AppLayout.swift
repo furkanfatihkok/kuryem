@@ -22,8 +22,8 @@ enum AppLayout {
     
     // MARK: - Corner Radius
     static let cornerRadiusSmall: CGFloat = 8
-    static let cornerRadiusMedium: CGFloat = 12
-    static let cornerRadiusLarge: CGFloat = 16
+    static let cornerRadiusMedium: CGFloat = 20
+    static let cornerRadiusLarge: CGFloat = 23.5
     static let cornerRadiusXLarge: CGFloat = 24
     
     // MARK: - Button
@@ -40,6 +40,17 @@ enum AppLayout {
     static let iconMedium: CGFloat = 24
     static let iconLarge: CGFloat = 32
     
+    // MARK: - Icon Sizes
+    static let iconSizeMedium: CGFloat = 24.0
+    static let iconSizeLarge: CGFloat = 30.0
+    
+    // MARK: - Container Sizes
+    static let iconContainerSizeSmall: CGFloat = 40.0
+    static let iconContainerSizeLarge: CGFloat = 50.0
+    
+    // MARK: - Component Specific Sizes
+    static let roleCardHeight: CGFloat = 148.0
+    
     // MARK: - Onboarding
     static let onboardingImageAspectRatio: CGFloat = 250 / 375
     static let onboardingImageWidthMultiplier: CGFloat = 0.9
@@ -52,10 +63,10 @@ enum AppLayout {
     static let codeInputSpacing: CGFloat = 12
     
     // MARK: - Font Sizes
-    static let fontSizeXSmall: CGFloat = 12
-    static let fontSizeSmall: CGFloat = 14
+    static let fontSizeXSmall: CGFloat = 10
+    static let fontSizeSmall: CGFloat = 12
     static let fontSizeMedium: CGFloat = 16
-    static let fontSizeLarge: CGFloat = 20
+    static let fontSizeLarge: CGFloat = 18
     static let fontSizeXLarge: CGFloat = 24
     static let fontSizeXXLarge: CGFloat = 28
     

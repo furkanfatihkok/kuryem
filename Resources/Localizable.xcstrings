@@ -506,13 +506,13 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Deliver Packages"
+            "value" : "Accept delivery requests and earn by delivering packages"
           }
         },
         "tr" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Paket Teslim Et"
+            "state" : "translated",
+            "value" : "Teslimat taleplerini kabul edin ve paketleri teslim ederek kazanç elde edin"
           }
         }
       }
@@ -523,13 +523,13 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "We need to know if you are a customer, sender, or a delivery person to personalize your app experience."
+            "value" : "Select how you want to continue in the app. You can change this later from settings."
           }
         },
         "tr" : {
           "stringUnit" : {
             "state" : "needs_review",
-            "value" : "Uygulama deneyiminizi kişiselleştirmek için müşteri mi, gönderici mi yoksa kurye mi olduğunuzu bilmemiz gerekiyor."
+            "value" : "Uygulamada nasıl devam etmek istediğinizi seçin. Bunu daha sonra ayarlardan değiştirebilirsiniz."
           }
         }
       }
@@ -540,13 +540,13 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Send packages to anyone across the country."
+            "value" : "Create delivery orders and track parcels in real time\r"
           }
         },
         "tr" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Paket Gönder"
+            "state" : "translated",
+            "value" : "Teslimat siparişleri oluşturun ve paketleri gerçek zamanlı olarak takip edin"
           }
         }
       }
