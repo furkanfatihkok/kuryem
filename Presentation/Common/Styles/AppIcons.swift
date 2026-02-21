@@ -18,4 +18,9 @@ enum AppIcons {
         static let tracking = "onboarding_tracking"
         static let secure = "onboarding_secure"
     }
+    
+    enum RoleSelection {
+        static let roleSender = "role_sender"
+        static let roleDelivery = "role_delivery"
+    }
 }
