@@ -37,8 +37,4 @@ final class OnboardingViewModel {
     func didTapNext() {
         comlepteOnboarding()
     }
-    
-    func didTapSkip() {
-        comlepteOnboarding()
-    }
 }
