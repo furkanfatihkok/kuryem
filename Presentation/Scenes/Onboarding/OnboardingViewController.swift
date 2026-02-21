@@ -11,7 +11,12 @@ final class OnboardingViewController: UIViewController {
     
     // MARK: - Properties
     private let viewModel: OnboardingViewModel
-    private var currentPage: Int = 0
+    private var currentPage: Int = 0 {
+        didSet {
+            pageControl.currentPage = currentPage
+            updateButtonTitle()
+        }
+    }
     
     // MARK: - UI Components
     private lazy var collectionView: UICollectionView = {
@@ -96,6 +101,16 @@ final class OnboardingViewController: UIViewController {
         collectionView.register(OnboardingCell.self, forCellWithReuseIdentifier: OnboardingCell.reuseIdentifier)
     }
     
+    private func updateButtonTitle() {
+        let isLastPage = currentPage == (viewModel.pages.count - 1)
+        
+        let title = isLastPage ? Localized.Onboarding.getStarted : Localized.Onboarding.next
+        
+        UIView.transition(with: nextButton, duration: 0.3, options: .transitionCrossDissolve) {
+            self.nextButton.setTitle(title, for: .normal)
+        }
+    }
+    
     // MARK: - Actions
     @objc private func nextButtonTapped() {
         if currentPage < viewModel.pages.count - 1 {
@@ -105,10 +120,6 @@ final class OnboardingViewController: UIViewController {
         } else {
             viewModel.didTapNext()
         }
-    }
-    
-    @objc private func skipButtonTapped() {
-        viewModel.didTapSkip()
     }
 }
 

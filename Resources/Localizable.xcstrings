@@ -69,6 +69,23 @@
         }
       }
     },
+    "common_get_started" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Get Started"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Başla"
+          }
+        }
+      }
+    },
     "common_login" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -92,13 +109,13 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Next >"
+            "value" : "Next "
           }
         },
         "tr" : {
           "stringUnit" : {
             "state" : "needs_review",
-            "value" : "İleri >"
+            "value" : "İleri "
           }
         }
       }
@@ -133,23 +150,6 @@
           "stringUnit" : {
             "state" : "needs_review",
             "value" : "Telefon Numarası"
-          }
-        }
-      }
-    },
-    "common_skip" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Skip"
-          }
-        },
-        "tr" : {
-          "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Atla"
           }
         }
       }
