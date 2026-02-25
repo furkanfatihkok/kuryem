@@ -25,7 +25,6 @@ final class RoleSelectionCoordinator: Coordinator {
     
     func start() {
         let viewModel = factory.makeRoleSelectionViewModel()
-        
         viewModel.delegate = self
         
         let viewController = RoleSelectionViewController(viewModel: viewModel)
@@ -34,6 +33,7 @@ final class RoleSelectionCoordinator: Coordinator {
     }
 }
 
+// MARK: - RoleSelectionViewModelDelegate
 extension RoleSelectionCoordinator: RoleSelectionViewModelDelegate {
     func roleSelectionViewModel(_ viewModel: RoleSelectionViewModel, didSelectRole role: UserRole) {
         delegate?.roleSelectionCoordinatorDidFinish(self, selectedRole: role)
