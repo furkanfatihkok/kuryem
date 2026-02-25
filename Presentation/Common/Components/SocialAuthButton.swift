@@ -8,6 +8,7 @@
 import UIKit
 
 final class SocialAuthButton: UIButton {
+    // MARK: - AuthType Enum
     enum AuthType {
         case google
         case apple
@@ -15,27 +16,9 @@ final class SocialAuthButton: UIButton {
         var icon: UIImage? {
             switch self {
             case .google:
-                return UIImage(systemName: AppIcons.SocialMedia.google)
+                return UIImage(named: AppIcons.Signup.google_icon)
             case .apple:
-                return UIImage(systemName: AppIcons.SocialMedia.apple)
-            }
-        }
-        
-        var backgroundColor: UIColor {
-            switch self {
-            case .google:
-                return AppColor.google
-            case .apple:
-                return AppColor.apple
-            }
-        }
-        
-        var textColor: UIColor {
-            switch self {
-            case .google:
-                return AppColor.textPrimary
-            case .apple:
-                return .white
+                return UIImage(named: AppIcons.Signup.apple_icon)
             }
         }
     }
@@ -58,16 +41,18 @@ final class SocialAuthButton: UIButton {
     private func setupButton(title: String) {
         var configuration = UIButton.Configuration.filled()
         configuration.title = title
+        
         configuration.image = authType.icon
         configuration.imagePadding = AppLayout.spacingSmall
         configuration.imagePlacement = .leading
-        configuration.baseBackgroundColor = authType.backgroundColor
-        configuration.baseForegroundColor = authType.textColor
+        
+        configuration.baseBackgroundColor = .white
+        configuration.baseForegroundColor = AppColor.textPrimary
         configuration.cornerStyle = .medium
         
         self.configuration = configuration
         
-        layer.borderWidth = authType == .google ? AppLayout.borderWidthThin : 0
+        layer.borderWidth = AppLayout.borderWidthThin
         layer.borderColor = AppColor.border.cgColor
         layer.cornerRadius = AppLayout.buttonCornerRadius
         

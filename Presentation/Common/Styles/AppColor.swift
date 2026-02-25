@@ -22,11 +22,15 @@ enum AppColor {
     static let textPrimary = UIColor(hex: "#000000")
     static let textSecondary = UIColor(hex: "#6B7280")
     static let textTertiary = UIColor(hex: "#999999")
-    static let textPlaceholder = UIColor(hex: "#CCCCCC")
+    static let textPlaceholder = UIColor(hex: "#6B7280")
     
     // MARK: - Border Colors
     static let border = UIColor(hex: "#6B7280")
     static let borderActive = UIColor(hex: "#F4B400")
+    
+    // MARK: - TextField Border Colors
+    static let textfieldBorder = UIColor(hex: "#E6E8EC")
+    static let textfieldBorderActive = UIColor(hex: "#EF4444")
     
     // MARK: - Status Colors
     static let error = UIColor(hex: "#FF3B30")

@@ -30,6 +30,7 @@ final class OnboardingViewController: UIViewController {
         collectionView.showsHorizontalScrollIndicator = false
         collectionView.backgroundColor = .clear
         collectionView.translatesAutoresizingMaskIntoConstraints = false
+        // Sadece burada register edilmesi yeterli
         collectionView.register(OnboardingCell.self, forCellWithReuseIdentifier: OnboardingCell.reuseIdentifier)
         return collectionView
     }()
@@ -62,15 +63,20 @@ final class OnboardingViewController: UIViewController {
     // MARK: - LifeCylce
     override func viewDidLoad() {
         super.viewDidLoad()
-        setupViews()
-        setupConstraints()
+        setupUI()
         setupCollectionView()
     }
     
     // MARK: - Setup
-    private func setupViews() {
+    private func setupUI() {
         view.backgroundColor = AppColor.background
         
+        setupHierarchy()
+        setupConstraints()
+    }
+    
+    // REFACTOR: Projedeki diğer dosyalarla isimlendirme tutarlılığı sağlandı
+    private func setupHierarchy() {
         view.addSubview(collectionView)
         view.addSubview(pageControl)
         view.addSubview(nextButton)
@@ -78,32 +84,32 @@ final class OnboardingViewController: UIViewController {
         pageControl.numberOfPages = viewModel.pages.count
     }
     
+    // REFACTOR: Girintiler (indentation) düzeltildi
     private func setupConstraints() {
-    NSLayoutConstraint.activate([
-        collectionView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
-        collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-        collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-        collectionView.bottomAnchor.constraint(equalTo: pageControl.topAnchor, constant: -AppLayout.spacingLarge),
+        NSLayoutConstraint.activate([
+            collectionView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            collectionView.bottomAnchor.constraint(equalTo: pageControl.topAnchor, constant: -AppLayout.spacingLarge),
             
-        pageControl.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-        pageControl.bottomAnchor.constraint(equalTo: nextButton.topAnchor, constant: -AppLayout.spacingXLarge),
+            pageControl.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            pageControl.bottomAnchor.constraint(equalTo: nextButton.topAnchor, constant: -AppLayout.spacingXLarge),
             
-        nextButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: AppLayout.paddingHorizontal),
-        nextButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -AppLayout.paddingHorizontal),
-        nextButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -AppLayout.spacingXLarge),
-        nextButton.heightAnchor.constraint(equalToConstant: AppLayout.buttonHeight)
+            nextButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: AppLayout.paddingHorizontal),
+            nextButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -AppLayout.paddingHorizontal),
+            nextButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -AppLayout.spacingXLarge),
+            nextButton.heightAnchor.constraint(equalToConstant: AppLayout.buttonHeight)
         ])
     }
     
     private func setupCollectionView() {
         collectionView.delegate = self
         collectionView.dataSource = self
-        collectionView.register(OnboardingCell.self, forCellWithReuseIdentifier: OnboardingCell.reuseIdentifier)
+        // REFACTOR: İkinci kez register etme kod tekrarı silindi
     }
     
     private func updateButtonTitle() {
         let isLastPage = currentPage == (viewModel.pages.count - 1)
-        
         let title = isLastPage ? Localized.Onboarding.getStarted : Localized.Onboarding.next
         
         UIView.transition(with: nextButton, duration: 0.3, options: .transitionCrossDissolve) {

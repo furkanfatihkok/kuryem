@@ -9,7 +9,7 @@ import UIKit
 
 final class OnboardingCell: UICollectionViewCell {
 
-    static let reuseIdentifier = AppConstants.reuseIdentifier
+    static let reuseIdentifier = CellConstants.reuseIdentifier
 
     // MARK: - UI Components
     private let imageView: UIImageView = {
