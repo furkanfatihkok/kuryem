@@ -27,18 +27,13 @@ enum AppLayout {
     static let cornerRadiusXLarge: CGFloat = 24
     
     // MARK: - Button
-    static let buttonHeight: CGFloat = 52
+    static let buttonHeight: CGFloat = 50
     static let buttonCornerRadius: CGFloat = 5
     
     // MARK: - TextField
-    static let textFieldHeight: CGFloat = 52
-    static let textFieldCornerRadius: CGFloat = 12
+    static let textFieldHeight: CGFloat = 40
+    static let textFieldCornerRadius: CGFloat = 8
     static let textFieldBorderWidth: CGFloat = 1
-    
-    // MARK: - Icon
-    static let iconSmall: CGFloat = 20
-    static let iconMedium: CGFloat = 24
-    static let iconLarge: CGFloat = 32
     
     // MARK: - Icon Sizes
     static let iconSizeMedium: CGFloat = 24.0
@@ -65,8 +60,8 @@ enum AppLayout {
     // MARK: - Font Sizes
     static let fontSizeXSmall: CGFloat = 10
     static let fontSizeSmall: CGFloat = 12
-    static let fontSizeMedium: CGFloat = 16
-    static let fontSizeLarge: CGFloat = 18
+    static let fontSizeMedium: CGFloat = 14
+    static let fontSizeLarge: CGFloat = 20
     static let fontSizeXLarge: CGFloat = 24
     static let fontSizeXXLarge: CGFloat = 28
     
