@@ -22,6 +22,19 @@ enum AppIcons {
     enum RoleSelection {
         static let roleSender = "role_sender"
         static let roleDelivery = "role_delivery"
-        static let profile = "profile"
+        static let profile_icon = "profile"
+    }
+    
+    enum Signup {
+        static let signup_icon = "signup"
+        static let google_icon = "google"
+        static let apple_icon = "apple"
+        static let eye_slash = "eye.slash"
+        static let eye = "eye"
+        static let square = "square"
+        static let checkmark_square_fill = "checkmark.square.fill"
+        static let full_text = "By continuing, you agree to our Terms of Services and Privacy Policy"
+        static let terms_of_services = "Terms of Services"
+        static let privacy_policy = "Privacy Policy"
     }
 }
