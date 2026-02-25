@@ -1,5 +1,5 @@
 //
-//  Constants.swift
+//  CellConstants.swift
 //  kuryem
 //
 //  Created by FFK on 20.02.2026.
@@ -7,6 +7,6 @@
 
 import Foundation
 
-enum AppConstants {
+enum CellConstants {
     static let reuseIdentifier = "OnboardingCell"
 }

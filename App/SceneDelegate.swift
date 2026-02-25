@@ -16,9 +16,11 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         guard let windowScene = (scene as? UIWindowScene) else { return }
         let onboardingRepository = OnboardingRepository()
         let roleSelectionRepository = RoleSelectionRepository()
+        let authRepository = FirebaseAuthRepository()
         let factory = DependencyFactory(
             onboardingRepository: onboardingRepository,
-            roleSelectionRepository: roleSelectionRepository
+            roleSelectionRepository: roleSelectionRepository,
+            authRepository: authRepository
         )
         let rootNavigationController = UINavigationController()
 
