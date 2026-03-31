@@ -28,10 +28,12 @@ final class SenderSignupViewModel {
     private let authRepository: AuthRepositoryProtocol
     var selectedRole: UserRole = .sender
     
+    // MARK: - State Properties
     private(set) var isLoading: Bool = false {
         didSet { viewDelegate?.senderSignupViewModelDidUpdateLoading(self) }
     }
     
+    // Firebase'den gelen asenkron hatalar için tuttuğumuz değişken
     private(set) var activeError: AuthError? {
         didSet {
             if let error = activeError {
@@ -45,7 +47,7 @@ final class SenderSignupViewModel {
         self.authRepository = authRepository
     }
     
-    // MARK: - Public Actions
+    // MARK: - Authentication Actions
     func signup(fullName: String, email: String, phoneNumber: String, password: String, confirmPassword: String) {
         guard validateInput(fullName: fullName, email: email, phoneNumber: phoneNumber, password: password, confirmPassword: confirmPassword) else { return }
         
@@ -56,6 +58,7 @@ final class SenderSignupViewModel {
         checkAvailabilityAndProceed(for: request)
     }
     
+    // MARK: - Social Authentication
     func signupWithGoogle() {
         isLoading = true
         authRepository.signInWithGoogle { [weak self] result in
@@ -72,11 +75,12 @@ final class SenderSignupViewModel {
         }
     }
     
+    // MARK: - Routing Methods
     func didTapLogin() {
         delegate?.senderSignupViewModelRequestLogin(self)
     }
     
-    // MARK: - Formatting
+    // MARK: - Text Formatting
     func formatPhoneNumber(_ text: String) -> String {
         var numbers = text.components(separatedBy: CharacterSet.decimalDigits.inverted).joined()
         if numbers.hasPrefix("0") { numbers.removeFirst() }
@@ -89,16 +93,50 @@ final class SenderSignupViewModel {
         return formatted
     }
     
-    // MARK: - Private Helpers
+    // MARK: - Validation Helpers
     private func validateInput(fullName: String, email: String, phoneNumber: String, password: String, confirmPassword: String) -> Bool {
-        guard !fullName.isEmpty else { activeError = .emptyFullName; return false }
-        guard !email.isEmpty else { activeError = .emptyEmail; return false }
-        guard isValidEmail(email) else { activeError = .invalidEmail; return false }
-        guard phoneNumber.count == 10 else { activeError = .invalidPhoneNumber; return false }
-        guard !password.isEmpty else { activeError = .emptyPassword; return false }
-        guard password.count >= 8 else { activeError = .weakPassword; return false }
-        guard password == confirmPassword else { activeError = .passwordsDoNotMatch; return false }
-        return true
+        var hasValidationError = false
+        
+        // 1. İsim Kontrolü
+        if fullName.isEmpty {
+            viewDelegate?.senderSignupViewModelDidReceiveError(self, error: .emptyFullName)
+            hasValidationError = true
+        }
+        
+        // 2. Email Kontrolü
+        if email.isEmpty {
+            viewDelegate?.senderSignupViewModelDidReceiveError(self, error: .emptyEmail)
+            hasValidationError = true
+        } else if !isValidEmail(email) {
+            viewDelegate?.senderSignupViewModelDidReceiveError(self, error: .invalidEmail)
+            hasValidationError = true
+        }
+        
+        // 3. Telefon Kontrolü
+        if phoneNumber.isEmpty {
+            viewDelegate?.senderSignupViewModelDidReceiveError(self, error: .emptyPhoneNumber)
+            hasValidationError = true
+        } else if phoneNumber.count != 10 {
+            viewDelegate?.senderSignupViewModelDidReceiveError(self, error: .invalidPhoneNumber)
+            hasValidationError = true
+        }
+        
+        // 4. Şifre Kontrolü
+        if password.isEmpty {
+            viewDelegate?.senderSignupViewModelDidReceiveError(self, error: .emptyPassword)
+            hasValidationError = true
+        } else if password.count < 8 {
+            viewDelegate?.senderSignupViewModelDidReceiveError(self, error: .weakPassword)
+            hasValidationError = true
+        }
+        
+        // 5. Şifre Tekrar Kontrolü
+        if confirmPassword.isEmpty || password != confirmPassword {
+            viewDelegate?.senderSignupViewModelDidReceiveError(self, error: .passwordsDoNotMatch)
+            hasValidationError = true
+        }
+        
+        return !hasValidationError
     }
     
     private func isValidEmail(_ email: String) -> Bool {
@@ -107,6 +145,7 @@ final class SenderSignupViewModel {
         return emailPredicate.evaluate(with: email)
     }
     
+    // MARK: - Database & Network Calls
     private func checkAvailabilityAndProceed(for request: SignupRequest) {
         authRepository.checkEmailExists(email: request.email) { [weak self] emailResult in
             guard let self = self else { return }
@@ -162,6 +201,7 @@ final class SenderSignupViewModel {
         }
     }
     
+    // MARK: - Social Auth Helpers
     private func handleSocialAuthResult(_ result: Result<User, AuthError>) {
         self.isLoading = false
         

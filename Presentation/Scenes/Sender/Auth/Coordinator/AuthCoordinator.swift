@@ -102,13 +102,23 @@ extension AuthCoordinator: SenderSignupViewModelDelegate {
     
     func signupViewModelDidAuthenticateWithSocial(_ viewModel: SenderSignupViewModel) {
         delegate?.authCoordinatorDidAuthenticate(self)
+        print("Socical button ile Home sayfasına geçildi")
     }
 }
 
 // MARK: - SenderLoginViewModelDelegate
 extension AuthCoordinator: SenderLoginViewModelDelegate {
+    func senderLoginViewModelDidRequestForgotPassword(_ viewModel: SenderLoginViewModel) {
+        print("Forgot Passwor Sayfasına geçildi")
+    }
+    
+    func senderLoginViewModelDidAuthenticateWithSocial(_ viewModel: SenderLoginViewModel) {
+        print("Socical button ile Home sayfasına geçildi")
+    }
+    
     func senderLoginViewModelDidLogin(_ viewModel: SenderLoginViewModel) {
         delegate?.authCoordinatorDidAuthenticate(self)
+        print("Login Button ile Home Sayfasına Geçildi")
     }
     
     func senderLoginViewModelRequestSignup(_ viewModel: SenderLoginViewModel) {
