@@ -94,7 +94,7 @@ extension AppCoordinator: RoleSelectionCoordinatorDelegate {
     func roleSelectionCoordinatorDidFinish(_ coordinator: RoleSelectionCoordinator, selectedRole: UserRole) {
         removeChilCoordinator(coordinator)
         showAuth(initialScreen: .signup, role: selectedRole)
-        
+        print("Seçilen Rol:\(selectedRole)")
         // TODO: Seçilen role göre (sender veya deliveryPerson) uygulamanın ana akışını başlat.
     }
 }

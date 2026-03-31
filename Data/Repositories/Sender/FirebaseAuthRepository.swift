@@ -103,6 +103,7 @@ final class FirebaseAuthRepository: NSObject, AuthRepositoryProtocol {
         }
     }
     
+    // MARK: - Signup Flow
     func singUp(request: SignupRequest, completion: @escaping (Result<User, AuthError>) -> Void) {
         auth.createUser(withEmail: request.email, password: request.password) { [weak self] authResult, error in
             guard let self = self else { return }
@@ -116,6 +117,41 @@ final class FirebaseAuthRepository: NSObject, AuthRepositoryProtocol {
             }
             
             self.handleFirebaseUser(firebaseUser, providedFullName: request.fullName, providedPhoneNumber: request.phoneNumber, role: request.role, completion: completion)
+        }
+    }
+    
+    // MARK: - Login Flow
+    func login(request: LoginRequest, completion: @escaping (Result<User, AuthError>) -> Void) {
+        auth.signIn(withEmail: request.email, password: request.password) { [weak self] authResult, error in
+            guard let self = self else { return }
+            
+            if let error = error {
+                return completion(.failure(self.mapFirebaseError(error)))
+            }
+            
+            guard let firebaseUser = authResult?.user else {
+                return completion(.failure(.unknown))
+            }
+            
+            self.firestore.collection(FirestoreConstants.Collections.users).document(firebaseUser.uid).getDocument { snapshot, error in
+                if error != nil { return completion(.failure(.databaseError)) }
+                
+                guard let data = snapshot?.data(),
+                      let roleRaw = data[FirestoreConstants.UserFields.role] as? String,
+                      let role = UserRole(rawValue: roleRaw) else {
+                    return completion(.failure(.userNotFound))
+                }
+                
+                let appUser = User(
+                    id: firebaseUser.uid,
+                    fullName: data[FirestoreConstants.UserFields.fullName] as? String ?? "Kullanıcı",
+                    email: firebaseUser.email ?? "",
+                    phoneNumber: data[FirestoreConstants.UserFields.phoneNumber] as? String ?? "",
+                    role: role
+                )
+                
+                completion(.success(appUser))
+            }
         }
     }
     
@@ -166,34 +202,22 @@ final class FirebaseAuthRepository: NSObject, AuthRepositoryProtocol {
     private func mapFirebaseError(_ error: Error) -> AuthError {
         let nsError = error as NSError
         
-        // Ağ hatası
         if nsError.domain == NSURLErrorDomain {
             return .networkError
         }
         
         switch nsError.code {
-        case AuthErrorCode.emailAlreadyInUse.rawValue:
-            return .emailAlreadyInUse
-        case AuthErrorCode.invalidEmail.rawValue:
-            return .invalidEmail
-        case AuthErrorCode.weakPassword.rawValue:
-            return .weakPassword
-        case AuthErrorCode.wrongPassword.rawValue:
-            return .wrongPassword
-        case AuthErrorCode.userNotFound.rawValue:
-            return .userNotFound
-        case AuthErrorCode.invalidPhoneNumber.rawValue:
-            return .invalidPhoneNumber
-        case AuthErrorCode.invalidVerificationCode.rawValue:
-            return .invalidVerificationCode
-        case AuthErrorCode.sessionExpired.rawValue:
-            return .sessionExpired
-        case AuthErrorCode.tooManyRequests.rawValue:
-            return .tooManyRequests
-        case AuthErrorCode.networkError.rawValue:
-            return .networkError
-        default:
-            return .unknown
+        case AuthErrorCode.emailAlreadyInUse.rawValue:        return .emailAlreadyInUse
+        case AuthErrorCode.invalidEmail.rawValue:             return .invalidEmail
+        case AuthErrorCode.weakPassword.rawValue:             return .weakPassword
+        case AuthErrorCode.wrongPassword.rawValue:            return .wrongPassword
+        case AuthErrorCode.userNotFound.rawValue:             return .userNotFound
+        case AuthErrorCode.invalidPhoneNumber.rawValue:       return .invalidPhoneNumber
+        case AuthErrorCode.invalidVerificationCode.rawValue:  return .invalidVerificationCode
+        case AuthErrorCode.sessionExpired.rawValue:           return .sessionExpired
+        case AuthErrorCode.tooManyRequests.rawValue:          return .tooManyRequests
+        case AuthErrorCode.networkError.rawValue:             return .networkError
+        default:                                              return .unknown
         }
     }
     

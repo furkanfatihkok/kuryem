@@ -16,6 +16,12 @@ struct SignupRequest {
     let role: UserRole
 }
 
+// MARK: - Login Models
+struct LoginRequest {
+    let email: String
+    let password: String
+}
+
 // MARK: - Verification Models
 struct PhoneVerificationRequest {
     let phoneNumber: String

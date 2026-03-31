@@ -449,7 +449,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Forgot password? Reset here"
+            "value" : "Forgot password?"
           }
         },
         "tr" : {
@@ -466,7 +466,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Don't have an account? Signup"
+            "value" : "Don't have an account?"
           }
         },
         "tr" : {
@@ -975,7 +975,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Enter phone number in correct format. e.g,  +90 (5XX) XXX XX28"
+            "value" : "Enter phone number in correct format."
           }
         },
         "tr" : {
