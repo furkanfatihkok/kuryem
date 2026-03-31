@@ -31,6 +31,8 @@ final class CustomTextField: UIView {
         let textField = UITextField()
         textField.font = AppFonts.body.withSize(AppLayout.fontSizeMedium)
         textField.textColor = AppColor.textPrimary
+        textField.autocapitalizationType = .none
+        textField.autocorrectionType = .no
         textField.translatesAutoresizingMaskIntoConstraints = false
         return textField
     }()

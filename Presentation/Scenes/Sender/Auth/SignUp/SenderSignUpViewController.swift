@@ -103,6 +103,7 @@ final class SenderSignupViewController: UIViewController {
         let attributedString = fullText.highlight(targetWord: "Login")
         button.setAttributedTitle(attributedString, for: .normal)
         button.addTarget(self, action: #selector(loginButtonTapped), for: .touchUpInside)
+        button.isUserInteractionEnabled = true
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
@@ -251,9 +252,15 @@ final class SenderSignupViewController: UIViewController {
         )
     }
     
-    @objc private func googleButtonTapped() { viewModel.signupWithGoogle() }
-    @objc private func appleButtonTapped() { viewModel.signupWithApple() }
-    @objc private func loginButtonTapped() { viewModel.didTapLogin() }
+    @objc private func googleButtonTapped() {
+        viewModel.signupWithGoogle()
+    }
+    @objc private func appleButtonTapped() {
+        viewModel.signupWithApple()
+    }
+    @objc private func loginButtonTapped() {
+        viewModel.didTapLogin()
+    }
 }
 
 // MARK: - TermsAgreementViewDelegate
