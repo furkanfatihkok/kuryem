@@ -37,4 +37,8 @@ enum AppIcons {
         static let terms_of_services = "Terms of Services"
         static let privacy_policy = "Privacy Policy"
     }
+    
+    enum Verification {
+        static let shield_check = "shield-check"
+    }
 }
