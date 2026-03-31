@@ -38,6 +38,10 @@ enum AppIcons {
         static let privacy_policy = "Privacy Policy"
     }
     
+    enum Login {
+        static let login_icon = "login"
+    }
+    
     enum Verification {
         static let shield_check = "shield-check"
     }

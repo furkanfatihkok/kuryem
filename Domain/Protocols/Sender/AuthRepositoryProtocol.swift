@@ -23,4 +23,7 @@ protocol AuthRepositoryProtocol {
     // MARK: - Social Authentication
     func signInWithGoogle(completion: @escaping (Result<User, AuthError>) -> Void)
     func signInWithApple(completion: @escaping (Result<User, AuthError>) -> Void)
+    
+    // MARK: - Login
+    func login(request: LoginRequest, completion: @escaping (Result<User, AuthError>) -> Void)
 }
