@@ -34,7 +34,7 @@ final class AuthHeaderView: UIView {
         return label
     }()
     
-    private let descriptionLabel: UILabel = {
+    let descriptionLabel: UILabel = {
         let label = UILabel()
         label.font = AppFonts.body.withSize(AppLayout.fontSizeSmall)
         label.textColor = AppColor.textSecondary

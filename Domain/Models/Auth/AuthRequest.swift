@@ -7,7 +7,7 @@
 
 import Foundation
 
-// MARK: SignupRequest
+// MARK: - Signup Models
 struct SignupRequest {
     let fullName: String
     let email: String
@@ -16,7 +16,7 @@ struct SignupRequest {
     let role: UserRole
 }
 
-// MARK: - Verification
+// MARK: - Verification Models
 struct PhoneVerificationRequest {
     let phoneNumber: String
 }

@@ -134,5 +134,17 @@ enum Localized {
         static var genericError: String { String(localized: "error_generic") }
         static var networkError: String { String(localized: "error_network") }
         static var authenticationFailed: String { String(localized: "error_auth_failed") }
+        
+        static var emailAlreadyInUse: String { String(localized: "error_email_in_use") }
+        static var phoneNumberAlreadyInUse: String { String(localized: "error_phone_in_use") }
+        static var userNotFound: String { String(localized: "error_user_not_found") }
+        static var wrongPassword: String { String(localized: "error_wrong_password") }
+        
+        static var sessionExpired: String { String(localized: "error_session_expired") }
+        static var tooManyRequests: String { String(localized: "error_too_many_requests") }
+        static var missingVerificationID: String { String(localized: "error_missing_verification_id") }
+        static var databaseError: String { String(localized: "error_database") }
+        static var socialAuthCanceled: String { String(localized: "error_social_canceled") }
+        static var socialAuthFailed: String { String(localized: "error_social_failed") }
     }
 }
