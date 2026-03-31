@@ -7,13 +7,19 @@
 
 import UIKit
 
+// MARK: - Enums
+enum CodeVerificationFlow {
+    case signupVerification(request: SignupRequest)
+    case passwordReset(phoneNumber: String)
+}
+
+// MARK: - AuthCoordinatorDelegate
 protocol AuthCoordinatorDelegate: AnyObject {
     func authCoordinatorDidAuthenticate(_ coordinator: AuthCoordinator)
     func authCoordinatorDidCancel(_ coordinator: AuthCoordinator)
 }
 
 final class AuthCoordinator: Coordinator {
-    
     enum InitialScreen {
         case login
         case signup
@@ -27,7 +33,6 @@ final class AuthCoordinator: Coordinator {
     private let factory: DependencyFactory
     private let initialScreen: InitialScreen
     private let role: UserRole
-//    TODO: driver modunda da ekranı açıyor burayı sadece sender için yap
     
     // MARK: - Initialization
     init(navigationController: UINavigationController, factory: DependencyFactory, initialScreen: InitialScreen, role: UserRole) {
@@ -37,7 +42,7 @@ final class AuthCoordinator: Coordinator {
         self.role = role
     }
     
-    // MARK: - Public Methods
+    // MARK: - Start
     func start() {
         switch initialScreen {
         case .login:
@@ -51,7 +56,6 @@ final class AuthCoordinator: Coordinator {
     private func showSignup() {
         let viewModel = factory.makeSenderSignUpViewModel(role: role)
         viewModel.delegate = self
-        
         let viewController = SenderSignupViewController(viewModel: viewModel)
         navigationController.pushViewController(viewController, animated: true)
     }
@@ -59,24 +63,37 @@ final class AuthCoordinator: Coordinator {
     private func showLogin() {
         let viewModel = factory.makeSenderLoginViewModel()
         viewModel.delegate = self
-        
-        let viewController = SenderLoginViewController(viewModel:viewModel)
-        navigationController.pushViewController(viewController, animated: true)
+        let viewController = SenderLoginViewController(viewModel: viewModel)
+        navigationController.setViewControllers([viewController], animated: true)
     }
     
-    private func showVerificationScreen(phoneNumber: String) {
-        let viewModel = factory.makeSenderVerificationViewModel(phoneNumber: phoneNumber)
-        viewModel.delegate = self
+    private func showCodeVerification(flow: CodeVerificationFlow) {
+        let verificationType: VerificationType
+        switch flow {
+        case .signupVerification(let request):
+            verificationType = .signupVerification(request: request)
+        case .passwordReset(let phoneNumber):
+            verificationType = .passwordReset(phoneNumber: phoneNumber)
+        }
         
+        let viewModel = factory.makeSenderVerificationViewModel(verificationType: verificationType)
+        viewModel.delegate = self
         let viewController = SenderVerificationViewController(viewModel: viewModel)
         navigationController.pushViewController(viewController, animated: true)
     }
+    
+    private func showCreateNewPassword() {
+        // let viewModel = factory.makeCreateNewPasswordViewModel()
+        // viewModel.delegate = self
+        // let viewController = SenderCreateNewPasswordViewController(viewModel: viewModel)
+        // navigationController.pushViewController(viewController, animated: true)
+    }
 }
 
-// MARK: SenderSignupViewModelDelegate
+// MARK: - SenderSignupViewModelDelegate
 extension AuthCoordinator: SenderSignupViewModelDelegate {
-    func senderSignupViewModelDidSignup(_ viewModel: SenderSignupViewModel, phoneNumber: String) {
-       showVerificationScreen(phoneNumber: phoneNumber)
+    func senderSignupViewModelDidSignup(_ viewModel: SenderSignupViewModel, request: SignupRequest) {
+        showCodeVerification(flow: .signupVerification(request: request))
     }
     
     func senderSignupViewModelRequestLogin(_ viewModel: SenderSignupViewModel) {
@@ -87,6 +104,7 @@ extension AuthCoordinator: SenderSignupViewModelDelegate {
         delegate?.authCoordinatorDidAuthenticate(self)
     }
 }
+
 // MARK: - SenderLoginViewModelDelegate
 extension AuthCoordinator: SenderLoginViewModelDelegate {
     func senderLoginViewModelDidLogin(_ viewModel: SenderLoginViewModel) {
@@ -98,9 +116,15 @@ extension AuthCoordinator: SenderLoginViewModelDelegate {
     }
 }
 
-// MARK: - SenderVerificationViewModelDelegate
+// MARK: - VerificationViewModelDelegate
 extension AuthCoordinator: SenderVerificationViewModelDelegate {
     func senderVerificationViewModelDidVerify(_ viewModel: SenderVerificationViewModel) {
-        delegate?.authCoordinatorDidAuthenticate(self)
+        switch viewModel.verificationType {
+        case .signupVerification:
+            print("🚀 KULLANICI BAŞARIYLA KAYDEDİLDİ. LOGİN SAYFASINA GEÇİLİYOR 🚀")
+            showLogin()
+        case .passwordReset:
+            showCreateNewPassword()
+        }
     }
 }
