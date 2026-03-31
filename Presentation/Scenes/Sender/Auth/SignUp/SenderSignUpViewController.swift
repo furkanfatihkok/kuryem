@@ -39,8 +39,6 @@ final class SenderSignupViewController: UIViewController {
     private lazy var fullNameTextField = CustomTextField(placeholder: Localized.Signup.fullName)
     private lazy var emailTextField = CustomTextField(placeholder: Localized.Signup.emailAddress, keyboardType: .emailAddress)
     
-    // Telefon Alanı
-//    TODO: textfield yap ve birden fazla ülkelerin numarası olsun.
     private let phoneStackView: UIStackView = {
         let sv = UIStackView()
         sv.axis = .horizontal
@@ -115,9 +113,7 @@ final class SenderSignupViewController: UIViewController {
         super.init(nibName: nil, bundle: nil)
     }
     
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
+    required init?(coder: NSCoder) { fatalError("init(coder:) has not been implemented") }
     
     // MARK: - Lifecycle
     override func viewDidLoad() {
@@ -129,7 +125,7 @@ final class SenderSignupViewController: UIViewController {
         phoneTextField.addTarget(self, action: #selector(phoneTextChanged), for: .editingChanged)
     }
     
-    // MARK: - Setup
+    // MARK: - Setup UI
     private func setupUI() {
         view.backgroundColor = AppColor.background
         navigationController?.setNavigationBarHidden(true, animated: false)
@@ -157,7 +153,7 @@ final class SenderSignupViewController: UIViewController {
     
     private func setupConstraints() {
         NSLayoutConstraint.activate([
-            // ScrollView & ContentView
+            // ScrollView Constraints
             scrollView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
             scrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             scrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
@@ -169,12 +165,11 @@ final class SenderSignupViewController: UIViewController {
             contentView.bottomAnchor.constraint(equalTo: scrollView.contentLayoutGuide.bottomAnchor),
             contentView.widthAnchor.constraint(equalTo: scrollView.frameLayoutGuide.widthAnchor),
             
-            // Header
+            // Component Constraints
             headerView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: AppLayout.spacingMedium),
             headerView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: AppLayout.paddingHorizontal),
             headerView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -AppLayout.paddingHorizontal),
             
-            // TextFields
             fullNameTextField.topAnchor.constraint(equalTo: headerView.bottomAnchor, constant: AppLayout.spacingXLarge),
             fullNameTextField.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: AppLayout.paddingHorizontal),
             fullNameTextField.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -AppLayout.paddingHorizontal),
@@ -199,7 +194,6 @@ final class SenderSignupViewController: UIViewController {
             confirmPasswordTextField.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: AppLayout.paddingHorizontal),
             confirmPasswordTextField.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -AppLayout.paddingHorizontal),
             
-            // Agreement & Continue Button
             termsAgreementView.topAnchor.constraint(equalTo: confirmPasswordTextField.bottomAnchor, constant: AppLayout.spacingLarge),
             termsAgreementView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: AppLayout.paddingHorizontal),
             termsAgreementView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -AppLayout.paddingHorizontal),
@@ -209,7 +203,6 @@ final class SenderSignupViewController: UIViewController {
             continueButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -AppLayout.paddingHorizontal),
             continueButton.heightAnchor.constraint(equalToConstant: AppLayout.buttonHeight),
             
-            // Divider & Social Buttons
             dividerView.topAnchor.constraint(equalTo: continueButton.bottomAnchor, constant: AppLayout.spacingLarge),
             dividerView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: AppLayout.paddingHorizontal),
             dividerView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -AppLayout.paddingHorizontal),
@@ -224,7 +217,6 @@ final class SenderSignupViewController: UIViewController {
             appleButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -AppLayout.paddingHorizontal),
             appleButton.heightAnchor.constraint(equalToConstant: AppLayout.buttonHeight),
             
-            // Login
             loginButton.topAnchor.constraint(equalTo: appleButton.bottomAnchor, constant: AppLayout.spacingLarge),
             loginButton.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
             loginButton.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -AppLayout.spacingXLarge)
@@ -235,10 +227,9 @@ final class SenderSignupViewController: UIViewController {
         viewModel.viewDelegate = self
     }
     
-    // MARK: - Helper Methods
+    // MARK: - Private Helpers
     private func resetErrors() {
-        let textFields = [fullNameTextField, emailTextField, phoneTextField, passwordTextField, confirmPasswordTextField]
-        textFields.forEach { $0.setError(nil) }
+        [fullNameTextField, emailTextField, phoneTextField, passwordTextField, confirmPasswordTextField].forEach { $0.setError(nil) }
     }
     
     // MARK: - Actions
@@ -260,17 +251,9 @@ final class SenderSignupViewController: UIViewController {
         )
     }
     
-    @objc private func googleButtonTapped() {
-        viewModel.signupWithGoogle()
-    }
-        
-    @objc private func appleButtonTapped() {
-        viewModel.signupWithApple()
-    }
-        
-    @objc private func loginButtonTapped() {
-        viewModel.didTapLogin()
-    }
+    @objc private func googleButtonTapped() { viewModel.signupWithGoogle() }
+    @objc private func appleButtonTapped() { viewModel.signupWithApple() }
+    @objc private func loginButtonTapped() { viewModel.didTapLogin() }
 }
 
 // MARK: - TermsAgreementViewDelegate
@@ -294,9 +277,9 @@ extension SenderSignupViewController: SenderSignupViewModelViewDelegate {
         switch error {
         case .emptyFullName:
             fullNameTextField.setError(error.localizedDescription)
-        case .emptyEmail, .invalidEmail:
+        case .emptyEmail, .invalidEmail, .emailAlreadyInUse:
             emailTextField.setError(error.localizedDescription)
-        case .emptyPhoneNumber, .invalidPhoneNumber:
+        case .emptyPhoneNumber, .invalidPhoneNumber, .phoneNumberAlreadyInUse:
             phoneTextField.setError(error.localizedDescription)
         case .emptyPassword, .weakPassword:
             passwordTextField.setError(error.localizedDescription)

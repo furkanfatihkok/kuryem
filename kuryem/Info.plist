@@ -12,6 +12,12 @@
 				<string>com.googleusercontent.apps.46511267833-v0ebbcq81r9v5m1t4vgijsqf9c28v3hc</string>
 			</array>
 		</dict>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleURLSchemes</key>
+			<array/>
+		</dict>
 	</array>
 	<key>UIAppFonts</key>
 	<array>
@@ -37,5 +43,9 @@
 			</array>
 		</dict>
 	</dict>
+	<key>UIBackgroundModes</key>
+	<array>
+		<string>remote-notification</string>
+	</array>
 </dict>
 </plist>
