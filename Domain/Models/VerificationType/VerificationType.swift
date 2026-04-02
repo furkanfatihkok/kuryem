@@ -14,8 +14,10 @@ enum VerificationType {
     // MARK: - Properties
     var title: String {
         switch self {
-        case .signupVerification:   return Localized.OTPVerification.verifyYourNumber
-        case .passwordReset:        return Localized.CodeVerification.verifyYourNumber
+        case .signupVerification:
+            return Localized.OTPVerification.verifyYourNumber
+        case .passwordReset:
+            return Localized.CodeVerification.verifyYourNumber
         }
     }
     
@@ -30,8 +32,10 @@ enum VerificationType {
     
     var phoneNumber: String {
         switch self {
-        case .signupVerification(let request):  return request.phoneNumber
-        case .passwordReset(let phone):         return phone
+        case .signupVerification(let request):
+            return request.phoneNumber
+        case .passwordReset(let phone):
+            return phone
         }
     }
     

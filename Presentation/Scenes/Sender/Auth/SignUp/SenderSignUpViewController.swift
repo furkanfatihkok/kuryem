@@ -33,20 +33,23 @@ final class SenderSignupViewController: UIViewController {
             title: Localized.Signup.createYourAccount,
             description: Localized.Signup.signupDescription
         )
+        view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
     
-    private lazy var fullNameTextField = CustomTextField(placeholder: Localized.Signup.fullName)
-    private lazy var emailTextField = CustomTextField(placeholder: Localized.Signup.emailAddress, keyboardType: .emailAddress)
-    
-    private let phoneStackView: UIStackView = {
-        let sv = UIStackView()
-        sv.axis = .horizontal
-        sv.spacing = AppLayout.spacingSmall
-        sv.translatesAutoresizingMaskIntoConstraints = false
-        return sv
+    private lazy var fullNameTextField: CustomTextField = {
+        let tf = CustomTextField(placeholder: Localized.Signup.fullName)
+        tf.translatesAutoresizingMaskIntoConstraints = false
+        return tf
     }()
     
+    private lazy var emailTextField: CustomTextField = {
+        let tf = CustomTextField(placeholder: Localized.Signup.emailAddress, keyboardType: .emailAddress)
+        tf.translatesAutoresizingMaskIntoConstraints = false
+        return tf
+    }()
+    
+    // UIStackView KALDARILDI, elemanlar ayrı ayrı eklendi
     private let countryCodeContainer: UIView = {
         let view = UIView()
         view.layer.borderWidth = AppLayout.borderWidthThin
@@ -65,35 +68,57 @@ final class SenderSignupViewController: UIViewController {
         return label
     }()
     
-    private lazy var phoneTextField = CustomTextField(placeholder: "5XX XXX XXX", keyboardType: .phonePad)
-    private lazy var passwordTextField = CustomTextField(placeholder: Localized.Signup.password, isSecure: true)
-    private lazy var confirmPasswordTextField = CustomTextField(placeholder: Localized.Signup.confirmPassword, isSecure: true)
+    private lazy var phoneTextField: CustomTextField = {
+        let tf = CustomTextField(placeholder: "5XX XXX XXX", keyboardType: .phonePad)
+        tf.translatesAutoresizingMaskIntoConstraints = false
+        return tf
+    }()
+    
+    private lazy var passwordTextField: CustomTextField = {
+        let tf = CustomTextField(placeholder: Localized.Signup.password, isSecure: true)
+        tf.translatesAutoresizingMaskIntoConstraints = false
+        return tf
+    }()
+    
+    private lazy var confirmPasswordTextField: CustomTextField = {
+        let tf = CustomTextField(placeholder: Localized.Signup.confirmPassword, isSecure: true)
+        tf.translatesAutoresizingMaskIntoConstraints = false
+        return tf
+    }()
     
     private lazy var termsAgreementView: TermsAgreementView = {
         let view = TermsAgreementView()
         view.delegate = self
+        view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
     
-    private let dividerView = OrDividerView()
+    private let dividerView: OrDividerView = {
+        let view = OrDividerView()
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
+    }()
     
     private lazy var continueButton: PrimaryButton = {
         let button = PrimaryButton(title: Localized.Signup.continueButton)
         button.addTarget(self, action: #selector(continueButtonTapped), for: .touchUpInside)
         button.isEnabled = false
         button.alpha = 0.5
+        button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
     
     private lazy var googleButton: SocialAuthButton = {
         let button = SocialAuthButton(type: .google, title: Localized.Signup.continueWithGoogle)
         button.addTarget(self, action: #selector(googleButtonTapped), for: .touchUpInside)
+        button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
     
     private lazy var appleButton: SocialAuthButton = {
         let button = SocialAuthButton(type: .apple, title: Localized.Signup.continueWithApple)
         button.addTarget(self, action: #selector(appleButtonTapped), for: .touchUpInside)
+        button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
     
@@ -140,11 +165,10 @@ final class SenderSignupViewController: UIViewController {
         scrollView.addSubview(contentView)
         
         countryCodeContainer.addSubview(countryCodeLabel)
-        phoneStackView.addArrangedSubview(countryCodeContainer)
-        phoneStackView.addArrangedSubview(phoneTextField)
         
         let subviews = [
-            headerView, fullNameTextField, emailTextField, phoneStackView,
+            headerView, fullNameTextField, emailTextField,
+            countryCodeContainer, phoneTextField, // StackView kaldırıldı, direkt View'a eklendi
             passwordTextField, confirmPasswordTextField, termsAgreementView,
             continueButton, dividerView, googleButton, appleButton, loginButton
         ]
@@ -166,58 +190,74 @@ final class SenderSignupViewController: UIViewController {
             contentView.bottomAnchor.constraint(equalTo: scrollView.contentLayoutGuide.bottomAnchor),
             contentView.widthAnchor.constraint(equalTo: scrollView.frameLayoutGuide.widthAnchor),
             
-            // Component Constraints
+            // Header Constraints
             headerView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: AppLayout.spacingMedium),
             headerView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: AppLayout.paddingHorizontal),
             headerView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -AppLayout.paddingHorizontal),
             
+            // Full Name TextField
             fullNameTextField.topAnchor.constraint(equalTo: headerView.bottomAnchor, constant: AppLayout.spacingXLarge),
             fullNameTextField.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: AppLayout.paddingHorizontal),
             fullNameTextField.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -AppLayout.paddingHorizontal),
             
+            // Email TextField
             emailTextField.topAnchor.constraint(equalTo: fullNameTextField.bottomAnchor, constant: AppLayout.spacingMedium),
             emailTextField.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: AppLayout.paddingHorizontal),
             emailTextField.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -AppLayout.paddingHorizontal),
             
-            phoneStackView.topAnchor.constraint(equalTo: emailTextField.bottomAnchor, constant: AppLayout.spacingMedium),
-            phoneStackView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: AppLayout.paddingHorizontal),
-            phoneStackView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -AppLayout.paddingHorizontal),
+            // 1. +90 Kutusunun Konumu
+            countryCodeContainer.topAnchor.constraint(equalTo: emailTextField.bottomAnchor, constant: AppLayout.spacingMedium),
+            countryCodeContainer.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: AppLayout.paddingHorizontal),
+            countryCodeContainer.widthAnchor.constraint(equalToConstant: AppLayout.textFieldWeight),
+            countryCodeContainer.heightAnchor.constraint(equalToConstant: AppLayout.textFieldHeight),
             
-            countryCodeContainer.widthAnchor.constraint(equalToConstant: 80),
             countryCodeLabel.centerYAnchor.constraint(equalTo: countryCodeContainer.centerYAnchor),
             countryCodeLabel.centerXAnchor.constraint(equalTo: countryCodeContainer.centerXAnchor),
             
-            passwordTextField.topAnchor.constraint(equalTo: phoneStackView.bottomAnchor, constant: AppLayout.spacingMedium),
+            // 2. Telefon TextField
+            phoneTextField.topAnchor.constraint(equalTo: countryCodeContainer.topAnchor),
+            phoneTextField.leadingAnchor.constraint(equalTo: countryCodeContainer.trailingAnchor, constant: AppLayout.spacingSmall),
+            phoneTextField.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -AppLayout.paddingHorizontal),
+            
+            // --- ŞİFRE ALANI ---
+            passwordTextField.topAnchor.constraint(equalTo: phoneTextField.bottomAnchor, constant: AppLayout.spacingMedium),
             passwordTextField.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: AppLayout.paddingHorizontal),
             passwordTextField.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -AppLayout.paddingHorizontal),
             
+            // Confirm Password TextField
             confirmPasswordTextField.topAnchor.constraint(equalTo: passwordTextField.bottomAnchor, constant: AppLayout.spacingMedium),
             confirmPasswordTextField.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: AppLayout.paddingHorizontal),
             confirmPasswordTextField.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -AppLayout.paddingHorizontal),
             
+            // Terms Agreement
             termsAgreementView.topAnchor.constraint(equalTo: confirmPasswordTextField.bottomAnchor, constant: AppLayout.spacingLarge),
             termsAgreementView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: AppLayout.paddingHorizontal),
             termsAgreementView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -AppLayout.paddingHorizontal),
             
+            // Continue Button
             continueButton.topAnchor.constraint(equalTo: termsAgreementView.bottomAnchor, constant: AppLayout.spacingXLarge),
             continueButton.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: AppLayout.paddingHorizontal),
             continueButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -AppLayout.paddingHorizontal),
             continueButton.heightAnchor.constraint(equalToConstant: AppLayout.buttonHeight),
             
+            // Divider
             dividerView.topAnchor.constraint(equalTo: continueButton.bottomAnchor, constant: AppLayout.spacingLarge),
             dividerView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: AppLayout.paddingHorizontal),
             dividerView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -AppLayout.paddingHorizontal),
             
+            // Google Button
             googleButton.topAnchor.constraint(equalTo: dividerView.bottomAnchor, constant: AppLayout.spacingLarge),
             googleButton.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: AppLayout.paddingHorizontal),
             googleButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -AppLayout.paddingHorizontal),
             googleButton.heightAnchor.constraint(equalToConstant: AppLayout.buttonHeight),
             
+            // Apple Button
             appleButton.topAnchor.constraint(equalTo: googleButton.bottomAnchor, constant: AppLayout.spacingMedium),
             appleButton.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: AppLayout.paddingHorizontal),
             appleButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -AppLayout.paddingHorizontal),
             appleButton.heightAnchor.constraint(equalToConstant: AppLayout.buttonHeight),
             
+            // Login Button
             loginButton.topAnchor.constraint(equalTo: appleButton.bottomAnchor, constant: AppLayout.spacingLarge),
             loginButton.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
             loginButton.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -AppLayout.spacingXLarge)
@@ -255,9 +295,11 @@ final class SenderSignupViewController: UIViewController {
     @objc private func googleButtonTapped() {
         viewModel.signupWithGoogle()
     }
+    
     @objc private func appleButtonTapped() {
         viewModel.signupWithApple()
     }
+    
     @objc private func loginButtonTapped() {
         viewModel.didTapLogin()
     }
@@ -276,24 +318,50 @@ extension SenderSignupViewController: TermsAgreementViewDelegate {
 // MARK: - SenderSignupViewModelViewDelegate
 extension SenderSignupViewController: SenderSignupViewModelViewDelegate {
     func senderSignupViewModelDidUpdateLoading(_ viewModel: SenderSignupViewModel) {
-        continueButton.isEnabled = !viewModel.isLoading
-        continueButton.alpha = viewModel.isLoading ? 0.5 : 1.0
+        DispatchQueue.main.async {
+            self.continueButton.isEnabled = !viewModel.isLoading
+            self.continueButton.alpha = viewModel.isLoading ? 0.5 : 1.0
+            self.view.isUserInteractionEnabled = !viewModel.isLoading
+        }
     }
     
     func senderSignupViewModelDidReceiveError(_ viewModel: SenderSignupViewModel, error: AuthError) {
-        switch error {
-        case .emptyFullName:
-            fullNameTextField.setError(error.localizedDescription)
-        case .emptyEmail, .invalidEmail, .emailAlreadyInUse:
-            emailTextField.setError(error.localizedDescription)
-        case .emptyPhoneNumber, .invalidPhoneNumber, .phoneNumberAlreadyInUse:
-            phoneTextField.setError(error.localizedDescription)
-        case .emptyPassword, .weakPassword:
-            passwordTextField.setError(error.localizedDescription)
-        case .passwordsDoNotMatch:
-            confirmPasswordTextField.setError(error.localizedDescription)
-        default:
-            print("Auth Error: \(error.localizedDescription)")
+        DispatchQueue.main.async {
+            switch error {
+            case .emptyFullName:
+                self.fullNameTextField.setError(error.localizedDescription)
+                self.fullNameTextField.becomeFirstResponder()
+                
+            case .emptyEmail, .invalidEmail, .emailAlreadyInUse:
+                self.emailTextField.setError(error.localizedDescription)
+                if !self.fullNameTextField.isFirstResponder { self.emailTextField.becomeFirstResponder() }
+                
+            case .emptyPhoneNumber, .invalidPhoneNumber, .phoneNumberAlreadyInUse:
+                self.phoneTextField.setError(error.localizedDescription)
+                if !self.fullNameTextField.isFirstResponder && !self.emailTextField.isFirstResponder {
+                    self.phoneTextField.becomeFirstResponder()
+                }
+                
+            case .emptyPassword, .weakPassword:
+                self.passwordTextField.setError(error.localizedDescription)
+                if !self.fullNameTextField.isFirstResponder && !self.emailTextField.isFirstResponder && !self.phoneTextField.isFirstResponder {
+                    self.passwordTextField.becomeFirstResponder()
+                }
+                
+            case .passwordsDoNotMatch:
+                self.confirmPasswordTextField.setError(error.localizedDescription)
+                
+            case .networkError:
+                let alert = UIAlertController(title: "Bağlantı Hatası", message: "Lütfen internet bağlantınızı kontrol edip tekrar deneyin.", preferredStyle: .alert)
+                alert.addAction(UIAlertAction(title: "Tamam", style: .default, handler: nil))
+                self.present(alert, animated: true)
+                
+            default:
+                print("Auth Error: \(error.localizedDescription)")
+                let alert = UIAlertController(title: "Hata", message: error.localizedDescription, preferredStyle: .alert)
+                alert.addAction(UIAlertAction(title: "Tamam", style: .default, handler: nil))
+                self.present(alert, animated: true)
+            }
         }
     }
 }

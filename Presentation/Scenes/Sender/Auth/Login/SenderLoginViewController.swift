@@ -299,6 +299,11 @@ extension SenderLoginViewController: SenderLoginViewModelViewDelegate {
                 if !self.emailTextField.isFirstResponder {
                     self.passwordTextField.becomeFirstResponder()
                 }
+                // TODO: Aşağıdaki errorlar için custom error yapıp yukardan çıkar error hatasını.
+            case .networkError:
+                let alert = UIAlertController(title: "Bağlantı Hatası", message: "Lütfen internet bağlantınızı kontrol edip tekrar deneyin.", preferredStyle: .alert)
+                alert.addAction(UIAlertAction(title: "Tamam", style: .default, handler: nil))
+                self.present(alert, animated: true)
                 
             default:
                 print("Auth Error: \(error.localizedDescription)")
