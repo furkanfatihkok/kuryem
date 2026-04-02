@@ -43,6 +43,14 @@ enum AppIcons {
     }
     
     enum Verification {
-        static let shield_check = "shield-check"
+        static let shield_check = "shield_check"
+    }
+    
+    enum ForgotPassword {
+        static let password_key = "password_key"
+    }
+    
+    enum Popup {
+        static let checkmark = "checkmark"
     }
 }
