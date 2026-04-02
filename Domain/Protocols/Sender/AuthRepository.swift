@@ -8,4 +8,4 @@
 import Foundation
 
 // MARK: - COMPOSED AUTH REPOSITORY
-typealias AuthRepository = PhoneAuthRepository & ValidationAuthRepository & RegistrationAuthRepository & SessionAuthRepository
+typealias AuthRepository = PhoneAuthRepository & ValidationAuthRepository & RegistrationAuthRepository & SessionAuthRepository & PasswordManagementRepository
