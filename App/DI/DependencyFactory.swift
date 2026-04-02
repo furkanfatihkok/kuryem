@@ -52,7 +52,7 @@ final class DependencyFactory: DependencyFactoryProtocol {
     }
 
     func makeForgotPasswordViewModel() -> SenderForgotPasswordViewModel {
-        SenderForgotPasswordViewModel(authRepository: authRepository)
+        SenderForgotPasswordViewModel(validationRepository: authRepository, phoneAuthRepository: authRepository)
     }
 
     func makeSenderVerificationViewModel(verificationType: VerificationType) -> SenderVerificationViewModel {
@@ -60,6 +60,6 @@ final class DependencyFactory: DependencyFactoryProtocol {
     }
 
     func makeCreateNewPasswordViewModel() -> SenderCreateNewPasswordViewModel {
-        SenderCreateNewPasswordViewModel(authRepository: authRepository)
+        SenderCreateNewPasswordViewModel(passwordRepository: authRepository)
     }
 }

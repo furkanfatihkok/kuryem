@@ -104,17 +104,6 @@ enum Localized {
         static var savePassword: String { String(localized: "create_password_btn_save") }
     }
     
-    // MARK: - OTP Verification
-    enum OTPVerification {
-        static var verifyYourNumber: String { String(localized: "otp_title") }
-        static var otpDescription: String { String(localized: "otp_desc") }
-        
-        static var verify: String { String(localized: "common_verify") }
-        static func resendCodeIn(_ seconds: String) -> String {
-            String(localized: "otp_resend_timer \(seconds)")
-        }
-    }
-    
     // MARK: - Validation Messages
     enum Validation {
         static var emailRequired: String { String(localized: "validation_email_required") }
@@ -127,6 +116,12 @@ enum Localized {
         static var phoneNumberInvalid: String { String(localized: "validation_phone_invalid") }
         static var codeRequired: String { String(localized: "validation_code_required") }
         static var codeInvalid: String { String(localized: "validation_code_invalid") }
+    }
+    
+    // MARK: Success
+    enum Success {
+        static var successTitle: String { String(localized:"success_title")}
+        static var successDescription: String { String(localized:"success_description")}
     }
     
     // MARK: - Errors

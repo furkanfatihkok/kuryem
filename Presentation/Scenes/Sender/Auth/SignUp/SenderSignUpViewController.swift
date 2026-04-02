@@ -49,7 +49,6 @@ final class SenderSignupViewController: UIViewController {
         return tf
     }()
     
-    // UIStackView KALDARILDI, elemanlar ayrı ayrı eklendi
     private let countryCodeContainer: UIView = {
         let view = UIView()
         view.layer.borderWidth = AppLayout.borderWidthThin
@@ -208,7 +207,7 @@ final class SenderSignupViewController: UIViewController {
             // 1. +90 Kutusunun Konumu
             countryCodeContainer.topAnchor.constraint(equalTo: emailTextField.bottomAnchor, constant: AppLayout.spacingMedium),
             countryCodeContainer.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: AppLayout.paddingHorizontal),
-            countryCodeContainer.widthAnchor.constraint(equalToConstant: AppLayout.textFieldWeight),
+            countryCodeContainer.widthAnchor.constraint(equalToConstant: AppLayout.textFieldWidth),
             countryCodeContainer.heightAnchor.constraint(equalToConstant: AppLayout.textFieldHeight),
             
             countryCodeLabel.centerYAnchor.constraint(equalTo: countryCodeContainer.centerYAnchor),

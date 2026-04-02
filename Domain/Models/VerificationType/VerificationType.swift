@@ -15,7 +15,7 @@ enum VerificationType {
     var title: String {
         switch self {
         case .signupVerification:
-            return Localized.OTPVerification.verifyYourNumber
+            return Localized.CodeVerification.verifyYourNumber
         case .passwordReset:
             return Localized.CodeVerification.verifyYourNumber
         }

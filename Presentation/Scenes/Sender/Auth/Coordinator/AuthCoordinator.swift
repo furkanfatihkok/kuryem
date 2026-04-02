@@ -84,12 +84,16 @@ final class AuthCoordinator: Coordinator {
 
     private func showForgotPassword() {
         let viewModel = factory.makeForgotPasswordViewModel()
-        // TODO: Controller implement edildiğinde açılacak
+        viewModel.delegate = self
+        let viewController = SenderForgotPasswordViewController(viewModel: viewModel)
+        navigationController.pushViewController(viewController, animated: true)
     }
 
     private func showCreateNewPassword() {
         let viewModel = factory.makeCreateNewPasswordViewModel()
-        // TODO: Controller implement edildiğinde açılacak
+        viewModel.delegate = self
+        let viewController = SenderCreateNewPasswordViewController(viewModel: viewModel)
+        navigationController.pushViewController(viewController, animated: true)
     }
 }
 
@@ -138,16 +142,15 @@ extension AuthCoordinator: SenderVerificationViewModelDelegate {
         }
     }
 }
-/*
+
 // MARK: - SenderForgotPasswordViewModelDelegate
 extension AuthCoordinator: SenderForgotPasswordViewModelDelegate {
-    func forgotPasswordViewModelDidSendCode(_ viewModel: SenderForgotPasswordViewModel) {
-        // TODO: telefon numarası ile verification ekranına geç
-        // showCodeVerification(flow: .passwordReset(phoneNumber: viewModel.phoneNumber))
+    func forgotPasswordViewModelDidSendCode(_ viewModel: SenderForgotPasswordViewModel, phoneNumber: PhoneVerificationRequest) {
+         showCodeVerification(flow: .passwordReset(phoneNumber: phoneNumber.phoneNumber))
     }
-
-    func forgotPasswordViewModelDidReceiveError(_ viewModel: SenderForgotPasswordViewModel, error: AuthError) {
-        // TODO: error handling
+    
+    func forgotPasswordViewModelRequestLogin(_ viewModel: SenderForgotPasswordViewModel) {
+        navigationController.popViewController(animated: true)
     }
 }
 
@@ -156,9 +159,4 @@ extension AuthCoordinator: SenderCreateNewPasswordViewModelDelegate {
     func createNewPasswordViewModelDidComplete(_ viewModel: SenderCreateNewPasswordViewModel) {
         delegate?.authCoordinatorDidAuthenticate(self)
     }
-
-    func createNewPasswordViewModelDidReceiveError(_ viewModel: SenderCreateNewPasswordViewModel, error: AuthError) {
-        // TODO: error handling
-    }
 }
- */
