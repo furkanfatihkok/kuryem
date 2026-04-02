@@ -7,41 +7,42 @@
 
 import UIKit
 
-// MARK: - Enums
+// MARK: - CODE VERIFICATION FLOW
 enum CodeVerificationFlow {
     case signupVerification(request: SignupRequest)
     case passwordReset(phoneNumber: String)
 }
 
-// MARK: - AuthCoordinatorDelegate
+// MARK: - AUTH COORDINATOR DELEGATE
 protocol AuthCoordinatorDelegate: AnyObject {
     func authCoordinatorDidAuthenticate(_ coordinator: AuthCoordinator)
     func authCoordinatorDidCancel(_ coordinator: AuthCoordinator)
 }
 
+// MARK: - AUTH COORDINATOR
 final class AuthCoordinator: Coordinator {
     enum InitialScreen {
         case login
         case signup
     }
-    
+
     // MARK: - Properties
     let navigationController: UINavigationController
     var childCoordinators: [Coordinator] = []
     weak var delegate: AuthCoordinatorDelegate?
-    
-    private let factory: DependencyFactory
+
+    private let factory: DependencyFactoryProtocol
     private let initialScreen: InitialScreen
     private let role: UserRole
-    
-    // MARK: - Initialization
-    init(navigationController: UINavigationController, factory: DependencyFactory, initialScreen: InitialScreen, role: UserRole) {
+
+    // MARK: - Init
+    init(navigationController: UINavigationController, factory: DependencyFactoryProtocol, initialScreen: InitialScreen, role: UserRole) {
         self.navigationController = navigationController
         self.factory = factory
         self.initialScreen = initialScreen
         self.role = role
     }
-    
+
     // MARK: - Start
     func start() {
         switch initialScreen {
@@ -51,22 +52,22 @@ final class AuthCoordinator: Coordinator {
             showSignup()
         }
     }
-    
-    // MARK: - Navigation Methods
+
+    // MARK: - Private Navigation
     private func showSignup() {
         let viewModel = factory.makeSenderSignUpViewModel(role: role)
         viewModel.delegate = self
         let viewController = SenderSignupViewController(viewModel: viewModel)
         navigationController.pushViewController(viewController, animated: true)
     }
-    
+
     private func showLogin() {
         let viewModel = factory.makeSenderLoginViewModel()
         viewModel.delegate = self
         let viewController = SenderLoginViewController(viewModel: viewModel)
         navigationController.setViewControllers([viewController], animated: true)
     }
-    
+
     private func showCodeVerification(flow: CodeVerificationFlow) {
         let verificationType: VerificationType
         switch flow {
@@ -75,66 +76,89 @@ final class AuthCoordinator: Coordinator {
         case .passwordReset(let phoneNumber):
             verificationType = .passwordReset(phoneNumber: phoneNumber)
         }
-        
         let viewModel = factory.makeSenderVerificationViewModel(verificationType: verificationType)
         viewModel.delegate = self
         let viewController = SenderVerificationViewController(viewModel: viewModel)
         navigationController.pushViewController(viewController, animated: true)
     }
-    
+
+    private func showForgotPassword() {
+        let viewModel = factory.makeForgotPasswordViewModel()
+        // TODO: Controller implement edildiğinde açılacak
+    }
+
     private func showCreateNewPassword() {
-        // let viewModel = factory.makeCreateNewPasswordViewModel()
-        // viewModel.delegate = self
-        // let viewController = SenderCreateNewPasswordViewController(viewModel: viewModel)
-        // navigationController.pushViewController(viewController, animated: true)
+        let viewModel = factory.makeCreateNewPasswordViewModel()
+        // TODO: Controller implement edildiğinde açılacak
     }
 }
 
-// MARK: - SenderSignupViewModelDelegate
+// MARK: - SENDER SIGNUP VIEW MODEL DELEGATE
 extension AuthCoordinator: SenderSignupViewModelDelegate {
     func senderSignupViewModelDidSignup(_ viewModel: SenderSignupViewModel, request: SignupRequest) {
         showCodeVerification(flow: .signupVerification(request: request))
     }
-    
+
     func senderSignupViewModelRequestLogin(_ viewModel: SenderSignupViewModel) {
         showLogin()
     }
-    
+
     func signupViewModelDidAuthenticateWithSocial(_ viewModel: SenderSignupViewModel) {
         delegate?.authCoordinatorDidAuthenticate(self)
-        print("Socical button ile Home sayfasına geçildi")
     }
 }
 
-// MARK: - SenderLoginViewModelDelegate
+// MARK: - SENDER LOGIN VIEW MODEL DELEGATE
 extension AuthCoordinator: SenderLoginViewModelDelegate {
-    func senderLoginViewModelDidRequestForgotPassword(_ viewModel: SenderLoginViewModel) {
-        print("Forgot Passwor Sayfasına geçildi")
-    }
-    
-    func senderLoginViewModelDidAuthenticateWithSocial(_ viewModel: SenderLoginViewModel) {
-        print("Socical button ile Home sayfasına geçildi")
-    }
-    
     func senderLoginViewModelDidLogin(_ viewModel: SenderLoginViewModel) {
         delegate?.authCoordinatorDidAuthenticate(self)
-        print("Login Button ile Home Sayfasına Geçildi")
     }
-    
+
     func senderLoginViewModelRequestSignup(_ viewModel: SenderLoginViewModel) {
         showSignup()
     }
+
+    func senderLoginViewModelDidRequestForgotPassword(_ viewModel: SenderLoginViewModel) {
+        showForgotPassword()
+    }
+
+    func senderLoginViewModelDidAuthenticateWithSocial(_ viewModel: SenderLoginViewModel) {
+        delegate?.authCoordinatorDidAuthenticate(self)
+    }
 }
 
-// MARK: - VerificationViewModelDelegate
+// MARK: - SENDER VERIFICATION VIEW MODEL DELEGATE
 extension AuthCoordinator: SenderVerificationViewModelDelegate {
     func senderVerificationViewModelDidVerify(_ viewModel: SenderVerificationViewModel) {
         switch viewModel.verificationType {
         case .signupVerification:
-            print("🚀 KULLANICI BAŞARIYLA KAYDEDİLDİ. LOGİN SAYFASINA GEÇİLİYOR 🚀")
             showLogin()
         case .passwordReset:
             showCreateNewPassword()
         }
     }
 }
+/*
+// MARK: - SenderForgotPasswordViewModelDelegate
+extension AuthCoordinator: SenderForgotPasswordViewModelDelegate {
+    func forgotPasswordViewModelDidSendCode(_ viewModel: SenderForgotPasswordViewModel) {
+        // TODO: telefon numarası ile verification ekranına geç
+        // showCodeVerification(flow: .passwordReset(phoneNumber: viewModel.phoneNumber))
+    }
+
+    func forgotPasswordViewModelDidReceiveError(_ viewModel: SenderForgotPasswordViewModel, error: AuthError) {
+        // TODO: error handling
+    }
+}
+
+// MARK: - SenderCreateNewPasswordViewModelDelegate
+extension AuthCoordinator: SenderCreateNewPasswordViewModelDelegate {
+    func createNewPasswordViewModelDidComplete(_ viewModel: SenderCreateNewPasswordViewModel) {
+        delegate?.authCoordinatorDidAuthenticate(self)
+    }
+
+    func createNewPasswordViewModelDidReceiveError(_ viewModel: SenderCreateNewPasswordViewModel, error: AuthError) {
+        // TODO: error handling
+    }
+}
+ */

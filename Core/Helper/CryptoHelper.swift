@@ -8,6 +8,7 @@
 import CryptoKit
 import Foundation
 
+// MARK: - CRYPTO HELPER
 final class CryptoHelper {
     static let shared = CryptoHelper()
     private init() {}
