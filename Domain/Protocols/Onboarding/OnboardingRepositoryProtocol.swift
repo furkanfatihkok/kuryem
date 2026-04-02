@@ -7,6 +7,7 @@
 
 import Foundation
 
-protocol OnboardingRepositoryProtocol {
+// MARK: - ONBOARDING REPOSITORY
+protocol OnboardingRepositoryProtocol: AnyObject {
     func getOnboardingPages() -> [OnboardingPage]
 }

@@ -7,7 +7,7 @@
 
 import Foundation
 
-// MARK: - Delegate Protocols
+// MARK: - DELEGATE PROTOCOLS
 protocol SenderSignupViewModelDelegate: AnyObject {
     func senderSignupViewModelDidSignup(_ viewModel: SenderSignupViewModel, request: SignupRequest)
     func senderSignupViewModelRequestLogin(_ viewModel: SenderSignupViewModel)
@@ -19,21 +19,22 @@ protocol SenderSignupViewModelViewDelegate: AnyObject {
     func senderSignupViewModelDidReceiveError(_ viewModel: SenderSignupViewModel, error: AuthError)
 }
 
+// MARK: - SENDER SIGNUP VIEW MODEL
 final class SenderSignupViewModel {
-    
     // MARK: - Properties
     weak var delegate: SenderSignupViewModelDelegate?
     weak var viewDelegate: SenderSignupViewModelViewDelegate?
-    
-    private let authRepository: AuthRepositoryProtocol
+
+    private let validationRepository: ValidationAuthRepository
+    private let registrationRepository: RegistrationAuthRepository
+    private let phoneAuthRepository: PhoneAuthRepository
+
     var selectedRole: UserRole = .sender
-    
-    // MARK: - State Properties
+
     private(set) var isLoading: Bool = false {
         didSet { viewDelegate?.senderSignupViewModelDidUpdateLoading(self) }
     }
-    
-    // Firebase'den gelen asenkron hatalar için tuttuğumuz değişken
+
     private(set) var activeError: AuthError? {
         didSet {
             if let error = activeError {
@@ -41,157 +42,109 @@ final class SenderSignupViewModel {
             }
         }
     }
-    
-    // MARK: - Initialization
-    init(authRepository: AuthRepositoryProtocol) {
-        self.authRepository = authRepository
+
+    // MARK: - Init
+    init(validationRepository: ValidationAuthRepository, registrationRepository: RegistrationAuthRepository, phoneAuthRepository: PhoneAuthRepository) {
+        self.validationRepository = validationRepository
+        self.registrationRepository = registrationRepository
+        self.phoneAuthRepository = phoneAuthRepository
     }
-    
-    // MARK: - Authentication Actions
+
+    // MARK: - Public Actions
     func signup(fullName: String, email: String, phoneNumber: String, password: String, confirmPassword: String) {
-        guard validateInput(fullName: fullName, email: email, phoneNumber: phoneNumber, password: password, confirmPassword: confirmPassword) else { return }
-        
+        guard validate(fullName: fullName, email: email, phone: phoneNumber, password: password, confirm: confirmPassword) else { return }
+
         isLoading = true
         let phoneWithCountryCode = "+90\(phoneNumber)"
         let request = SignupRequest(fullName: fullName, email: email, phoneNumber: phoneWithCountryCode, password: password, role: selectedRole)
-        
-        checkAvailabilityAndProceed(for: request)
+        checkEmailThenPhone(for: request)
     }
-    
-    // MARK: - Social Authentication
+
     func signupWithGoogle() {
         isLoading = true
-        authRepository.signInWithGoogle { [weak self] result in
-            guard let self = self else { return }
-            self.handleSocialAuthResult(result)
+        registrationRepository.signInWithGoogle { [weak self] result in
+            self?.handleSocialResult(result)
         }
     }
-    
+
     func signupWithApple() {
         isLoading = true
-        authRepository.signInWithApple { [weak self] result in
-            guard let self = self else { return }
-            self.handleSocialAuthResult(result)
+        registrationRepository.signInWithApple { [weak self] result in
+            self?.handleSocialResult(result)
         }
     }
-    
-    // MARK: - Routing Methods
+
     func didTapLogin() {
         delegate?.senderSignupViewModelRequestLogin(self)
     }
-    
-    // MARK: - Text Formatting
+
     func formatPhoneNumber(_ text: String) -> String {
-        var numbers = text.components(separatedBy: CharacterSet.decimalDigits.inverted).joined()
-        if numbers.hasPrefix("0") { numbers.removeFirst() }
-        let limitedNumbers = String(numbers.prefix(10))
+        var digits = text.components(separatedBy: CharacterSet.decimalDigits.inverted).joined()
+        if digits.hasPrefix("0") { digits.removeFirst() }
+        let limited = String(digits.prefix(10))
         var formatted = ""
-        for (index, character) in limitedNumbers.enumerated() {
+        for (index, character) in limited.enumerated() {
             if index == 3 || index == 6 { formatted.append(" ") }
             formatted.append(character)
         }
         return formatted
     }
-    
-    // MARK: - Validation Helpers
-    private func validateInput(fullName: String, email: String, phoneNumber: String, password: String, confirmPassword: String) -> Bool {
-        var hasValidationError = false
-        
-        // 1. İsim Kontrolü
-        if fullName.isEmpty {
-            viewDelegate?.senderSignupViewModelDidReceiveError(self, error: .emptyFullName)
-            hasValidationError = true
-        }
-        
-        // 2. Email Kontrolü
-        if email.isEmpty {
-            viewDelegate?.senderSignupViewModelDidReceiveError(self, error: .emptyEmail)
-            hasValidationError = true
-        } else if !isValidEmail(email) {
-            viewDelegate?.senderSignupViewModelDidReceiveError(self, error: .invalidEmail)
-            hasValidationError = true
-        }
-        
-        // 3. Telefon Kontrolü
-        if phoneNumber.isEmpty {
-            viewDelegate?.senderSignupViewModelDidReceiveError(self, error: .emptyPhoneNumber)
-            hasValidationError = true
-        } else if phoneNumber.count != 10 {
-            viewDelegate?.senderSignupViewModelDidReceiveError(self, error: .invalidPhoneNumber)
-            hasValidationError = true
-        }
-        
-        // 4. Şifre Kontrolü
-        if password.isEmpty {
-            viewDelegate?.senderSignupViewModelDidReceiveError(self, error: .emptyPassword)
-            hasValidationError = true
-        } else if password.count < 8 {
-            viewDelegate?.senderSignupViewModelDidReceiveError(self, error: .weakPassword)
-            hasValidationError = true
-        }
-        
-        // 5. Şifre Tekrar Kontrolü
-        if confirmPassword.isEmpty || password != confirmPassword {
-            viewDelegate?.senderSignupViewModelDidReceiveError(self, error: .passwordsDoNotMatch)
-            hasValidationError = true
-        }
-        
-        return !hasValidationError
+
+    // MARK: - Private Helpers
+    private func validate(fullName: String, email: String, phone: String, password: String, confirm: String) -> Bool {
+        var hasError = false
+        if fullName.isEmpty { viewDelegate?.senderSignupViewModelDidReceiveError(self, error: .emptyFullName); hasError = true }
+        if email.isEmpty { viewDelegate?.senderSignupViewModelDidReceiveError(self, error: .emptyEmail); hasError = true }
+        else if !isValidEmail(email) { viewDelegate?.senderSignupViewModelDidReceiveError(self, error: .invalidEmail); hasError = true }
+        if phone.isEmpty { viewDelegate?.senderSignupViewModelDidReceiveError(self, error: .emptyPhoneNumber); hasError = true }
+        else if phone.count != 10 { viewDelegate?.senderSignupViewModelDidReceiveError(self, error: .invalidPhoneNumber); hasError = true }
+        if password.isEmpty { viewDelegate?.senderSignupViewModelDidReceiveError(self, error: .emptyPassword); hasError = true }
+        else if password.count < 8 { viewDelegate?.senderSignupViewModelDidReceiveError(self, error: .weakPassword); hasError = true }
+        if confirm.isEmpty || password != confirm { viewDelegate?.senderSignupViewModelDidReceiveError(self, error: .passwordsDoNotMatch); hasError = true }
+        return !hasError
     }
-    
-    private func isValidEmail(_ email: String) -> Bool {
-        let emailRegex = "[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,64}"
-        let emailPredicate = NSPredicate(format: "SELF MATCHES %@", emailRegex)
-        return emailPredicate.evaluate(with: email)
-    }
-    
-    // MARK: - Database & Network Calls
-    private func checkAvailabilityAndProceed(for request: SignupRequest) {
-        authRepository.checkEmailExists(email: request.email) { [weak self] emailResult in
-            guard let self = self else { return }
-            
-            switch emailResult {
-            case .success(let emailExists):
-                guard !emailExists else {
+
+    private func checkEmailThenPhone(for request: SignupRequest) {
+        validationRepository.checkEmailExists(email: request.email) { [weak self] result in
+            guard let self else { return }
+            switch result {
+            case .success(let exists):
+                if exists {
                     self.isLoading = false
                     self.activeError = .emailAlreadyInUse
                     return
                 }
-                self.checkPhoneAvailabilityAndProceed(for: request)
-                
+                self.checkPhone(for: request)
             case .failure(let error):
                 self.isLoading = false
                 self.activeError = error
             }
         }
     }
-    
-    private func checkPhoneAvailabilityAndProceed(for request: SignupRequest) {
-        authRepository.checkPhoneNumberExists(phoneNumber: request.phoneNumber) { [weak self] phoneResult in
-            guard let self = self else { return }
-            
-            switch phoneResult {
-            case .success(let phoneExists):
-                guard !phoneExists else {
+
+    private func checkPhone(for request: SignupRequest) {
+        validationRepository.checkPhoneNumberExists(phoneNumber: request.phoneNumber) { [weak self] result in
+            guard let self else { return }
+            switch result {
+            case .success(let exists):
+                if exists {
                     self.isLoading = false
                     self.activeError = .phoneNumberAlreadyInUse
                     return
                 }
                 self.sendVerificationCode(for: request)
-                
             case .failure(let error):
                 self.isLoading = false
                 self.activeError = error
             }
         }
     }
-    
+
     private func sendVerificationCode(for request: SignupRequest) {
         let phoneReq = PhoneVerificationRequest(phoneNumber: request.phoneNumber)
-        authRepository.sendPhoneVerificationCode(request: phoneReq) { [weak self] result in
-            guard let self = self else { return }
+        phoneAuthRepository.sendPhoneVerificationCode(request: phoneReq) { [weak self] result in
+            guard let self else { return }
             self.isLoading = false
-            
             switch result {
             case .success:
                 self.delegate?.senderSignupViewModelDidSignup(self, request: request)
@@ -200,16 +153,19 @@ final class SenderSignupViewModel {
             }
         }
     }
-    
-    // MARK: - Social Auth Helpers
-    private func handleSocialAuthResult(_ result: Result<User, AuthError>) {
-        self.isLoading = false
-        
+
+    private func handleSocialResult(_ result: Result<User, AuthError>) {
+        isLoading = false
         switch result {
         case .success:
-            self.delegate?.signupViewModelDidAuthenticateWithSocial(self)
+            delegate?.signupViewModelDidAuthenticateWithSocial(self)
         case .failure(let error):
-            self.activeError = error
+            activeError = error
         }
+    }
+
+    private func isValidEmail(_ email: String) -> Bool {
+        let regex = "[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,64}"
+        return NSPredicate(format: "SELF MATCHES %@", regex).evaluate(with: email)
     }
 }

@@ -7,7 +7,7 @@
 
 import Foundation
 
-// MARK: - Role Selection Repository
+// MARK: - ROLE SELECTION REPOSITORY
 final class RoleSelectionRepository: RoleSelectionRepositoryProtocol {
     func getRoles() -> [RoleOption] {
         return [
