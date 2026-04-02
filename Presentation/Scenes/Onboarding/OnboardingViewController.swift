@@ -8,7 +8,6 @@
 import UIKit
 
 final class OnboardingViewController: UIViewController {
-    
     // MARK: - Properties
     private let viewModel: OnboardingViewModel
     private var currentPage: Int = 0 {
@@ -30,7 +29,6 @@ final class OnboardingViewController: UIViewController {
         collectionView.showsHorizontalScrollIndicator = false
         collectionView.backgroundColor = .clear
         collectionView.translatesAutoresizingMaskIntoConstraints = false
-        // Sadece burada register edilmesi yeterli
         collectionView.register(OnboardingCell.self, forCellWithReuseIdentifier: OnboardingCell.reuseIdentifier)
         return collectionView
     }()
@@ -75,7 +73,6 @@ final class OnboardingViewController: UIViewController {
         setupConstraints()
     }
     
-    // REFACTOR: Projedeki diğer dosyalarla isimlendirme tutarlılığı sağlandı
     private func setupHierarchy() {
         view.addSubview(collectionView)
         view.addSubview(pageControl)
@@ -84,7 +81,6 @@ final class OnboardingViewController: UIViewController {
         pageControl.numberOfPages = viewModel.pages.count
     }
     
-    // REFACTOR: Girintiler (indentation) düzeltildi
     private func setupConstraints() {
         NSLayoutConstraint.activate([
             collectionView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
@@ -157,6 +153,8 @@ extension OnboardingViewController: UICollectionViewDelegateFlowLayout {
 // MARK: - UIScrollViewDelegate
 extension OnboardingViewController: UIScrollViewDelegate {
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        guard scrollView.isDragging || scrollView.isDecelerating else { return }
+        
         let width = scrollView.frame.width
         guard width > 0 else { return }
         
@@ -164,7 +162,6 @@ extension OnboardingViewController: UIScrollViewDelegate {
         
         if currentPage != page {
             currentPage = page
-            pageControl.currentPage = page
         }
     }
 }

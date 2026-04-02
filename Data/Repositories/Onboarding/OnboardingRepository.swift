@@ -7,7 +7,7 @@
 
 import Foundation
 
-// MARK: - Onboarding Repository
+// MARK: - ONBOARDING REPOSITORY
 final class OnboardingRepository: OnboardingRepositoryProtocol {
     func getOnboardingPages() -> [OnboardingPage] {
         return [
