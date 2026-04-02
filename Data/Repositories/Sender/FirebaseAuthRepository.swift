@@ -53,14 +53,15 @@ extension FirebaseAuthRepository: PhoneAuthRepository {
     func verifyPhoneCode(request: CodeVerificationRequest, completion: @escaping (Result<Void, AuthError>) -> Void) {
         guard let verificationID = VerificationIDStore.shared.retrieve() else { return completion(.failure(.missingVerificationID)) }
         let credential = PhoneAuthProvider.provider().credential(withVerificationID: verificationID, verificationCode: request.code)
-        auth.currentUser?.link(with: credential) { [weak self] _, error in
+        
+        auth.signIn(with: credential) { [weak self] result, error in
             guard let self else { return }
             if let error { return completion(.failure(self.errorMapper.map(error))) }
+            
             completion(.success(()))
         }
     }
 }
-
 // MARK: - VALIDATION AUTH REPOSITORY EXTENSION
 extension FirebaseAuthRepository: ValidationAuthRepository {
     func checkEmailExists(email: String, completion: @escaping (Result<Bool, AuthError>) -> Void) {
@@ -143,6 +144,23 @@ extension FirebaseAuthRepository: SessionAuthRepository {
 
     func logout() throws {
         try auth.signOut()
+    }
+}
+
+// MARK: - PASSWORD MANAGEMENT REPOSITORY EXTENSION
+extension FirebaseAuthRepository: PasswordManagementRepository {
+    func updatePassword(password: String, completion: @escaping (Result<Void, AuthError>) -> Void) {
+        guard let currentUser = auth.currentUser else {
+            return completion(.failure(.userNotFound))
+        }
+        
+        currentUser.updatePassword(to: password) { [weak self] error in
+            guard let self else { return }
+            if let error {
+                return completion(.failure(self.errorMapper.map(error)))
+            }
+            completion(.success(()))
+        }
     }
 }
 

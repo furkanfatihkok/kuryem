@@ -28,11 +28,12 @@ enum AppLayout {
     
     // MARK: - Button
     static let buttonHeight: CGFloat = 50
+    static let buttonHeightPopup: CGFloat = 37
     static let buttonCornerRadius: CGFloat = 5
     
     // MARK: - TextField
     static let textFieldHeight: CGFloat = 40
-    static let textFieldWeight: CGFloat = 82
+    static let textFieldWidth: CGFloat = 82
     static let textFieldCornerRadius: CGFloat = 8
     static let textFieldBorderWidth: CGFloat = 1
     
