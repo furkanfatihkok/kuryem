@@ -8,9 +8,9 @@
 import Foundation
 
 final class SenderForgotPasswordViewModel {
-    private let authRepository: AuthRepositoryProtocol
+    private let authRepository: AuthRepository
     
-    init(authRepository: AuthRepositoryProtocol) {
+    init(authRepository: AuthRepository) {
         self.authRepository = authRepository
     }
 }

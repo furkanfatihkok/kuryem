@@ -32,6 +32,7 @@ enum AppLayout {
     
     // MARK: - TextField
     static let textFieldHeight: CGFloat = 40
+    static let textFieldWeight: CGFloat = 82
     static let textFieldCornerRadius: CGFloat = 8
     static let textFieldBorderWidth: CGFloat = 1
     
