@@ -121,15 +121,12 @@ final class SenderSignupViewController: UIViewController {
         return button
     }()
     
-    private lazy var loginButton: UIButton = {
-        let button = UIButton(type: .system)
-        let fullText = Localized.Signup.alreadyHaveAccount + " Login"
-        let attributedString = fullText.highlight(targetWord: "Login")
-        button.setAttributedTitle(attributedString, for: .normal)
-        button.addTarget(self, action: #selector(loginButtonTapped), for: .touchUpInside)
-        button.isUserInteractionEnabled = true
-        button.translatesAutoresizingMaskIntoConstraints = false
-        return button
+    private lazy var footerView: AuthFooterView = {
+        let view = AuthFooterView()
+        view.configure(message: Localized.Signup.alreadyHaveAccount, actionTitle: "Login")
+        view.delegate = self
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
     }()
     
     // MARK: - Initialization
@@ -167,9 +164,9 @@ final class SenderSignupViewController: UIViewController {
         
         let subviews = [
             headerView, fullNameTextField, emailTextField,
-            countryCodeContainer, phoneTextField, // StackView kaldırıldı, direkt View'a eklendi
+            countryCodeContainer, phoneTextField,
             passwordTextField, confirmPasswordTextField, termsAgreementView,
-            continueButton, dividerView, googleButton, appleButton, loginButton
+            continueButton, dividerView, googleButton, appleButton, footerView
         ]
         
         subviews.forEach { contentView.addSubview($0) }
@@ -257,9 +254,9 @@ final class SenderSignupViewController: UIViewController {
             appleButton.heightAnchor.constraint(equalToConstant: AppLayout.buttonHeight),
             
             // Login Button
-            loginButton.topAnchor.constraint(equalTo: appleButton.bottomAnchor, constant: AppLayout.spacingLarge),
-            loginButton.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
-            loginButton.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -AppLayout.spacingXLarge)
+            footerView.topAnchor.constraint(equalTo: appleButton.bottomAnchor, constant: AppLayout.spacingLarge),
+            footerView.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
+            footerView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -AppLayout.spacingXLarge)
         ])
     }
     
@@ -297,10 +294,6 @@ final class SenderSignupViewController: UIViewController {
     
     @objc private func appleButtonTapped() {
         viewModel.signupWithApple()
-    }
-    
-    @objc private func loginButtonTapped() {
-        viewModel.didTapLogin()
     }
 }
 
@@ -362,5 +355,11 @@ extension SenderSignupViewController: SenderSignupViewModelViewDelegate {
                 self.present(alert, animated: true)
             }
         }
+    }
+}
+// ... MARK: - Delegate Extension ...
+extension SenderSignupViewController: AuthFooterViewDelegate {
+    func authFooterViewDidTapAction(_ view: AuthFooterView) {
+        viewModel.didTapLogin()
     }
 }

@@ -8,7 +8,6 @@
 import UIKit
 
 extension String {
-    
     func highlight(
         targetWord: String,
         baseColor: UIColor = AppColor.textSecondary,

@@ -55,14 +55,12 @@ final class SenderLoginViewController: UIViewController {
         return textField
     }()
     
-    private lazy var forgotPasswordButton: UIButton = {
-        let button = UIButton(type: .system)
-        button.setTitle(Localized.Login.forgotPassword, for: .normal)
-        button.setTitleColor(AppColor.primary, for: .normal)
-        button.titleLabel?.font = AppFonts.body.withSize(AppLayout.fontSizeSmall)
-        button.addTarget(self, action: #selector(forgotPasswordTapped), for: .touchUpInside)
-        button.translatesAutoresizingMaskIntoConstraints = false
-        return button
+    private lazy var forgotPasswordAction: AuthInlineActionButton = {
+        let view = AuthInlineActionButton()
+        view.configure(title: Localized.Login.forgotPassword)
+        view.delegate = self
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
     }()
     
     private lazy var loginButton: PrimaryButton = {
@@ -86,14 +84,12 @@ final class SenderLoginViewController: UIViewController {
         return button
     }()
     
-    private lazy var signUpButton: UIButton = {
-        let button = UIButton(type: .system)
-        let fullText = Localized.Login.dontHaveAccount + " Sign Up"
-        let attributedTitle = fullText.highlight(targetWord: "Sign Up")
-        button.setAttributedTitle(attributedTitle, for: .normal)
-        button.addTarget(self, action: #selector(signupButtonTapped), for: .touchUpInside)
-        button.translatesAutoresizingMaskIntoConstraints = false
-        return button
+    private lazy var footerView: AuthFooterView = {
+        let view = AuthFooterView()
+        view.configure(message: Localized.Login.dontHaveAccount, actionTitle: "Sign Up")
+        view.delegate = self
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
     }()
     
     // MARK: - Initialization
@@ -129,8 +125,8 @@ final class SenderLoginViewController: UIViewController {
         scrollView.addSubview(contentView)
         
         let subviews = [
-            headerView, emailTextField, passwordTextField, forgotPasswordButton,
-            loginButton, dividerView, googleButton, appleButton, signUpButton
+            headerView, emailTextField, passwordTextField, forgotPasswordAction, // Güncellendi
+            loginButton, dividerView, googleButton, appleButton, footerView // Güncellendi
         ]
         
         subviews.forEach { contentView.addSubview($0) }
@@ -165,11 +161,11 @@ final class SenderLoginViewController: UIViewController {
             passwordTextField.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -AppLayout.paddingHorizontal),
             
             // Forgot Password Button
-            forgotPasswordButton.topAnchor.constraint(equalTo: passwordTextField.bottomAnchor, constant: AppLayout.spacingSmall),
-            forgotPasswordButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -AppLayout.paddingHorizontal),
+            forgotPasswordAction.topAnchor.constraint(equalTo: passwordTextField.bottomAnchor, constant: AppLayout.spacingSmall),
+            forgotPasswordAction.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -AppLayout.paddingHorizontal),
             
             // Login Button
-            loginButton.topAnchor.constraint(equalTo: forgotPasswordButton.bottomAnchor, constant: AppLayout.spacingLarge),
+            loginButton.topAnchor.constraint(equalTo: forgotPasswordAction.bottomAnchor, constant: AppLayout.spacingLarge),
             loginButton.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: AppLayout.paddingHorizontal),
             loginButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -AppLayout.paddingHorizontal),
             loginButton.heightAnchor.constraint(equalToConstant: AppLayout.buttonHeight),
@@ -191,9 +187,9 @@ final class SenderLoginViewController: UIViewController {
             appleButton.heightAnchor.constraint(equalToConstant: AppLayout.buttonHeight),
             
             // Signup Button
-            signUpButton.topAnchor.constraint(equalTo: appleButton.bottomAnchor, constant: 60),
-            signUpButton.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
-            signUpButton.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -AppLayout.spacingXLarge)
+            footerView.topAnchor.constraint(equalTo: appleButton.bottomAnchor, constant: 160),
+            footerView.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
+            footerView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -AppLayout.spacingXSmall)
         ])
     }
     
@@ -233,20 +229,12 @@ final class SenderLoginViewController: UIViewController {
         viewModel.login(email: email, password: password)
     }
     
-    @objc private func forgotPasswordTapped() {
-        viewModel.didTapForgotPassword()
-    }
-    
     @objc private func googleButtonTapped() {
         viewModel.loginWithGoogle()
     }
     
     @objc private func appleButtonTapped() {
         viewModel.loginWithApple()
-    }
-    
-    @objc private func signupButtonTapped() {
-        viewModel.didTapSignup()
     }
     
     @objc private func keyboardWillShow(notification: Notification) {
@@ -312,5 +300,17 @@ extension SenderLoginViewController: SenderLoginViewModelViewDelegate {
                 self.present(alert, animated: true)
             }
         }
+    }
+}
+// ... MARK: - Delegate Extension ...
+extension SenderLoginViewController: AuthInlineActionButtonDelegate {
+    func authInlineActionButtonDidTap(_ view: AuthInlineActionButton) {
+        viewModel.didTapForgotPassword()
+    }
+}
+
+extension SenderLoginViewController: AuthFooterViewDelegate {
+    func authFooterViewDidTapAction(_ view: AuthFooterView) {
+        viewModel.didTapSignup()
     }
 }

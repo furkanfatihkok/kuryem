@@ -58,14 +58,16 @@ final class AuthCoordinator: Coordinator {
         let viewModel = factory.makeSenderSignUpViewModel(role: role)
         viewModel.delegate = self
         let viewController = SenderSignupViewController(viewModel: viewModel)
-        navigationController.pushViewController(viewController, animated: true)
+        addFadeTransition()
+        navigationController.pushViewController(viewController, animated: false)
     }
 
     private func showLogin() {
         let viewModel = factory.makeSenderLoginViewModel()
         viewModel.delegate = self
         let viewController = SenderLoginViewController(viewModel: viewModel)
-        navigationController.setViewControllers([viewController], animated: true)
+        addFadeTransition()
+        navigationController.setViewControllers([viewController], animated: false)
     }
 
     private func showCodeVerification(flow: CodeVerificationFlow) {
@@ -79,21 +81,34 @@ final class AuthCoordinator: Coordinator {
         let viewModel = factory.makeSenderVerificationViewModel(verificationType: verificationType)
         viewModel.delegate = self
         let viewController = SenderVerificationViewController(viewModel: viewModel)
-        navigationController.pushViewController(viewController, animated: true)
+        addFadeTransition()
+        navigationController.pushViewController(viewController, animated: false)
     }
 
     private func showForgotPassword() {
         let viewModel = factory.makeForgotPasswordViewModel()
         viewModel.delegate = self
         let viewController = SenderForgotPasswordViewController(viewModel: viewModel)
-        navigationController.pushViewController(viewController, animated: true)
+        addFadeTransition()
+        navigationController.pushViewController(viewController, animated: false)
     }
 
     private func showCreateNewPassword() {
         let viewModel = factory.makeCreateNewPasswordViewModel()
         viewModel.delegate = self
         let viewController = SenderCreateNewPasswordViewController(viewModel: viewModel)
-        navigationController.pushViewController(viewController, animated: true)
+        addFadeTransition()
+        navigationController.pushViewController(viewController, animated: false)
+    }
+    
+    // MARK: - Transition Helper
+    private func addFadeTransition() {
+        let transition = CATransition()
+        transition.duration = 0.3
+        transition.type = .fade
+        transition.timingFunction = CAMediaTimingFunction(name: .easeInEaseOut)
+        
+        navigationController.view.layer.add(transition, forKey: kCATransition)
     }
 }
 
@@ -150,7 +165,7 @@ extension AuthCoordinator: SenderForgotPasswordViewModelDelegate {
     }
     
     func forgotPasswordViewModelRequestLogin(_ viewModel: SenderForgotPasswordViewModel) {
-        navigationController.popViewController(animated: true)
+        showLogin()
     }
 }
 
