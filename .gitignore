@@ -1,8 +1,21 @@
+# Firebase Secret (Kritik!)
+GoogleService-Info.plist
+
 # Xcode
-#
 build/
 DerivedData/
 *.hmap
 *.ipa
 *.xcuserstate
 project.xcworkspace/xcuserdata/
+
+# Swift Package Manager
+.build/
+
+# Dependency Managers
+Pods/
+Carthage/Checkouts/
+
+# Secrets & Environment Variables
+.env
+*.secret
