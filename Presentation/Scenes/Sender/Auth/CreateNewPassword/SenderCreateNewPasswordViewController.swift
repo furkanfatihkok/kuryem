@@ -8,7 +8,6 @@
 import UIKit
 
 final class SenderCreateNewPasswordViewController: UIViewController {
-    
     // MARK: - Properties
     private let viewModel: SenderCreateNewPasswordViewModel
     
@@ -54,6 +53,7 @@ final class SenderCreateNewPasswordViewController: UIViewController {
         button.setTitle(Localized.ForgotPassword.forgotPassword, for: .normal)
         button.setTitleColor(AppColor.primary, for: .normal)
         button.titleLabel?.font = AppFonts.body.withSize(AppLayout.fontSizeSmall)
+        button.addTarget(self, action: #selector(forgotPasswordButtonTapped), for: .touchUpInside)
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
@@ -158,6 +158,10 @@ final class SenderCreateNewPasswordViewController: UIViewController {
             password: newPasswordTextField.text ?? "",
             confirm: confirmPasswordTextField.text ?? ""
         )
+    }
+    
+    @objc private func forgotPasswordButtonTapped() {
+        viewModel.didTapForgotPassword()
     }
 }
 

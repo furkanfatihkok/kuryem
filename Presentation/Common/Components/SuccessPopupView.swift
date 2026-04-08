@@ -18,7 +18,7 @@ final class SuccessPopupView: UIView {
     
     // MARK: - UI Components
     private lazy var blurEffectView: UIVisualEffectView = {
-        let blurEffect = UIBlurEffect(style: .dark)
+        let blurEffect = UIBlurEffect(style: .systemUltraThinMaterialLight)
         let view = UIVisualEffectView(effect: blurEffect)
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
@@ -80,6 +80,7 @@ final class SuccessPopupView: UIView {
     
     // MARK: - Setup
     private func setupUI() {
+        self.backgroundColor = .clear
         self.isHidden = true
         self.alpha = 0
         self.translatesAutoresizingMaskIntoConstraints = false
@@ -137,6 +138,7 @@ final class SuccessPopupView: UIView {
     func show() {
         self.isHidden = false
         UIView.animate(withDuration: 0.3, delay: 0, options: .curveEaseOut) {
+            self.blurEffectView.alpha = 1
             self.alpha = 1
             self.popupContainer.transform = .identity
         }
