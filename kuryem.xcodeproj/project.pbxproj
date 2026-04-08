@@ -43,6 +43,14 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		0282223F2F867824001B99A4 /* Exceptions for "Presentation" folder in "kuryemTests" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Common/Components/AuthFooterView.swift,
+				Common/Components/AuthInlineActionButton.swift,
+			);
+			target = 0292B9862F46FD7E0095BB50 /* kuryemTests */;
+		};
 		0292B9992F46FD7E0095BB50 /* Exceptions for "kuryem" folder in "kuryem" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
@@ -109,6 +117,9 @@
 		};
 		0292BA0B2F4713EC0095BB50 /* Presentation */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				0282223F2F867824001B99A4 /* Exceptions for "Presentation" folder in "kuryemTests" target */,
+			);
 			path = Presentation;
 			sourceTree = "<group>";
 		};

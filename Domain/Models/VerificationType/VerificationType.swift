@@ -24,9 +24,9 @@ enum VerificationType {
     var description: String {
         switch self {
         case .signupVerification(let request):
-            return "Enter the 6-digit code sent to \(formatPhoneNumber(request.phoneNumber))"
+            return "\(Localized.CodeVerification.verifyDescription) \(formatPhoneNumber(request.phoneNumber))"
         case .passwordReset(let phone):
-            return "Enter the 6-digit code sent to \(formatPhoneNumber(phone))"
+            return "\(Localized.CodeVerification.verifyDescription) \(formatPhoneNumber(phone))"
         }
     }
     
