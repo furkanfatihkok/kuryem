@@ -10,6 +10,7 @@ import Foundation
 // MARK: - DELEGATE PROTOCOLS
 protocol SenderCreateNewPasswordViewModelDelegate: AnyObject {
     func createNewPasswordViewModelDidComplete(_ viewModel: SenderCreateNewPasswordViewModel)
+    func createNewPasswordViewModelDidRequestForgotPassword(_ viewModel: SenderCreateNewPasswordViewModel)
 }
 
 protocol SenderCreateNewPasswordViewModelViewDelegate: AnyObject {
@@ -24,9 +25,7 @@ final class SenderCreateNewPasswordViewModel {
     weak var delegate: SenderCreateNewPasswordViewModelDelegate?
     weak var viewDelegate: SenderCreateNewPasswordViewModelViewDelegate?
     
-    // ÇÖZÜM: Sadece ihtiyacımız olan repoyu içeri alıyoruz
     private let passwordRepository: PasswordManagementRepository
-    
     private(set) var isLoading: Bool = false {
         didSet { viewDelegate?.createNewPasswordViewModelDidUpdateLoading(self) }
     }
@@ -72,5 +71,9 @@ final class SenderCreateNewPasswordViewModel {
     
     func didTapLoginOnPopup() {
         delegate?.createNewPasswordViewModelDidComplete(self)
+    }
+    
+    func didTapForgotPassword() {
+        delegate?.createNewPasswordViewModelDidRequestForgotPassword(self)
     }
 }

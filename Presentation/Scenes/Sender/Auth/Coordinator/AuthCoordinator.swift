@@ -156,7 +156,11 @@ extension AuthCoordinator: SenderForgotPasswordViewModelDelegate {
 
 // MARK: - SenderCreateNewPasswordViewModelDelegate
 extension AuthCoordinator: SenderCreateNewPasswordViewModelDelegate {
+    func createNewPasswordViewModelDidRequestForgotPassword(_ viewModel: SenderCreateNewPasswordViewModel) {
+        showForgotPassword()
+    }
+    
     func createNewPasswordViewModelDidComplete(_ viewModel: SenderCreateNewPasswordViewModel) {
-        delegate?.authCoordinatorDidAuthenticate(self)
+        showLogin()
     }
 }
