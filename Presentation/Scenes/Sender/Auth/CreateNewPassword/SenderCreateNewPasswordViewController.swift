@@ -48,15 +48,13 @@ final class SenderCreateNewPasswordViewController: UIViewController {
         return tf
     }()
     
-    private lazy var forgotPasswordButton: UIButton = {
-        let button = UIButton(type: .system)
-        button.setTitle(Localized.ForgotPassword.forgotPassword, for: .normal)
-        button.setTitleColor(AppColor.primary, for: .normal)
-        button.titleLabel?.font = AppFonts.body.withSize(AppLayout.fontSizeSmall)
-        button.addTarget(self, action: #selector(forgotPasswordButtonTapped), for: .touchUpInside)
-        button.translatesAutoresizingMaskIntoConstraints = false
-        return button
-    }()
+    private lazy var forgotPasswordAction: AuthInlineActionButton = {
+            let view = AuthInlineActionButton()
+            view.configure(title: Localized.Login.forgotPassword)
+            view.delegate = self
+            view.translatesAutoresizingMaskIntoConstraints = false
+            return view
+        }()
     
     private lazy var saveButton: PrimaryButton = {
         let button = PrimaryButton(title: Localized.CreateNewPassword.savePassword)
@@ -95,7 +93,7 @@ final class SenderCreateNewPasswordViewController: UIViewController {
         view.addSubview(scrollView)
         scrollView.addSubview(contentView)
         
-        let subviews = [headerView, newPasswordTextField, confirmPasswordTextField, forgotPasswordButton, saveButton]
+        let subviews = [headerView, newPasswordTextField, confirmPasswordTextField, forgotPasswordAction, saveButton]
         subviews.forEach { contentView.addSubview($0) }
         
         view.addSubview(successPopup)
@@ -129,8 +127,8 @@ final class SenderCreateNewPasswordViewController: UIViewController {
             confirmPasswordTextField.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: AppLayout.paddingHorizontal),
             confirmPasswordTextField.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -AppLayout.paddingHorizontal),
             
-            forgotPasswordButton.topAnchor.constraint(equalTo: confirmPasswordTextField.bottomAnchor, constant: AppLayout.spacingSmall),
-            forgotPasswordButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -AppLayout.paddingHorizontal),
+            forgotPasswordAction.topAnchor.constraint(equalTo: confirmPasswordTextField.bottomAnchor, constant: AppLayout.spacingSmall),
+            forgotPasswordAction.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -AppLayout.paddingHorizontal),
             
             saveButton.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -AppLayout.spacingXLarge),
             saveButton.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: AppLayout.paddingHorizontal),
@@ -158,10 +156,6 @@ final class SenderCreateNewPasswordViewController: UIViewController {
             password: newPasswordTextField.text ?? "",
             confirm: confirmPasswordTextField.text ?? ""
         )
-    }
-    
-    @objc private func forgotPasswordButtonTapped() {
-        viewModel.didTapForgotPassword()
     }
 }
 
@@ -203,5 +197,11 @@ extension SenderCreateNewPasswordViewController: SenderCreateNewPasswordViewMode
 extension SenderCreateNewPasswordViewController: SuccessPopupViewDelegate {
     func successPopupViewDidTapLogin(_ view: SuccessPopupView) {
         viewModel.didTapLoginOnPopup()
+    }
+}
+// MARK: - AuthInlineActionButtonDelegate
+extension SenderCreateNewPasswordViewController: AuthInlineActionButtonDelegate {
+    func authInlineActionButtonDidTap(_ view: AuthInlineActionButton) {
+        viewModel.didTapForgotPassword()
     }
 }
