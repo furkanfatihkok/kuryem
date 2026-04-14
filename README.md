@@ -233,6 +233,3 @@ kuryemUITests/   # UI testler — Auth flow end-to-end testleri
 **Furkan Fatih Kok**
 
 [![GitHub](https://img.shields.io/badge/GitHub-furkanfatihkok-181717?style=flat-square&logo=github)](https://github.com/furkanfatihkok)
-
----
-```
