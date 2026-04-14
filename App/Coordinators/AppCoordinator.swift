@@ -12,10 +12,10 @@ final class AppCoordinator: Coordinator {
     // MARK: - Properties
     let navigationController: UINavigationController
     var childCoordinators: [Coordinator] = []
-    private let factory: DependencyFactoryProtocol
+    private let factory: DependencyFactory
 
     // MARK: - Init
-    init(navigationController: UINavigationController, factory: DependencyFactoryProtocol) {
+    init(navigationController: UINavigationController, factory: DependencyFactory) {
         self.navigationController = navigationController
         self.factory = factory
     }

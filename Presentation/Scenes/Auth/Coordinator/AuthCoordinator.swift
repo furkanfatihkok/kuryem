@@ -25,18 +25,18 @@ final class AuthCoordinator: Coordinator {
         case login
         case signup
     }
-
+    
     // MARK: - Properties
     let navigationController: UINavigationController
     var childCoordinators: [Coordinator] = []
     weak var delegate: AuthCoordinatorDelegate?
 
-    private let factory: DependencyFactoryProtocol
+    private let factory: AuthFactoryProtocol
     private let initialScreen: InitialScreen
     private let role: UserRole
 
     // MARK: - Init
-    init(navigationController: UINavigationController, factory: DependencyFactoryProtocol, initialScreen: InitialScreen, role: UserRole) {
+    init(navigationController: UINavigationController, factory: AuthFactoryProtocol, initialScreen: InitialScreen, role: UserRole) {
         self.navigationController = navigationController
         self.factory = factory
         self.initialScreen = initialScreen

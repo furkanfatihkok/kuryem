@@ -18,10 +18,10 @@ final class OnboardingCoordinator: Coordinator {
     let navigationController: UINavigationController
     var childCoordinators: [Coordinator] = []
     weak var delegate: OnboardingCoordinatorDelegate?
-    private let factory: DependencyFactoryProtocol
+    private let factory: OnboardingFactoryProtocol
 
     // MARK: - Initialization
-    init(navigationController: UINavigationController, factory: DependencyFactoryProtocol) {
+    init(navigationController: UINavigationController, factory: OnboardingFactoryProtocol) {
         self.navigationController = navigationController
         self.factory = factory
     }
