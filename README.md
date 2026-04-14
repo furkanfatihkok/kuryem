@@ -14,7 +14,7 @@
 
 | Giriş Yap | Kayıt Ol | Şifremi Unuttum |
 |:---------:|:--------:|:---------------:|
-| ![Login](screenshots/login.png) | ![Register](screenshots/register.png) | ![ForgotPassword](screenshots/forgot_password.png) |
+| ![Login](screenshots/login.png) | ![Register](screenshots/register.png) | ![ForgotPassword](screenshots/forgotpassword.png) |
 
 ---
 
