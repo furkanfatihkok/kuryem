@@ -12,9 +12,13 @@
 
 ## 📱 Ekran Görüntüleri
 
-| Giriş Yap | Kayıt Ol | Şifremi Unuttum |
+|Role Selection | Register | Login |
 |:---------:|:--------:|:---------------:|
-| ![Login](screenshots/login.png) | ![Register](screenshots/register.png) | ![ForgotPassword](screenshots/forgotpassword.png) |
+| ![Role Selection](screenshots/roleselection.png)| ![Register](screenshots/register.png) | ![Login](screenshots/login.png)  |
+
+| Forgot Password | Verification | Create New Password|
+|:---------:|:--------:|:---------------:|
+|  ![ForgotPassword](screenshots/forgotpassword.png) | ![Verification](screenshots/verification.png) | ![Create New Password](screenshots/createnewpassword.png) |
 
 ---
 
