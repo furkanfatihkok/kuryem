@@ -118,7 +118,43 @@ enum Localized {
         static var codeInvalid: String { String(localized: "validation_code_invalid") }
     }
     
-    // MARK: Success
+    // MARK: - Home
+    enum Home {
+        static let goodMorning = "Good morning,"
+        static let goodAfternoon = "Good afternoon,"
+        static let goodEvening = "Good evening,"
+        
+        static let sendPackage = "Send Package"
+        static let sendPackageDescription = "Request a pickup for your package today"
+        
+        static let orderHistory = "ORDER HISTORY"
+        static let viewDetails = "View Details"
+        static let trackOrder = "Track"
+        static let payNow = "Pay now"
+        
+        static let arrivingIn = "Arriving in %d minutes"
+        static let yourCourierIsOnTheWay = "Your Courier is on the way"
+        
+        static let noActiveOrderTitle = "No active order + history"
+        static let noActiveOrderMessage = "This is your first delivery"
+        
+        static let noPreviousOrdersTitle = "No previous orders yet"
+        static let noPreviousOrdersMessage = "This is your first delivery"
+        
+        static let noOrdersTitle = "No orders yet"
+        static let noOrdersMessage = "Send your first package to get started"
+        
+        static let sendAPackage = "SEND A PACKAGE"
+        
+        // Bottom Navigation
+        static let navHome = "Home"
+        static let navWallet = "Wallet"
+        static let navTrack = "Track"
+        static let navOrders = "Orders"
+        static let navMessages = "Messages"
+    }
+    
+    // MARK: - Success
     enum Success {
         static var successTitle: String { String(localized:"success_title")}
         static var successDescription: String { String(localized:"success_description")}
