@@ -25,7 +25,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
             contextProvider: self
         )
 
-        let factory: DependencyFactoryProtocol = DependencyFactory(
+        let factory: DependencyFactory = DependencyFactory(
             onboardingRepository:    OnboardingRepository(),
             roleSelectionRepository: RoleSelectionRepository(),
             authRepository:          authRepository

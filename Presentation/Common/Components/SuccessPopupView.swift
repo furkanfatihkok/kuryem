@@ -96,7 +96,6 @@ final class SuccessPopupView: UIView {
     
     private func setupConstraints() {
         NSLayoutConstraint.activate([
-            // Blur ekranı tam kaplasın
             blurEffectView.topAnchor.constraint(equalTo: topAnchor),
             blurEffectView.leadingAnchor.constraint(equalTo: leadingAnchor),
             blurEffectView.trailingAnchor.constraint(equalTo: trailingAnchor),

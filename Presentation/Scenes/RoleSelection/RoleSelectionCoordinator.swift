@@ -18,10 +18,10 @@ final class RoleSelectionCoordinator: Coordinator {
     let navigationController: UINavigationController
     var childCoordinators: [Coordinator] = []
     weak var delegate: RoleSelectionCoordinatorDelegate?
-    private let factory: DependencyFactoryProtocol
+    private let factory: RoleSelectionFactoryProtocol
 
     // MARK: - Initialization
-    init(navigationController: UINavigationController, factory: DependencyFactoryProtocol) {
+    init(navigationController: UINavigationController, factory: RoleSelectionFactoryProtocol) {
         self.navigationController = navigationController
         self.factory = factory
     }
