@@ -13,12 +13,14 @@ final class DependencyFactory {
     private let onboardingRepository: OnboardingRepositoryProtocol
     private let roleSelectionRepository: RoleSelectionRepositoryProtocol
     private let authRepository: AuthRepository
+    private let orderRepository: OrderRepositoryProtocol
     
     // MARK: - Init
-    init(onboardingRepository: OnboardingRepositoryProtocol, roleSelectionRepository: RoleSelectionRepositoryProtocol, authRepository: AuthRepository) {
+    init(onboardingRepository: OnboardingRepositoryProtocol, roleSelectionRepository: RoleSelectionRepositoryProtocol, authRepository: AuthRepository, orderRepository: OrderRepositoryProtocol) {
         self.onboardingRepository = onboardingRepository
         self.roleSelectionRepository = roleSelectionRepository
         self.authRepository = authRepository
+        self.orderRepository = orderRepository
     }
 }
 // MARK: - ROLE SELECTION
@@ -65,5 +67,12 @@ extension DependencyFactory: AuthFactoryProtocol {
     
     func makeCreateNewPasswordViewModel() -> SenderCreateNewPasswordViewModel {
         SenderCreateNewPasswordViewModel(passwordRepository: authRepository)
+    }
+}
+
+// MARK: HOME PROTOCOL
+extension DependencyFactory: HomeFactoryProtocol {
+    func homeViewModel(user: User) -> HomeViewModel {
+        return HomeViewModel(orderRepository: orderRepository, user: user)
     }
 }
