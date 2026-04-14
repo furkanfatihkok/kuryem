@@ -216,7 +216,7 @@ kuryemUITests/   # UI testler — Auth flow end-to-end testleri
 - ✅ Hatalı şifre ile giriş → hata mesajı gösterimi
 - ✅ Boş alan validasyonu
 - ✅ Kayıt sırasında Firestore'a yazma
-- ✅ Şifre sıfırlama e-postası gönderimi
+- ✅ Şifre sıfırlaması için telefon kod doğrulama gönderimi
 
 ---
 
