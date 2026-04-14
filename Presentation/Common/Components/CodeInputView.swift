@@ -123,7 +123,7 @@ final class CodeInputView: UIView {
     // MARK: - Actions
     @objc private func viewTapped() {
         hiddenTextField.becomeFirstResponder()
-        updateDigitLabels() // Tap ile focus olunca UI'ı güncelle
+        updateDigitLabels()
     }
     
     // MARK: - Public Methods
@@ -162,27 +162,23 @@ final class CodeInputView: UIView {
             let label = digitLabels[index]
             let cursor = cursorViews[index]
             
-            // Cursor Animasyonunu durdur/kaldır
             cursor.layer.removeAllAnimations()
             cursor.alpha = 1.0
             cursor.isHidden = true
             
             if index < currentIndex {
-                // DOLU KUTU DURUMU (Görselin sağ tarafı)
                 let digitIndex = currentCode.index(currentCode.startIndex, offsetBy: index)
                 label.text = String(currentCode[digitIndex])
-                container.layer.borderColor = AppColor.textfieldBorder.cgColor // Dolu kutu da açık gri
+                container.layer.borderColor = AppColor.textfieldBorder.cgColor
             } else {
-                // BOŞ KUTU DURUMU
                 label.text = ""
                 
-                // Eğer bu kutu sıradaki aktif kutuysa ve klavye açıksa (Görselin sol tarafı)
                 if index == currentIndex && isEditing {
-                    container.layer.borderColor = AppColor.borderActive.cgColor // Sarı border
+                    container.layer.borderColor = AppColor.borderActive.cgColor
                     cursor.isHidden = false
                     startCursorBlinkAnimation(cursor)
                 } else {
-                    container.layer.borderColor = AppColor.textfieldBorder.cgColor // Standart açık gri
+                    container.layer.borderColor = AppColor.textfieldBorder.cgColor
                 }
             }
         }
@@ -208,14 +204,12 @@ extension CodeInputView: UITextFieldDelegate {
         guard let stringRange = Range(range, in: currentText) else { return false }
         let updatedText = currentText.replacingCharacters(in: stringRange, with: string)
         
-        // Only allow numbers
         let allowedCharacters = CharacterSet.decimalDigits
         let characterSet = CharacterSet(charactersIn: string)
         if !allowedCharacters.isSuperset(of: characterSet) && !string.isEmpty {
             return false
         }
         
-        // Limit to numberOfDigits
         if updatedText.count > numberOfDigits {
             return false
         }
