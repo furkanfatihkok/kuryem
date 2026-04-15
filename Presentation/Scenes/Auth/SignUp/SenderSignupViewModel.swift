@@ -11,7 +11,7 @@ import Foundation
 protocol SenderSignupViewModelDelegate: AnyObject {
     func senderSignupViewModelDidSignup(_ viewModel: SenderSignupViewModel, request: SignupRequest)
     func senderSignupViewModelRequestLogin(_ viewModel: SenderSignupViewModel)
-    func signupViewModelDidAuthenticateWithSocial(_ viewModel: SenderSignupViewModel)
+    func signupViewModelDidAuthenticateWithSocial(_ viewModel: SenderSignupViewModel, user: User)
 }
 
 protocol SenderSignupViewModelViewDelegate: AnyObject {
@@ -157,8 +157,8 @@ final class SenderSignupViewModel {
     private func handleSocialResult(_ result: Result<User, AuthError>) {
         isLoading = false
         switch result {
-        case .success:
-            delegate?.signupViewModelDidAuthenticateWithSocial(self)
+        case .success(let fetchedUser):
+            delegate?.signupViewModelDidAuthenticateWithSocial(self, user: fetchedUser)
         case .failure(let error):
             activeError = error
         }

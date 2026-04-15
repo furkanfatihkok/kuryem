@@ -18,18 +18,35 @@ final class HomeCoordinator: Coordinator {
     weak var delegate: HomeCoordinatorDelegate?
     
     private let user: User
+    private let factory: HomeFactoryProtocol
     
-    init(navigationController: UINavigationController, user: User) {
+    init(navigationController: UINavigationController, user: User, factory: HomeFactoryProtocol) {
         self.navigationController = navigationController
         self.user = user
+        self.factory = factory
     }
     
     func start() {
-        showHome()
+        let homeVC = factory.makeHomeViewController(user: user)
+        
+        // Delegate bağlaması yapıldı
+        homeVC.viewModel.delegate = self
+        
+        navigationController.setViewControllers([homeVC], animated: true)
+    }
+}
+
+// MARK: - HomeViewModelDelegate
+extension HomeCoordinator: HomeViewModelDelegate {
+    func homeViewModelDidSelectOrder(_ viewModel: HomeViewModel, order: Order) {
+        // Sipariş detayına geçiş kodları
     }
     
-    // MARK: - Navigation Methods
-    private func showHome() {
-        print(".....homin")
+    func homeViewModelDidRequestCreateOrder(_ viewModel: HomeViewModel) {
+        // Yeni sipariş ekranına geçiş kodları
+    }
+    
+    func homeViewModelDidRequestProfile(_ viewModel: HomeViewModel) {
+        // Profil ekranına geçiş kodları
     }
 }

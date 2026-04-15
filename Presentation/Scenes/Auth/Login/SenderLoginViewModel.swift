@@ -9,10 +9,10 @@ import Foundation
 
 // MARK: - DELEGATE PROTOCOLS
 protocol SenderLoginViewModelDelegate: AnyObject {
-    func senderLoginViewModelDidLogin(_ viewModel: SenderLoginViewModel)
+    func senderLoginViewModelDidLogin(_ viewModel: SenderLoginViewModel, user: User)
     func senderLoginViewModelRequestSignup(_ viewModel: SenderLoginViewModel)
     func senderLoginViewModelDidRequestForgotPassword(_ viewModel: SenderLoginViewModel)
-    func senderLoginViewModelDidAuthenticateWithSocial(_ viewModel: SenderLoginViewModel)
+    func senderLoginViewModelDidAuthenticateWithSocial(_ viewModel: SenderLoginViewModel, user: User)
 }
 
 protocol SenderLoginViewModelViewDelegate: AnyObject {
@@ -103,8 +103,8 @@ final class SenderLoginViewModel {
             guard let self else { return }
             self.isLoading = false
             switch result {
-            case .success:
-                self.delegate?.senderLoginViewModelDidAuthenticateWithSocial(self)
+            case .success(let fetchedUser):
+                self.delegate?.senderLoginViewModelDidAuthenticateWithSocial(self, user: fetchedUser)
             case .failure(let error):
                 self.viewDelegate?.senderLoginViewModelDidReceiveError(self, error: error)
             }
@@ -117,8 +117,8 @@ final class SenderLoginViewModel {
             guard let self else { return }
             self.isLoading = false
             switch result {
-            case .success:
-                self.delegate?.senderLoginViewModelDidAuthenticateWithSocial(self)
+            case .success(let fetchedUser):
+                self.delegate?.senderLoginViewModelDidAuthenticateWithSocial(self, user: fetchedUser)
             case .failure(let error):
                 self.viewDelegate?.senderLoginViewModelDidReceiveError(self, error: error)
             }
@@ -139,8 +139,8 @@ final class SenderLoginViewModel {
             guard let self else { return }
             self.isLoading = false
             switch result {
-            case .success:
-                self.delegate?.senderLoginViewModelDidLogin(self)
+            case .success(let fetchedUser):
+                self.delegate?.senderLoginViewModelDidLogin(self, user: fetchedUser)
             case .failure(let error):
                 self.viewDelegate?.senderLoginViewModelDidReceiveError(self, error: error)
             }

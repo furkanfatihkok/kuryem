@@ -15,7 +15,7 @@ enum CodeVerificationFlow {
 
 // MARK: - AUTH COORDINATOR DELEGATE
 protocol AuthCoordinatorDelegate: AnyObject {
-    func authCoordinatorDidAuthenticate(_ coordinator: AuthCoordinator)
+    func authCoordinatorDidAuthenticate(_ coordinator: AuthCoordinator, user: User)
     func authCoordinatorDidCancel(_ coordinator: AuthCoordinator)
 }
 
@@ -122,15 +122,15 @@ extension AuthCoordinator: SenderSignupViewModelDelegate {
         showLogin()
     }
 
-    func signupViewModelDidAuthenticateWithSocial(_ viewModel: SenderSignupViewModel) {
-        delegate?.authCoordinatorDidAuthenticate(self)
+    func signupViewModelDidAuthenticateWithSocial(_ viewModel: SenderSignupViewModel, user: User) {
+        delegate?.authCoordinatorDidAuthenticate(self, user: user)
     }
 }
 
 // MARK: - SENDER LOGIN VIEW MODEL DELEGATE
 extension AuthCoordinator: SenderLoginViewModelDelegate {
-    func senderLoginViewModelDidLogin(_ viewModel: SenderLoginViewModel) {
-        delegate?.authCoordinatorDidAuthenticate(self)
+    func senderLoginViewModelDidLogin(_ viewModel: SenderLoginViewModel, user: User) {
+        delegate?.authCoordinatorDidAuthenticate(self, user: user)
     }
 
     func senderLoginViewModelRequestSignup(_ viewModel: SenderLoginViewModel) {
@@ -141,8 +141,8 @@ extension AuthCoordinator: SenderLoginViewModelDelegate {
         showForgotPassword()
     }
 
-    func senderLoginViewModelDidAuthenticateWithSocial(_ viewModel: SenderLoginViewModel) {
-        delegate?.authCoordinatorDidAuthenticate(self)
+    func senderLoginViewModelDidAuthenticateWithSocial(_ viewModel: SenderLoginViewModel, user: User) {
+        delegate?.authCoordinatorDidAuthenticate(self, user: user)
     }
 }
 

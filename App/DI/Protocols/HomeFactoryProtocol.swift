@@ -8,5 +8,5 @@
 import Foundation
 
 protocol HomeFactoryProtocol {
-    func homeViewModel(user: User) -> HomeViewModel
+    func makeHomeViewController(user: User) -> HomeViewController
 }
