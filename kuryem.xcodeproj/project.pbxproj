@@ -46,8 +46,8 @@
 		0282223F2F867824001B99A4 /* Exceptions for "Presentation" folder in "kuryemTests" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
-				Common/Components/AuthFooterView.swift,
-				Common/Components/AuthInlineActionButton.swift,
+				Scenes/Auth/Component/AuthFooterView.swift,
+				Scenes/Auth/Component/AuthInlineActionButton.swift,
 			);
 			target = 0292B9862F46FD7E0095BB50 /* kuryemTests */;
 		};

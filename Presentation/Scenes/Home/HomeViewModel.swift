@@ -94,7 +94,7 @@ final class HomeViewModel {
         delegate?.homeViewModelDidRequestProfile(self)
     }
     
-    func didselectOrder(_ order: Order) {
+    func didSelectOrder(_ order: Order) {
         delegate?.homeViewModelDidSelectOrder(self, order: order)
     }
     
@@ -103,7 +103,7 @@ final class HomeViewModel {
         delegate?.homeViewModelDidSelectOrder(self, order: order)
     }
     
-    func didTapCallOrderDeliveryPerso() {
+    func didTapCallOrderDeliveryPerson() {
         guard let order = activeOrder,
               let phone = order.deliveryPersonPhone else { return }
         
@@ -118,8 +118,8 @@ final class HomeViewModel {
         print("Chat with delivery person")
     }
     
-    // MARK: - Private Methods
-    private func fetchActiveOrder() {
+    // MARK: - Public Methods
+     func fetchActiveOrder() {
         orderRepository.fetchActiveOrder(userID: user.id) { [ weak self] result in
             guard let self = self else { return }
             
@@ -134,7 +134,7 @@ final class HomeViewModel {
         }
     }
     
-    private func fetchOrderHistory() {
+     func fetchOrderHistory() {
         orderRepository.fetchOrderHistory(userID: user.id, limit: 10) { [ weak self] result in
             guard let self = self else { return }
             
