@@ -9,6 +9,7 @@ import UIKit
 
 enum AppLayout {
     // MARK: - Spacing
+    static let spacingXXSmall: CGFloat = 2
     static let spacingXSmall: CGFloat = 4
     static let spacingSmall: CGFloat = 8
     static let spacingMedium: CGFloat = 16
@@ -21,7 +22,9 @@ enum AppLayout {
     static let paddingVertical: CGFloat = 16
     
     // MARK: - Corner Radius
+    static let cornerRadiusXSmall: CGFloat = 6
     static let cornerRadiusSmall: CGFloat = 8
+    static let cornerRadiusMiddle: CGFloat = 16
     static let cornerRadiusMedium: CGFloat = 20
     static let cornerRadiusLarge: CGFloat = 23.5
     static let cornerRadiusXLarge: CGFloat = 24

@@ -72,7 +72,9 @@ extension DependencyFactory: AuthFactoryProtocol {
 
 // MARK: HOME PROTOCOL
 extension DependencyFactory: HomeFactoryProtocol {
-    func homeViewModel(user: User) -> HomeViewModel {
-        return HomeViewModel(orderRepository: orderRepository, user: user)
+    func makeHomeViewController(user: User) -> HomeViewController {
+        let viewModel = HomeViewModel(orderRepository: orderRepository, user: user)
+        let viewController = HomeViewController(viewModel: viewModel)
+        return viewController
     }
 }

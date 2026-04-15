@@ -46,12 +46,14 @@ final class AppCoordinator: Coordinator {
         childCoordinators.append(coordinator)
         coordinator.start()
     }
-
-    private func showHome() {
-        // TODO: HomeCoordinator implement edildiğinde açılacak
-        print("🏠 Show Home")
+    // Eksik olan showHome fonksiyonu
+    private func showHome(user: User) {
+        let coordinator = HomeCoordinator(navigationController: navigationController, user: user, factory: factory)
+        coordinator.delegate = self
+        childCoordinators.append(coordinator)
+        coordinator.start()
     }
-
+    
     private func removeChildCoordinator(_ coordinator: Coordinator) {
         childCoordinators.removeAll { $0 === coordinator }
     }
@@ -75,12 +77,20 @@ extension AppCoordinator: RoleSelectionCoordinatorDelegate {
 
 // MARK: - AUTH COORDINATOR DELEGATE
 extension AppCoordinator: AuthCoordinatorDelegate {
-    func authCoordinatorDidAuthenticate(_ coordinator: AuthCoordinator) {
+    func authCoordinatorDidAuthenticate(_ coordinator: AuthCoordinator, user: User) {
         removeChildCoordinator(coordinator)
-        showHome()
+        showHome(user: user)
     }
 
     func authCoordinatorDidCancel(_ coordinator: AuthCoordinator) {
+        removeChildCoordinator(coordinator)
+        showOnboarding()
+    }
+}
+
+// MARK: - HOME COORDINATOR DELEGATE
+extension AppCoordinator: HomeCoordinatorDelegate {
+    func homeCoordinatorDidRequestLogout(_ coordinator: HomeCoordinator) {
         removeChildCoordinator(coordinator)
         showOnboarding()
     }
