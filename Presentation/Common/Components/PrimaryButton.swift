@@ -21,16 +21,19 @@ final class PrimaryButton: UIButton {
         fatalError("init(coder:) has not been implemented")
     }
     
+    override var intrinsicContentSize: CGSize {
+        return CGSize(width: UIView.noIntrinsicMetric, height: AppLayout.PrimaryButton.height)
+    }
+    
     // MARK: - Setup
     private func setupButton(title: String) {
         setTitle(title, for: .normal)
-        setTitleColor(AppColor.buttonText, for: .normal)
-        setTitleColor(AppColor.buttonText.withAlphaComponent(0.6), for: .disabled)
-        titleLabel?.font = AppFonts.button
+        setTitleColor(AppColor.background, for: .normal)
+        titleLabel?.font = AppFonts.input
         
         backgroundColor = AppColor.buttonPrimary
         originalBackgroundColor = AppColor.buttonPrimary
-        layer.cornerRadius = AppLayout.buttonCornerRadius
+        layer.cornerRadius = AppLayout.PrimaryButton.radius
         
         translatesAutoresizingMaskIntoConstraints = false
         
@@ -66,7 +69,7 @@ final class PrimaryButton: UIButton {
         isEnabled = !isLoading
         if isLoading {
             let activityIndicator = UIActivityIndicatorView(style: .medium)
-            activityIndicator.color = AppColor.buttonText
+            activityIndicator.color = AppColor.background
             activityIndicator.tag = 999
             activityIndicator.translatesAutoresizingMaskIntoConstraints = false
             addSubview(activityIndicator)

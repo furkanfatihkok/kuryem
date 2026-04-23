@@ -7,7 +7,7 @@
 
 import Foundation
 
-// MARK: - DELEGATE PROTOCOLS
+// MARK: - Delegate Protocols
 protocol SenderForgotPasswordViewModelDelegate: AnyObject {
     func forgotPasswordViewModelDidSendCode(_ viewModel: SenderForgotPasswordViewModel, phoneNumber: PhoneVerificationRequest)
     func forgotPasswordViewModelRequestLogin(_ viewModel: SenderForgotPasswordViewModel)
@@ -15,12 +15,13 @@ protocol SenderForgotPasswordViewModelDelegate: AnyObject {
 
 protocol SenderForgotPasswordViewModelViewDelegate: AnyObject {
     func forgotPasswordViewModelDidUpdateLoading(_ viewModel: SenderForgotPasswordViewModel)
-    func forgotPasswordViewModelDidReceiveError(_ viewModel: SenderForgotPasswordViewModel, error: AuthError)
+    func forgotPasswordViewModelDidReceiveError(_ viewModel: SenderForgotPasswordViewModel, error: Error)
 }
 
-// MARK: - SENDER FORGOT PASSWORD VIEW MODEL
+// MARK: - Sender Forgot Password View Model
 final class SenderForgotPasswordViewModel {
-    // MARK: - Properties
+    
+    // MARK: Properties
     weak var delegate: SenderForgotPasswordViewModelDelegate?
     weak var viewDelegate: SenderForgotPasswordViewModelViewDelegate?
     
@@ -28,57 +29,45 @@ final class SenderForgotPasswordViewModel {
     private let phoneAuthRepository: PhoneAuthRepository
     
     private(set) var isLoading: Bool = false {
-        didSet { viewDelegate?.forgotPasswordViewModelDidUpdateLoading(self) }
+        didSet {
+            viewDelegate?.forgotPasswordViewModelDidUpdateLoading(self)
+        }
     }
     
-    // MARK: - Init
-    init(validationRepository: ValidationAuthRepository, phoneAuthRepository: PhoneAuthRepository) {
+    // MARK: Init
+    init(validationRepository: ValidationAuthRepository,
+         phoneAuthRepository: PhoneAuthRepository) {
         self.validationRepository = validationRepository
         self.phoneAuthRepository = phoneAuthRepository
     }
     
-    // MARK: - Public Actions
+    // MARK: Public Actions
     func sendCode(phoneNumber: String) {
-        if phoneNumber.isEmpty {
-            viewDelegate?.forgotPasswordViewModelDidReceiveError(self, error: .emptyPhoneNumber)
-            return
-        } else if phoneNumber.count != 10 {
-            viewDelegate?.forgotPasswordViewModelDidReceiveError(self, error: .invalidPhoneNumber)
+        // Validation logic extracted for SRP
+        let cleanNumber = PhoneNumberFormatter.clean(phoneNumber)
+        
+        if let validationError = validatePhoneNumber(phoneNumber) {
+            viewDelegate?.forgotPasswordViewModelDidReceiveError(self, error: validationError)
             return
         }
         
         isLoading = true
+        let phoneWithCountryCode = "+90\(cleanNumber)"
         
-        let phoneWithCountryCode = "+90\(phoneNumber)"
-        
+        // 1. Önce telefon numarasının sistemde kayıtlı olup olmadığını kontrol et
         validationRepository.checkPhoneNumberExists(phoneNumber: phoneWithCountryCode) { [weak self] result in
-            guard let self else { return }
+            guard let self = self else { return }
             
             switch result {
             case .success(let exists):
                 if !exists {
-                    self.isLoading = false
-                    self.viewDelegate?.forgotPasswordViewModelDidReceiveError(self, error: .userNotFound)
-                    return
+                    handleAuthError(.userNotFound)
+                } else {
+                    // 2. Numara varsa SMS gönderimini başlat
+                    self.requestSmsCode(for: phoneWithCountryCode)
                 }
-                
-                let request = PhoneVerificationRequest(phoneNumber: phoneWithCountryCode)
-                
-                self.phoneAuthRepository.sendPhoneVerificationCode(request: request) { [weak self] smsResult in
-                    guard let self else { return }
-                    self.isLoading = false
-                    
-                    switch smsResult {
-                    case .success:
-                        self.delegate?.forgotPasswordViewModelDidSendCode(self, phoneNumber: request)
-                    case .failure(let error):
-                        self.viewDelegate?.forgotPasswordViewModelDidReceiveError(self, error: error)
-                    }
-                }
-                
             case .failure(let error):
-                self.isLoading = false
-                self.viewDelegate?.forgotPasswordViewModelDidReceiveError(self, error: error)
+                handleError(error)
             }
         }
     }
@@ -87,18 +76,49 @@ final class SenderForgotPasswordViewModel {
         delegate?.forgotPasswordViewModelRequestLogin(self)
     }
     
+    /// UI tarafında telefon numarasını maskeler: (5XX) XXX XX XX
     func formatPhoneNumber(_ text: String) -> String {
-        var digits = text.components(separatedBy: CharacterSet.decimalDigits.inverted).joined()
-        if digits.hasPrefix("0") { digits.removeFirst() }
-        let limited = String(digits.prefix(10))
-        
-        var formatted = ""
-        for (index, character) in limited.enumerated() {
-            if index == 0 { formatted.append("(") }
-            formatted.append(character)
-            if index == 2 { formatted.append(") ") }
-            else if index == 5 { formatted.append(" ") }
+        return PhoneNumberFormatter.format(text: text)
+    }
+}
+
+// MARK: - Private Helpers
+private extension SenderForgotPasswordViewModel {
+    func validatePhoneNumber(_ phone: String) -> AuthError? {
+        if phone.isEmpty {
+            return AuthError.emptyPhoneNumber
         }
-        return formatted
+        
+        if phone.count < 10 {
+            return AuthError.invalidPhoneNumber
+        }
+        
+        return nil
+    }
+    /// SMS kodunu gönderen alt iş parçacığı
+    func requestSmsCode(for phoneNumber: String) {
+        let request = PhoneVerificationRequest(phoneNumber: phoneNumber)
+        
+        phoneAuthRepository.sendPhoneVerificationCode(request: request) { [weak self] result in
+            guard let self = self else { return }
+            self.isLoading = false
+            
+            switch result {
+            case .success:
+                self.delegate?.forgotPasswordViewModelDidSendCode(self, phoneNumber: request)
+            case .failure(let error):
+                self.viewDelegate?.forgotPasswordViewModelDidReceiveError(self, error: error)
+            }
+        }
+    }
+    
+    func handleError(_ error: Error) {
+        isLoading = false
+        viewDelegate?.forgotPasswordViewModelDidReceiveError(self, error: error)
+    }
+    
+    func handleAuthError(_ authError: AuthError) {
+        isLoading = false
+        viewDelegate?.forgotPasswordViewModelDidReceiveError(self, error: authError)
     }
 }

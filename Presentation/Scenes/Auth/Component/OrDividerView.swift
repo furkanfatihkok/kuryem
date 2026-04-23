@@ -32,7 +32,7 @@ final class OrDividerView: UIView {
         
         let label = UILabel()
         label.text = "or"
-        label.font = AppFonts.body.withSize(AppLayout.fontSizeXSmall)
+        label.font = AppFonts.caption
         label.textColor = AppColor.textSecondary
         label.translatesAutoresizingMaskIntoConstraints = false
         
@@ -43,18 +43,18 @@ final class OrDividerView: UIView {
         NSLayoutConstraint.activate([
             leftLine.leadingAnchor.constraint(equalTo: leadingAnchor),
             leftLine.centerYAnchor.constraint(equalTo: centerYAnchor),
-            leftLine.trailingAnchor.constraint(equalTo: label.leadingAnchor, constant: -AppLayout.spacingMedium),
-            leftLine.heightAnchor.constraint(equalToConstant: AppLayout.borderWidthThin),
+            leftLine.trailingAnchor.constraint(equalTo: label.leadingAnchor, constant: -AppLayout.Spacing.xSmall),
+            leftLine.heightAnchor.constraint(equalToConstant: AppLayout.Border.regular),
             
             label.centerXAnchor.constraint(equalTo: centerXAnchor),
             label.centerYAnchor.constraint(equalTo: centerYAnchor),
             
-            rightLine.leadingAnchor.constraint(equalTo: label.trailingAnchor, constant: AppLayout.spacingMedium),
+            rightLine.leadingAnchor.constraint(equalTo: label.trailingAnchor, constant: AppLayout.Spacing.xSmall),
             rightLine.centerYAnchor.constraint(equalTo: centerYAnchor),
             rightLine.trailingAnchor.constraint(equalTo: trailingAnchor),
-            rightLine.heightAnchor.constraint(equalToConstant: AppLayout.borderWidthThin),
+            rightLine.heightAnchor.constraint(equalToConstant: AppLayout.Border.regular),
             
-            heightAnchor.constraint(equalToConstant: AppLayout.onboardingIndicatorWidth)
+            heightAnchor.constraint(equalToConstant: AppLayout.iconContainer.radius)
         ])
     }
 }

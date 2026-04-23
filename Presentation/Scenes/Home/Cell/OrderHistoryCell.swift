@@ -10,17 +10,16 @@ import UIKit
 final class OrderHistoryCell: UITableViewCell {
     
     // MARK: - Properties
-    static let reuseIdentifier = "OrderHistoryCell"
+    static let reuseIdentifier = "OrderHistoryCell" // TODO:
     
     // MARK: - UI Components
     private let containerView: UIView = {
         let view = UIView()
-        view.backgroundColor = .white
-        view.layer.cornerRadius = AppLayout.cornerRadiusXSmall
-        // Kartın daha net görünmesi için tasarımdaki gibi çok hafif bir gölge/border
+        view.backgroundColor = AppColor.background
+        view.layer.cornerRadius = AppLayout.Radius.xSmall
         view.layer.shadowColor = UIColor.black.cgColor
         view.layer.shadowOffset = CGSize(width: 0, height: 2)
-        view.layer.shadowRadius = 8
+        view.layer.shadowRadius = AppLayout.Radius.small
         view.layer.shadowOpacity = 0.04
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
@@ -29,15 +28,15 @@ final class OrderHistoryCell: UITableViewCell {
     // MARK: Top Section (Icon, Tracking, Price)
     private let iconBackgroundView: UIView = {
         let view = UIView()
-        view.backgroundColor = UIColor.systemGray6 // İkonun arkasındaki gri kutu
-        view.layer.cornerRadius = 8
+        view.backgroundColor = AppColor.iconDeliveryBackground
+        view.layer.cornerRadius = AppLayout.Radius.xxSmall
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
     
     private let packageIconView: UIImageView = {
         let iv = UIImageView()
-        iv.image = UIImage(systemName: "shippingbox")
+        iv.image = UIImage(systemName: "shippingbox") // TODO:
         iv.tintColor = AppColor.textSecondary
         iv.contentMode = .scaleAspectFit
         iv.translatesAutoresizingMaskIntoConstraints = false
@@ -46,16 +45,16 @@ final class OrderHistoryCell: UITableViewCell {
     
     private let trackingNumberLabel: UILabel = {
         let label = UILabel()
-        label.font = UIFont.systemFont(ofSize: 20, weight: .bold) // Daha büyük ve kalın
-        label.textColor = .black
+        label.font = AppFonts.h4
+        label.textColor = AppColor.textPrimary
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
     
     private let priceLabel: UILabel = {
         let label = UILabel()
-        label.font = UIFont.systemFont(ofSize: 20, weight: .bold)
-        label.textColor = .black
+        label.font = AppFonts.h4
+        label.textColor = AppColor.textPrimary
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
@@ -63,8 +62,8 @@ final class OrderHistoryCell: UITableViewCell {
     // MARK: Middle Section (Addresses)
     private let pickupIconView: UIImageView = {
         let iv = UIImageView()
-        iv.image = UIImage(systemName: "circle.fill")
-        iv.tintColor = .systemGray4 // Gri nokta
+        iv.image = UIImage(systemName: "circle.fill") // TODO:
+        iv.tintColor = .systemGray4
         iv.contentMode = .scaleAspectFit
         iv.translatesAutoresizingMaskIntoConstraints = false
         return iv
@@ -72,16 +71,16 @@ final class OrderHistoryCell: UITableViewCell {
     
     private let pickupAddressLabel: UILabel = {
         let label = UILabel()
-        label.font = UIFont.systemFont(ofSize: 15, weight: .regular)
-        label.textColor = .systemGray
+        label.font = AppFonts.bodySmall
+        label.textColor = AppColor.textSecondary
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
     
     private let deliveryIconView: UIImageView = {
         let iv = UIImageView()
-        iv.image = UIImage(systemName: "circle.fill")
-        iv.tintColor = UIColor.systemYellow // Sarı nokta
+        iv.image = UIImage(systemName: "circle.fill")// TODO:
+        iv.tintColor = UIColor.systemYellow
         iv.contentMode = .scaleAspectFit
         iv.translatesAutoresizingMaskIntoConstraints = false
         return iv
@@ -89,8 +88,8 @@ final class OrderHistoryCell: UITableViewCell {
     
     private let deliveryAddressLabel: UILabel = {
         let label = UILabel()
-        label.font = UIFont.systemFont(ofSize: 15, weight: .medium)
-        label.textColor = .black
+        label.font = AppFonts.bodySmall
+        label.textColor = AppColor.textPrimary
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
@@ -98,7 +97,7 @@ final class OrderHistoryCell: UITableViewCell {
     // MARK: Divider
     private let dividerView: UIView = {
         let view = UIView()
-        view.backgroundColor = UIColor.systemGray5
+        view.backgroundColor = AppColor.border
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
@@ -106,22 +105,22 @@ final class OrderHistoryCell: UITableViewCell {
     // MARK: Bottom Section (Status & Date)
     private let statusBadge: UIView = {
         let view = UIView()
-        view.layer.cornerRadius = 14 // Tasarıma uygun yuvarlaklık
+        view.layer.cornerRadius = 14 // TODO:
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
     
     private let statusLabel: UILabel = {
         let label = UILabel()
-        label.font = UIFont.systemFont(ofSize: 13, weight: .medium)
+        label.font = AppFonts.bodySmall
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
     
     private let dateLabel: UILabel = {
         let label = UILabel()
-        label.font = UIFont.systemFont(ofSize: 13, weight: .regular)
-        label.textColor = .systemGray
+        label.font = AppFonts.bodySmall
+        label.textColor = AppColor.textSecondary
         label.textAlignment = .right
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
@@ -161,68 +160,66 @@ final class OrderHistoryCell: UITableViewCell {
         statusBadge.addSubview(statusLabel)
         containerView.addSubview(dateLabel)
         
-        // DİKEY ZİNCİR: iconBackground -> pickup -> delivery -> divider -> statusBadge -> container.bottom
         NSLayoutConstraint.activate([
-            containerView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 8),
-            containerView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
-            containerView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
-            containerView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -8),
+            containerView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: AppLayout.Spacing.medium),
+            containerView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: AppLayout.screenHorizontalMargin),
+            containerView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -AppLayout.screenHorizontalMargin),
+            containerView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -AppLayout.Spacing.medium),
             
             // Top Section
-            iconBackgroundView.topAnchor.constraint(equalTo: containerView.topAnchor, constant: 16),
-            iconBackgroundView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 16),
-            iconBackgroundView.widthAnchor.constraint(equalToConstant: 44),
-            iconBackgroundView.heightAnchor.constraint(equalToConstant: 44),
+            iconBackgroundView.topAnchor.constraint(equalTo: containerView.topAnchor, constant: AppLayout.Spacing.medium),
+            iconBackgroundView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: AppLayout.Spacing.medium),
+            iconBackgroundView.widthAnchor.constraint(equalToConstant: 36),// TODO:
+            iconBackgroundView.heightAnchor.constraint(equalToConstant: 36), // TODO:
             
             packageIconView.centerXAnchor.constraint(equalTo: iconBackgroundView.centerXAnchor),
             packageIconView.centerYAnchor.constraint(equalTo: iconBackgroundView.centerYAnchor),
-            packageIconView.widthAnchor.constraint(equalToConstant: 24),
-            packageIconView.heightAnchor.constraint(equalToConstant: 24),
+            packageIconView.widthAnchor.constraint(equalToConstant: 24), // TODO:
+            packageIconView.heightAnchor.constraint(equalToConstant: 24), // TODO:
             
             trackingNumberLabel.centerYAnchor.constraint(equalTo: iconBackgroundView.centerYAnchor),
-            trackingNumberLabel.leadingAnchor.constraint(equalTo: iconBackgroundView.trailingAnchor, constant: 12),
+            trackingNumberLabel.leadingAnchor.constraint(equalTo: iconBackgroundView.trailingAnchor, constant: AppLayout.Spacing.small),
             
             priceLabel.centerYAnchor.constraint(equalTo: iconBackgroundView.centerYAnchor),
-            priceLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -16),
+            priceLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -AppLayout.Spacing.medium),
             
             // Middle Section (Addresses)
-            pickupIconView.topAnchor.constraint(equalTo: iconBackgroundView.bottomAnchor, constant: 20),
-            pickupIconView.leadingAnchor.constraint(equalTo: trackingNumberLabel.leadingAnchor, constant: 4),
-            pickupIconView.widthAnchor.constraint(equalToConstant: 8),
-            pickupIconView.heightAnchor.constraint(equalToConstant: 8),
+            pickupIconView.topAnchor.constraint(equalTo: iconBackgroundView.bottomAnchor, constant: AppLayout.Spacing.medium),
+            pickupIconView.leadingAnchor.constraint(equalTo: trackingNumberLabel.leadingAnchor, constant: 4), // TODO:
+            pickupIconView.widthAnchor.constraint(equalToConstant: 6),
+            pickupIconView.heightAnchor.constraint(equalToConstant: 6),
             
             pickupAddressLabel.centerYAnchor.constraint(equalTo: pickupIconView.centerYAnchor),
-            pickupAddressLabel.leadingAnchor.constraint(equalTo: pickupIconView.trailingAnchor, constant: 12),
-            pickupAddressLabel.trailingAnchor.constraint(lessThanOrEqualTo: containerView.trailingAnchor, constant: -16),
+            pickupAddressLabel.leadingAnchor.constraint(equalTo: pickupIconView.trailingAnchor, constant: AppLayout.Spacing.xSmall),
+            pickupAddressLabel.trailingAnchor.constraint(lessThanOrEqualTo: containerView.trailingAnchor, constant: -AppLayout.Spacing.medium),
             
-            deliveryIconView.topAnchor.constraint(equalTo: pickupIconView.bottomAnchor, constant: 16),
+            deliveryIconView.topAnchor.constraint(equalTo: pickupIconView.bottomAnchor, constant: AppLayout.Spacing.xSmall),
             deliveryIconView.centerXAnchor.constraint(equalTo: pickupIconView.centerXAnchor),
-            deliveryIconView.widthAnchor.constraint(equalToConstant: 8),
-            deliveryIconView.heightAnchor.constraint(equalToConstant: 8),
+            deliveryIconView.widthAnchor.constraint(equalToConstant: 6),
+            deliveryIconView.heightAnchor.constraint(equalToConstant: 6),
             
             deliveryAddressLabel.centerYAnchor.constraint(equalTo: deliveryIconView.centerYAnchor),
-            deliveryAddressLabel.leadingAnchor.constraint(equalTo: deliveryIconView.trailingAnchor, constant: 12),
-            deliveryAddressLabel.trailingAnchor.constraint(lessThanOrEqualTo: containerView.trailingAnchor, constant: -16),
+            deliveryAddressLabel.leadingAnchor.constraint(equalTo: deliveryIconView.trailingAnchor, constant: AppLayout.Spacing.small),
+            deliveryAddressLabel.trailingAnchor.constraint(lessThanOrEqualTo: containerView.trailingAnchor, constant: -AppLayout.Spacing.medium),
             
             // Divider
-            dividerView.topAnchor.constraint(equalTo: deliveryAddressLabel.bottomAnchor, constant: 20),
-            dividerView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 16),
-            dividerView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -16),
-            dividerView.heightAnchor.constraint(equalToConstant: 1),
+            dividerView.topAnchor.constraint(equalTo: deliveryAddressLabel.bottomAnchor, constant: AppLayout.Spacing.medium),
+            dividerView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: AppLayout.Spacing.medium),
+            dividerView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -AppLayout.Spacing.medium),
+            dividerView.heightAnchor.constraint(equalToConstant: AppLayout.Border.regular),
             
             // Bottom Section (Status & Date)
-            statusBadge.topAnchor.constraint(equalTo: dividerView.bottomAnchor, constant: 16),
-            statusBadge.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 16),
-            // ZİNCİRİN SONU: Kartın altını belirliyor
-            statusBadge.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -16),
+            statusBadge.topAnchor.constraint(equalTo: dividerView.bottomAnchor, constant: AppLayout.Spacing.small),
+            statusBadge.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: AppLayout.Spacing.medium),
+            statusBadge.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -AppLayout.Spacing.medium),
             
-            statusLabel.topAnchor.constraint(equalTo: statusBadge.topAnchor, constant: 6),
-            statusLabel.bottomAnchor.constraint(equalTo: statusBadge.bottomAnchor, constant: -6),
-            statusLabel.leadingAnchor.constraint(equalTo: statusBadge.leadingAnchor, constant: 12),
-            statusLabel.trailingAnchor.constraint(equalTo: statusBadge.trailingAnchor, constant: -12),
+            statusLabel.topAnchor.constraint(equalTo: statusBadge.topAnchor, constant: AppLayout.Spacing.xxSmall),
+            statusLabel.bottomAnchor.constraint(equalTo: statusBadge.bottomAnchor, constant: -AppLayout.Spacing.xxSmall),
+            statusLabel.leadingAnchor.constraint(equalTo: statusBadge.leadingAnchor, constant: AppLayout.Spacing.small),
+            statusLabel.trailingAnchor.constraint(equalTo: statusBadge.trailingAnchor, constant: -AppLayout.Spacing.small),
             
             dateLabel.centerYAnchor.constraint(equalTo: statusBadge.centerYAnchor),
-            dateLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -16)
+            dateLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -AppLayout.Spacing.medium)
         ])
     }
     
@@ -238,18 +235,18 @@ final class OrderHistoryCell: UITableViewCell {
         case .inTransit:
             statusBadge.backgroundColor = UIColor.systemBlue.withAlphaComponent(0.1)
             statusLabel.textColor = .systemBlue
-            statusLabel.text = "In Transit"
+            statusLabel.text = "In Transit" // TODO:
         case .delivered:
             statusBadge.backgroundColor = UIColor.systemGreen.withAlphaComponent(0.1)
             statusLabel.textColor = .systemGreen
-            statusLabel.text = "Delivered"
+            statusLabel.text = "Delivered" // TODO:
         case .cancelled:
             statusBadge.backgroundColor = UIColor.systemRed.withAlphaComponent(0.1)
             statusLabel.textColor = .systemRed
-            statusLabel.text = "Cancelled"
+            statusLabel.text = "Cancelled" // TODO:
         }
         
-        // Format date
+        // Format date // TODO:
         let formatter = DateFormatter()
         let calendar = Calendar.current
         

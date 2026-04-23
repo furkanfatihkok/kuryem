@@ -17,7 +17,7 @@ final class AuthFooterView: UIView {
     private let stackView: UIStackView = {
         let sv = UIStackView()
         sv.axis = .horizontal
-        sv.spacing = 4
+        sv.spacing = AppLayout.Spacing.xxSmall
         sv.alignment = .center
         sv.translatesAutoresizingMaskIntoConstraints = false
         return sv
@@ -25,15 +25,15 @@ final class AuthFooterView: UIView {
     
     private let messageLabel: UILabel = {
         let label = UILabel()
-        label.font = AppFonts.body.withSize(AppLayout.fontSizeXSmall)
+        label.font = AppFonts.caption
         label.textColor = AppColor.textSecondary
         return label
     }()
     
     private lazy var actionButton: UIButton = {
         let button = UIButton(type: .system)
-        button.titleLabel?.font = AppFonts.subTitle.withSize(AppLayout.fontSizeXSmall)
-        button.setTitleColor(AppColor.borderActive, for: .normal)
+        button.titleLabel?.font = AppFonts.buttonText
+        button.setTitleColor(AppColor.buttonText, for: .normal)
         button.addTarget(self, action: #selector(handleTap), for: .touchUpInside)
         return button
     }()

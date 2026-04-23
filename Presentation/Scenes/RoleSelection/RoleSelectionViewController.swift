@@ -8,7 +8,6 @@
 import UIKit
 
 final class RoleSelectionViewController: UIViewController {
-    
     // MARK: - Properties
     private let viewModel: RoleSelectionViewModel
     private var roleCards: [RoleCardView] = []
@@ -20,7 +19,6 @@ final class RoleSelectionViewController: UIViewController {
             icon: UIImage(named: AppIcons.RoleSelection.profile_icon),
             title: Localized.RoleSelection.chooseYourRole,
             description: Localized.RoleSelection.selectRoleDescription,
-            iconBackgroundColor: AppColor.iconInActiveCardBackground
         )
         return view
     }()
@@ -28,7 +26,7 @@ final class RoleSelectionViewController: UIViewController {
     private let rolesStackView: UIStackView = {
         let stack = UIStackView()
         stack.axis = .vertical
-        stack.spacing = AppLayout.spacingMedium
+        stack.spacing = AppLayout.Spacing.medium
         stack.translatesAutoresizingMaskIntoConstraints = false
         return stack
     }()
@@ -66,13 +64,13 @@ final class RoleSelectionViewController: UIViewController {
     
     private func setupConstraints() {
         NSLayoutConstraint.activate([
-            headerView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: AppLayout.spacingMedium),
-            headerView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: AppLayout.paddingHorizontal),
-            headerView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -AppLayout.paddingHorizontal),
+            headerView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            headerView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: AppLayout.screenHorizontalMargin),
+            headerView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -AppLayout.screenHorizontalMargin),
             
-            rolesStackView.topAnchor.constraint(equalTo: headerView.bottomAnchor, constant: AppLayout.spacingLarge),
-            rolesStackView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: AppLayout.paddingHorizontal),
-            rolesStackView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -AppLayout.paddingHorizontal)
+            rolesStackView.topAnchor.constraint(equalTo: headerView.bottomAnchor, constant: AppLayout.Spacing.large),
+            rolesStackView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: AppLayout.screenHorizontalMargin),
+            rolesStackView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -AppLayout.screenHorizontalMargin)
         ])
     }
     

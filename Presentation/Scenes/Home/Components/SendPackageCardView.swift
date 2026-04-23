@@ -19,8 +19,8 @@ final class SendPackageCardView: UIView {
     // MARK: - UI Components
     private let containerView: UIView = {
         let view = UIView()
-        view.backgroundColor = AppColor.primary // Sarı arkaplan
-        view.layer.cornerRadius = AppLayout.cornerRadiusMiddle
+        view.backgroundColor = AppColor.primary
+        view.layer.cornerRadius = AppLayout.Radius.medium
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
@@ -28,8 +28,8 @@ final class SendPackageCardView: UIView {
     // MARK: Top Section
     private let packageIconView: UIView = {
         let view = UIView()
-        view.backgroundColor = AppColor.iconInActiveCardBackground
-        view.layer.cornerRadius = AppLayout.cornerRadiusLarge
+        view.backgroundColor = AppColor.iconContainerBackground
+        view.layer.cornerRadius = AppLayout.Radius.circular
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
@@ -47,7 +47,7 @@ final class SendPackageCardView: UIView {
         let iv = UIImageView()
         let config = UIImage.SymbolConfiguration(pointSize: 16, weight: .semibold)
         iv.image = UIImage(systemName: "chevron.right", withConfiguration: config)
-        iv.tintColor = .white // Sağdaki ok beyaz renkte
+        iv.tintColor = AppColor.background
         iv.contentMode = .scaleAspectFit
         iv.translatesAutoresizingMaskIntoConstraints = false
         return iv
@@ -58,7 +58,7 @@ final class SendPackageCardView: UIView {
         let label = UILabel()
         label.text = Localized.Home.sendPackage
         label.font = AppFonts.input.withSize(18)
-        label.textColor = .white // AppColor.background yerine direkt white daha güvenli
+        label.textColor = AppColor.background
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
@@ -67,7 +67,7 @@ final class SendPackageCardView: UIView {
         let label = UILabel()
         label.text = Localized.Home.sendPackageDescription
         label.font = AppFonts.input.withSize(14)
-        label.textColor = AppColor.description
+        label.textColor = AppColor.homeBannerDescription
         label.numberOfLines = 2
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
@@ -121,7 +121,6 @@ final class SendPackageCardView: UIView {
             chevronImageView.heightAnchor.constraint(equalToConstant: 16),
             
             // Bottom Section (Texts)
-            // Title ikonun ALTINA yerleşiyor
             titleLabel.topAnchor.constraint(equalTo: packageIconView.bottomAnchor, constant: 16),
             titleLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 20),
             titleLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -20),
@@ -129,7 +128,6 @@ final class SendPackageCardView: UIView {
             descriptionLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 4),
             descriptionLabel.leadingAnchor.constraint(equalTo: titleLabel.leadingAnchor),
             descriptionLabel.trailingAnchor.constraint(equalTo: titleLabel.trailingAnchor),
-            // View'ın yüksekliğini belirleyen alt kısıtlama
             descriptionLabel.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -20)
         ])
     }

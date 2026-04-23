@@ -120,10 +120,6 @@ enum Localized {
     
     // MARK: - Home
     enum Home {
-        static let goodMorning = "Good morning,"
-        static let goodAfternoon = "Good afternoon,"
-        static let goodEvening = "Good evening,"
-        
         static let sendPackage = "Send Package"
         static let sendPackageDescription = "Request a pickup for your package today"
         
@@ -148,10 +144,23 @@ enum Localized {
         
         // Bottom Navigation
         static let navHome = "Home"
-        static let navWallet = "Wallet"
-        static let navTrack = "Track"
-        static let navOrders = "Orders"
-        static let navMessages = "Messages"
+        static let navTrack = "History"
+        static let navOrders = "Messages"
+        static let navMessages = "Profile"
+    }
+    
+    // MARK: - Order
+    enum Order {
+        static var statusInTransit: String { String(localized: "order_status_transit") }
+        static var statusDelivered: String { String(localized: "order_status_delivered") }
+        static var statusCancelled: String { String(localized: "order_status_cancelled") }
+        
+        static var orderNotFound: String { String(localized: "error_order_not_found") }
+        static var fetchFailed: String { String(localized: "error_order_fetch_failed") }
+        static var createFailed: String { String(localized: "error_order_create_failed") }
+        static var updateFailed: String { String(localized: "error_order_update_failed") }
+        
+        static var calculating: String { String(localized: "order_calc_estimated_delivery") }
     }
     
     // MARK: - Success

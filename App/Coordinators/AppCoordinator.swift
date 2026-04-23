@@ -46,7 +46,7 @@ final class AppCoordinator: Coordinator {
         childCoordinators.append(coordinator)
         coordinator.start()
     }
-    // Eksik olan showHome fonksiyonu
+    
     private func showHome(user: User) {
         let coordinator = HomeCoordinator(navigationController: navigationController, user: user, factory: factory)
         coordinator.delegate = self

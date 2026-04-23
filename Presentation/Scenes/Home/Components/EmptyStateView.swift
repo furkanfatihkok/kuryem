@@ -22,7 +22,7 @@ final class EmptyStateView: UIView {
     
     private let titleLabel: UILabel = {
         let label = UILabel()
-        label.font = UIFont.systemFont(ofSize: AppLayout.fontSizeLarge, weight: .semibold)
+        label.font = AppFonts.h4
         label.textColor = AppColor.textPrimary
         label.textAlignment = .center
         label.numberOfLines = 0
@@ -32,7 +32,7 @@ final class EmptyStateView: UIView {
     
     private let messageLabel: UILabel = {
         let label = UILabel()
-        label.font = UIFont.systemFont(ofSize: AppLayout.fontSizeMedium)
+        label.font = AppFonts.bodyMedium
         label.textColor = AppColor.textSecondary
         label.textAlignment = .center
         label.numberOfLines = 0
@@ -64,13 +64,13 @@ final class EmptyStateView: UIView {
             iconImageView.widthAnchor.constraint(equalToConstant: 100),
             iconImageView.heightAnchor.constraint(equalToConstant: 124),
             
-            titleLabel.topAnchor.constraint(equalTo: iconImageView.bottomAnchor, constant: AppLayout.spacingXSmall),
-            titleLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: AppLayout.paddingHorizontal),
-            titleLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -AppLayout.paddingHorizontal),
+            titleLabel.topAnchor.constraint(equalTo: iconImageView.bottomAnchor, constant: AppLayout.Spacing.large),
+            titleLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: AppLayout.screenHorizontalMargin),
+            titleLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -AppLayout.screenHorizontalMargin),
             
-            messageLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: AppLayout.spacingSmall),
-            messageLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: AppLayout.paddingHorizontal),
-            messageLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -AppLayout.paddingHorizontal)
+            messageLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: AppLayout.Spacing.xxSmall),
+            messageLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: AppLayout.screenHorizontalMargin),
+            messageLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -AppLayout.screenHorizontalMargin)
         ])
     }
     
