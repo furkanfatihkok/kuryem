@@ -11,8 +11,8 @@ final class AuthHeaderView: UIView {
     // MARK: - UI Components
     private let iconContainerView: UIView = {
         let view = UIView()
-        view.backgroundColor = AppColor.iconInActiveCardBackground
-        view.layer.cornerRadius = AppLayout.cornerRadiusMedium
+        view.backgroundColor = AppColor.iconContainerBackground
+        view.layer.cornerRadius = AppLayout.iconContainer.radius
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
@@ -27,7 +27,7 @@ final class AuthHeaderView: UIView {
     
     private let titleLabel: UILabel = {
         let label = UILabel()
-        label.font = AppFonts.subTitle.withSize(AppLayout.fontSizeLarge)
+        label.font = AppFonts.h3
         label.textColor = AppColor.textPrimary
         label.numberOfLines = 0
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -36,7 +36,7 @@ final class AuthHeaderView: UIView {
     
     let descriptionLabel: UILabel = {
         let label = UILabel()
-        label.font = AppFonts.body.withSize(AppLayout.fontSizeSmall)
+        label.font = AppFonts.bodySmall
         label.textColor = AppColor.textSecondary
         label.numberOfLines = 0
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -46,7 +46,7 @@ final class AuthHeaderView: UIView {
     private let textStackView: UIStackView = {
         let sv = UIStackView()
         sv.axis = .vertical
-        sv.spacing = 8
+        sv.spacing = AppLayout.Spacing.xSmall
         sv.alignment = .leading
         sv.translatesAutoresizingMaskIntoConstraints = false
         return sv
@@ -55,8 +55,9 @@ final class AuthHeaderView: UIView {
     private let mainStackView: UIStackView = {
         let sv = UIStackView()
         sv.axis = .vertical
-        sv.spacing = 24
+        sv.spacing = AppLayout.Spacing.large
         sv.alignment = .leading
+        sv.distribution = .fill
         sv.translatesAutoresizingMaskIntoConstraints = false
         return sv
     }()
@@ -86,14 +87,13 @@ final class AuthHeaderView: UIView {
         addSubview(mainStackView)
         
         NSLayoutConstraint.activate([
-            
-            iconContainerView.widthAnchor.constraint(equalToConstant: AppLayout.iconContainerSizeLarge),
-            iconContainerView.heightAnchor.constraint(equalToConstant: AppLayout.iconContainerSizeLarge),
+            iconContainerView.widthAnchor.constraint(equalToConstant: AppLayout.iconContainer.width),
+            iconContainerView.heightAnchor.constraint(equalToConstant: AppLayout.iconContainer.height),
             
             iconImageView.centerXAnchor.constraint(equalTo: iconContainerView.centerXAnchor),
             iconImageView.centerYAnchor.constraint(equalTo: iconContainerView.centerYAnchor),
-            iconImageView.widthAnchor.constraint(equalToConstant: AppLayout.iconSizeMedium),
-            iconImageView.heightAnchor.constraint(equalToConstant: AppLayout.iconSizeMedium),
+            iconImageView.widthAnchor.constraint(equalTo: iconContainerView.widthAnchor, multiplier: 0.5),
+            iconImageView.heightAnchor.constraint(equalTo: iconContainerView.heightAnchor, multiplier: 0.5),
             
             mainStackView.topAnchor.constraint(equalTo: topAnchor),
             mainStackView.leadingAnchor.constraint(equalTo: leadingAnchor),
@@ -101,7 +101,7 @@ final class AuthHeaderView: UIView {
             mainStackView.bottomAnchor.constraint(equalTo: bottomAnchor)
         ])
         
-        iconContainerView.layer.cornerRadius = AppLayout.cornerRadiusXLarge
+//        iconContainerView.layer.cornerRadius = AppLayout.Radius.circular
         iconContainerView.clipsToBounds = true
     }
 

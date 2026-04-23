@@ -7,11 +7,8 @@
 
 import Foundation
 
-// MARK: - SADECE GELİŞTİRME ORTAMINDA DERLENİR
 #if DEBUG
 struct MockData {
-    
-    // 15 dakika sonrası için bir tarih oluşturuyoruz ki 'arrivingInMınutes' 15 dönsün
     static let futureDate = Calendar.current.date(byAdding: .minute, value: 15, to: Date())
     
     static let activeOrder = Order(

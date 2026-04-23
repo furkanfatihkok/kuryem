@@ -6,6 +6,8 @@
 //
 
 import UIKit
+import FirebaseAuth
+import FirebaseFirestore
 
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
@@ -14,22 +16,45 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     var appCoordinator: AppCoordinator?
 
     // MARK: - Scene Lifecycle
-    func scene( _ scene: UIScene, willConnectTo session: UISceneSession,options connectionOptions: UIScene.ConnectionOptions) {
-        guard let windowScene = scene as? UIWindowScene else { return }
+    func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
+        guard let windowScene = scene as? UIWindowScene else {
+            return
+        }
+        
+        // MARK: - 0. System Monitors (Proactive Error Handling)
+        // Uygulama başlar başlamaz arka plandaki global dinleyicileri aktif ediyoruz.
+        AppErrorMonitor.shared.startMonitoring()
 
-        // MARK: DI Graph
-        let persistenceService: UserPersistenceService = FirestoreUserService()
+        // MARK: - 1. Mappers (The Base)
+        let firestoreErrorMapper = FirebaseOrderErrorMapper()
+        let authErrorMapper = FirebaseAuthErrorMapper()
 
-        let authRepository: AuthRepository = FirebaseAuthRepository(
-            persistenceService: persistenceService,
-            contextProvider: self
+        // MARK: - 2. Services (Persistence)
+        let userPersistenceService: UserPersistenceService = FirestoreUserService(
+            errorMapper: firestoreErrorMapper
+        )
+        
+        let orderPersistenceService: OrderPersistenceService = FirestoreOrderService(
+            errorMapper: firestoreErrorMapper
         )
 
+        // MARK: - 3. Repositories (Domain Logic)
+        let authRepository: AuthRepository = FirebaseAuthRepository(
+            errorMapper: authErrorMapper,
+            persistenceService: userPersistenceService,
+            contextProvider: self
+        )
+        
+        let orderRepository: OrderRepositoryProtocol = FirebaseOrderRepository(
+            persistenceService: orderPersistenceService
+        )
+
+        // MARK: - 4. Factory & Coordinator Setup
         let factory: DependencyFactory = DependencyFactory(
-            onboardingRepository:    OnboardingRepository(),
+            onboardingRepository: OnboardingRepository(),
             roleSelectionRepository: RoleSelectionRepository(),
-            authRepository:          authRepository,
-            orderRepository: FirebaseOrderRepository()
+            authRepository: authRepository,
+            orderRepository: orderRepository
         )
 
         let rootNavigationController = UINavigationController()
@@ -39,10 +64,16 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
             factory: factory
         )
 
+        // MARK: - 5. Window Setup
         window = UIWindow(windowScene: windowScene)
         window?.rootViewController = rootNavigationController
         window?.makeKeyAndVisible()
+        
         appCoordinator?.start()
+        
+        // MARK: - 6. Initial State Checks
+        // UI hazırlandıktan sonra ilk proaktif kontrolleri yapıyoruz.
+        checkInitialSystemState()
     }
 
     func sceneDidDisconnect(_ scene: UIScene) {}
@@ -52,12 +83,31 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     func sceneDidEnterBackground(_ scene: UIScene) {}
 }
 
-// MARK: - PresentationContextProvider
+// MARK: - Proactive System Checks
+private extension SceneDelegate {
+    
+    func checkInitialSystemState() {
+        // Eğer uygulama açıldığında internet yoksa, kullanıcıyı hemen uyar
+        if !NetworkMonitor.shared.isConnected {
+            let error = AppError.network("Uygulama çevrimdışı modda başlatıldı. Bağlantı bekleniyor...")
+            ErrorBannerManager.shared.report(error)
+        }
+    }
+}
+
+// MARK: - PresentationContextProvider Implementation
 extension SceneDelegate: PresentationContextProvider {
+    
     func topViewController() -> UIViewController? {
-        guard let root = window?.rootViewController else { return nil }
+        guard let root = window?.rootViewController else {
+            return nil
+        }
+        
         var top = root
-        while let presented = top.presentedViewController { top = presented }
+        while let presented = top.presentedViewController {
+            top = presented
+        }
+        
         return top
     }
 }

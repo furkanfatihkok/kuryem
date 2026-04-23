@@ -9,6 +9,6 @@ import Foundation
 
 // MARK: - SESSION PROTOCOL
 protocol SessionAuthRepository: AnyObject {
-    func login(request: LoginRequest, completion: @escaping (Result<User, AuthError>) -> Void)
+    func login(request: LoginRequest, completion: @escaping (Result<User, Error>) -> Void)
     func logout() throws
 }

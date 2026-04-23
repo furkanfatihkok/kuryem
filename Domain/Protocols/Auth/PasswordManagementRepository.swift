@@ -8,5 +8,5 @@
 import Foundation
 // MARK: - PASSWORD MANAGEMENT REPOSITORY
 protocol PasswordManagementRepository: AnyObject {
-    func updatePassword(password: String, completion: @escaping (Result<Void, AuthError>) -> Void)
+    func updatePassword(password: String, completion: @escaping (Result<Void, Error>) -> Void)
 }

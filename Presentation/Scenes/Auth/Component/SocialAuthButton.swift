@@ -37,13 +37,17 @@ final class SocialAuthButton: UIButton {
         fatalError("init(coder:) has not been implemented")
     }
     
+    override var intrinsicContentSize: CGSize {
+        return CGSize(width: UIView.noIntrinsicMetric, height: AppLayout.PrimaryButton.height)
+    }
+    
     // MARK: - Setup
     private func setupButton(title: String) {
         var configuration = UIButton.Configuration.filled()
         configuration.title = title
         
         configuration.image = authType.icon
-        configuration.imagePadding = AppLayout.spacingSmall
+        configuration.imagePadding = AppLayout.Spacing.xSmall
         configuration.imagePlacement = .leading
         
         configuration.baseBackgroundColor = .white
@@ -52,9 +56,9 @@ final class SocialAuthButton: UIButton {
         
         self.configuration = configuration
         
-        layer.borderWidth = AppLayout.borderWidthThin
+        layer.borderWidth = AppLayout.Border.regular
         layer.borderColor = AppColor.border.cgColor
-        layer.cornerRadius = AppLayout.buttonCornerRadius
+        layer.cornerRadius = AppLayout.PrimaryButton.radius
         
         translatesAutoresizingMaskIntoConstraints = false
         

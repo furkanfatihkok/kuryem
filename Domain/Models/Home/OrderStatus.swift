@@ -12,15 +12,14 @@ enum OrderStatus: String, Codable {
     case delivered
     case cancelled
     
-    // TODO: Localization
     var displayText: String {
         switch self {
         case .inTransit:
-            return "In Transit"
+            return Localized.Order.statusInTransit
         case .delivered:
-            return "Delivered"
+            return Localized.Order.statusDelivered
         case .cancelled:
-            return "Cancelled"
+            return Localized.Order.statusCancelled
         }
     }
 }

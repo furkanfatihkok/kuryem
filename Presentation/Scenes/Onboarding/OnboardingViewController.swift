@@ -86,22 +86,20 @@ final class OnboardingViewController: UIViewController {
             collectionView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
             collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            collectionView.bottomAnchor.constraint(equalTo: pageControl.topAnchor, constant: -AppLayout.spacingLarge),
+            collectionView.bottomAnchor.constraint(equalTo: pageControl.topAnchor, constant: -AppLayout.Spacing.large),
             
             pageControl.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            pageControl.bottomAnchor.constraint(equalTo: nextButton.topAnchor, constant: -AppLayout.spacingXLarge),
+            pageControl.bottomAnchor.constraint(equalTo: nextButton.topAnchor, constant: -AppLayout.Spacing.xLarge),
             
-            nextButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: AppLayout.paddingHorizontal),
-            nextButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -AppLayout.paddingHorizontal),
-            nextButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -AppLayout.spacingXLarge),
-            nextButton.heightAnchor.constraint(equalToConstant: AppLayout.buttonHeight)
+            nextButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: AppLayout.screenHorizontalMargin),
+            nextButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -AppLayout.screenHorizontalMargin),
+            nextButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -AppLayout.Spacing.xLarge),
         ])
     }
     
     private func setupCollectionView() {
         collectionView.delegate = self
         collectionView.dataSource = self
-        // REFACTOR: İkinci kez register etme kod tekrarı silindi
     }
     
     private func updateButtonTitle() {

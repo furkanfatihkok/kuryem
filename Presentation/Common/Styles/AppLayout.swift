@@ -4,7 +4,73 @@
 //
 //  Created by FFK on 19.02.2026.
 //
+import Foundation
 
+enum AppLayout {
+    
+    // MARK: - Spacing
+    enum Spacing {
+        static let xxSmall: CGFloat = 4
+        static let xSmall: CGFloat = 8
+        static let small: CGFloat = 12
+        static let medium: CGFloat = 16
+        static let large: CGFloat = 24
+        static let xLarge: CGFloat = 32
+        static let xxLarge: CGFloat = 48
+    }
+    
+    // MARK: - Radius
+    enum Radius {
+        static let xxSmall: CGFloat = 4
+        static let xSmall: CGFloat = 6
+        static let small: CGFloat = 8
+        static let medium: CGFloat = 16
+        static let large: CGFloat = 24
+        static let circular: CGFloat = 999
+    }
+    
+    // MARK: - Border
+    enum Border {
+        static let thin: CGFloat = 1
+        static let regular: CGFloat = 2
+    }
+    
+    // MARK: - TextField
+    enum TextField {
+        static let height: CGFloat = 40
+        static let width: CGFloat = 350
+    }
+    
+    // MARK: - Button
+    enum PrimaryButton {
+        static let height: CGFloat = 50
+        static let width: CGFloat = 350
+        static let radius: CGFloat = 5
+    }
+    
+    // MARK: - Role Card
+    enum roleCardContainer {
+        static let height: CGFloat = 150
+        static let width: CGFloat = 350
+    }
+    
+    // MARK: - IconContainer
+    enum iconContainer {
+        static let height: CGFloat = 40
+        static let width: CGFloat = 40
+        static let radius: CGFloat = 20
+    }
+    // MARK: - Icon Banner Container
+    enum iconPersonelContainer {
+        static let height: CGFloat = 48
+        static let width: CGFloat = 48
+    }
+    
+    // MARK: - Screen Margins
+    static let screenHorizontalMargin: CGFloat = 20
+}
+
+/*
 import UIKit
 
 enum AppLayout {
@@ -69,9 +135,5 @@ enum AppLayout {
     static let fontSizeLarge: CGFloat = 20
     static let fontSizeXLarge: CGFloat = 24
     static let fontSizeXXLarge: CGFloat = 28
-    
-    // MARK: - Border Width
-    static let borderWidthThin: CGFloat = 1
-    static let borderWidthMedium: CGFloat = 2
-}
+} */
 

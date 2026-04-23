@@ -5,9 +5,7 @@
 //  Created by FFK on 14.04.2026.
 //
 
-import UIKit
-
-//TODO: computed propertyler için extensiında devam et
+import Foundation
 
 struct Order: Codable {
     let id: String
@@ -24,26 +22,29 @@ struct Order: Codable {
     let estimatedDelivery: Date?
     let deliveryPersonName: String?
     let deliveryPersonPhone: String?
-    
+}
+
+// MARK: - Computed Properties (Presentation / UI Formatting)
+extension Order {
     var formattedPrice: String {
         return String(format: "%.2f", price)
     }
     
     var formattedTrackingNumber: String {
-        return String("#\(trackingNumber)")
+        return "#\(trackingNumber)"
     }
     
     var estimatedDeliveryText: String {
         guard let estimatedDelivery = estimatedDelivery else {
-            return "Calculating...."
+            return Localized.Order.calculating
         }
         
         let formatter = DateFormatter()
-        formatter.dateFormat = "MMMM dd, h:mm a"
+        formatter.dateFormat = "MMMM dd, h:mm a" // Core/Formatters içine al
         return formatter.string(from: estimatedDelivery)
     }
     
-    var arrivingInMınutes: Int? {
+    var arrivingInMinutes: Int? {
         guard let estimatedDelivery = estimatedDelivery else { return nil }
         
         let minutes = Int(estimatedDelivery.timeIntervalSinceNow / 60)

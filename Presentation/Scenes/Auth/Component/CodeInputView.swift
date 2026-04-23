@@ -26,7 +26,7 @@ final class CodeInputView: UIView {
         let stack = UIStackView()
         stack.axis = .horizontal
         stack.distribution = .fillEqually
-        stack.spacing = AppLayout.codeInputSpacing
+        stack.spacing = AppLayout.Spacing.small
         stack.translatesAutoresizingMaskIntoConstraints = false
         return stack
     }()
@@ -68,7 +68,7 @@ final class CodeInputView: UIView {
             stackView.leadingAnchor.constraint(equalTo: leadingAnchor),
             stackView.trailingAnchor.constraint(equalTo: trailingAnchor),
             stackView.bottomAnchor.constraint(equalTo: bottomAnchor),
-            stackView.heightAnchor.constraint(equalToConstant: AppLayout.iconContainerSizeLarge)
+            stackView.heightAnchor.constraint(equalToConstant: AppLayout.PrimaryButton.height)
         ])
         
         for _ in 0..<numberOfDigits {
@@ -83,15 +83,15 @@ final class CodeInputView: UIView {
         // Container
         let container = UIView()
         container.backgroundColor = .clear
-        container.layer.borderWidth = AppLayout.borderWidthThin
-        container.layer.borderColor = AppColor.textfieldBorder.cgColor
-        container.layer.cornerRadius = AppLayout.cornerRadiusSmall
+        container.layer.borderWidth = AppLayout.Border.regular
+        container.layer.borderColor = AppColor.border.cgColor
+        container.layer.cornerRadius = AppLayout.PrimaryButton.radius
         container.translatesAutoresizingMaskIntoConstraints = false
         
         // Label
         let label = UILabel()
         label.textAlignment = .center
-        label.font = AppFonts.title.withSize(AppLayout.fontSizeLarge)
+        label.font = AppFonts.h3
         label.textColor = AppColor.textPrimary
         label.translatesAutoresizingMaskIntoConstraints = false
         
@@ -150,6 +150,10 @@ final class CodeInputView: UIView {
     func setError(_ hasError: Bool) {
         let color = hasError ? AppColor.error.cgColor : AppColor.textfieldBorder.cgColor
         digitContainers.forEach { $0.layer.borderColor = color }
+        if hasError {
+            let generator = UINotificationFeedbackGenerator()
+            generator.notificationOccurred(.error)
+        }
     }
     
     // MARK: - Private Methods

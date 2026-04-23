@@ -11,9 +11,9 @@ extension String {
     func highlight(
         targetWord: String,
         baseColor: UIColor = AppColor.textSecondary,
-        baseFont: UIFont = AppFonts.body.withSize(AppLayout.fontSizeXSmall),
+        baseFont: UIFont = AppFonts.bodySmall,
         highlightColor: UIColor = AppColor.primary,
-        highlightFont: UIFont = UIFont.boldSystemFont(ofSize: AppLayout.fontSizeXSmall)
+        highlightFont: UIFont = AppFonts.buttonPrimary
     ) -> NSMutableAttributedString {
         let attributedString = NSMutableAttributedString(
             string: self,
@@ -33,7 +33,7 @@ extension NSMutableAttributedString {
     func highlight(
         targetWord: String,
         highlightColor: UIColor = AppColor.primary,
-        highlightFont: UIFont = UIFont.boldSystemFont(ofSize: AppLayout.fontSizeXSmall)
+        highlightFont: UIFont = AppFonts.buttonPrimary
     ) -> NSMutableAttributedString {
         
         let range = (self.string as NSString).range(of: targetWord)

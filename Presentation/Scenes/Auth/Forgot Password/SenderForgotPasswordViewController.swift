@@ -2,7 +2,7 @@
 //  SenderForgotPasswordViewController.swift
 //  kuryem
 //
-//  Created by FFK on 2.04.2026.
+//  Created by FFK on 2026-02-25.
 //
 
 import UIKit
@@ -40,7 +40,7 @@ final class SenderForgotPasswordViewController: UIViewController {
     private let phoneTitleLabel: UILabel = {
         let label = UILabel()
         label.text = Localized.ForgotPassword.phoneNumber.uppercased()
-        label.font = AppFonts.caption
+        label.font = AppFonts.bodySmall
         label.textColor = AppColor.textSecondary
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
@@ -48,18 +48,18 @@ final class SenderForgotPasswordViewController: UIViewController {
     
     private let countryCodeContainer: UIView = {
         let view = UIView()
-        view.layer.borderWidth = AppLayout.borderWidthThin
-        view.layer.borderColor = AppColor.textfieldBorder.cgColor
-        view.layer.cornerRadius = AppLayout.textFieldCornerRadius
+        view.layer.borderWidth = AppLayout.Border.thin
+        view.layer.borderColor = AppColor.border.cgColor
+        view.layer.cornerRadius = AppLayout.Radius.small
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
-    }()
+    } ()
     
     private let countryCodeLabel: UILabel = {
         let label = UILabel()
         label.text = "+90"
-        label.font = AppFonts.body.withSize(AppLayout.fontSizeMedium)
-        label.textColor = AppColor.textPrimary
+        label.font = AppFonts.input
+        label.textColor = AppColor.textSecondary
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
@@ -79,22 +79,22 @@ final class SenderForgotPasswordViewController: UIViewController {
     }()
     
     private lazy var footerView: AuthFooterView = {
-            let view = AuthFooterView()
-            view.configure(
-                message: Localized.ForgotPassword.rememberPassword,
-                actionTitle: "Login"
-            )
-            view.delegate = self
-            view.translatesAutoresizingMaskIntoConstraints = false
-            return view
-        }()
-    // MARK: Initialization
+        let view = AuthFooterView()
+        view.configure(message: Localized.ForgotPassword.rememberPassword, actionTitle: "Login")
+        view.delegate = self
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
+    }()
+    
+    // MARK: - Initialization
     init(viewModel: SenderForgotPasswordViewModel) {
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
     }
     
-    required init?(coder: NSCoder) { fatalError("init(coder:) has not been implemented") }
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
     // MARK: - Lifecycle
     override func viewDidLoad() {
@@ -103,9 +103,11 @@ final class SenderForgotPasswordViewController: UIViewController {
         setupViewModel()
         hideKeyboardWhenTappedAround()
     }
-    
-    // MARK: - Setup UI
-    private func setupUI() {
+}
+
+// MARK: - Setup UI
+private extension SenderForgotPasswordViewController {
+    func setupUI() {
         view.backgroundColor = AppColor.background
         navigationController?.setNavigationBarHidden(true, animated: false)
         
@@ -113,23 +115,18 @@ final class SenderForgotPasswordViewController: UIViewController {
         setupConstraints()
     }
     
-    private func setupHierarchy() {
+    func setupHierarchy() {
         view.addSubview(scrollView)
         scrollView.addSubview(contentView)
-        
         countryCodeContainer.addSubview(countryCodeLabel)
         
-        let subviews = [
-            headerView, phoneTitleLabel, countryCodeContainer,
-            phoneTextField, sendCodeButton, footerView
-        ]
-        
-        subviews.forEach { contentView.addSubview($0) }
+        [headerView, phoneTitleLabel, countryCodeContainer, phoneTextField, sendCodeButton, footerView].forEach {
+            contentView.addSubview($0)
+        }
     }
     
-    private func setupConstraints() {
+    func setupConstraints() {
         NSLayoutConstraint.activate([
-            // ScrollView Constraints
             scrollView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
             scrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             scrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
@@ -142,60 +139,54 @@ final class SenderForgotPasswordViewController: UIViewController {
             contentView.widthAnchor.constraint(equalTo: scrollView.frameLayoutGuide.widthAnchor),
             contentView.heightAnchor.constraint(greaterThanOrEqualTo: scrollView.frameLayoutGuide.heightAnchor),
             
-            // Header
-            headerView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: AppLayout.spacingMedium),
-            headerView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: AppLayout.paddingHorizontal),
-            headerView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -AppLayout.paddingHorizontal),
+            headerView.topAnchor.constraint(equalTo: contentView.topAnchor),
+            headerView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: AppLayout.screenHorizontalMargin),
+            headerView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -AppLayout.screenHorizontalMargin),
             
-            // Phone Title Label
-            phoneTitleLabel.topAnchor.constraint(equalTo: headerView.bottomAnchor, constant:AppLayout.spacingMedium),
-            phoneTitleLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: AppLayout.paddingHorizontal),
+            phoneTitleLabel.topAnchor.constraint(equalTo: headerView.bottomAnchor, constant: AppLayout.Spacing.xLarge),
+            phoneTitleLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: AppLayout.screenHorizontalMargin),
             
-            // Country Code Container
-            countryCodeContainer.topAnchor.constraint(equalTo: phoneTitleLabel.bottomAnchor, constant: AppLayout.spacingMedium),
-            countryCodeContainer.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: AppLayout.paddingHorizontal),
-            countryCodeContainer.widthAnchor.constraint(equalToConstant: AppLayout.textFieldWidth),
-            countryCodeContainer.heightAnchor.constraint(equalToConstant: AppLayout.textFieldHeight),
+            countryCodeContainer.topAnchor.constraint(equalTo: phoneTitleLabel.bottomAnchor, constant: AppLayout.Spacing.medium),
+            countryCodeContainer.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: AppLayout.screenHorizontalMargin),
+            countryCodeContainer.widthAnchor.constraint(equalToConstant: 80),
+            countryCodeContainer.heightAnchor.constraint(equalTo: phoneTextField.heightAnchor),
             
             countryCodeLabel.centerYAnchor.constraint(equalTo: countryCodeContainer.centerYAnchor),
-            countryCodeLabel.leadingAnchor.constraint(equalTo: countryCodeContainer.leadingAnchor, constant: 14),
+            countryCodeLabel.centerXAnchor.constraint(equalTo: countryCodeContainer.centerXAnchor),
             
-            // Phone TextField
             phoneTextField.topAnchor.constraint(equalTo: countryCodeContainer.topAnchor),
-            phoneTextField.leadingAnchor.constraint(equalTo: countryCodeContainer.trailingAnchor, constant: AppLayout.spacingSmall),
-            phoneTextField.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -AppLayout.paddingHorizontal),
+            phoneTextField.leadingAnchor.constraint(equalTo: countryCodeContainer.trailingAnchor, constant: AppLayout.Spacing.medium),
+            phoneTextField.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -AppLayout.screenHorizontalMargin),
             
-            // Bottom Elements
-            footerView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -AppLayout.spacingXLarge),
+            footerView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -AppLayout.Spacing.xLarge),
             footerView.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
             
-            sendCodeButton.bottomAnchor.constraint(equalTo: footerView.topAnchor, constant: -AppLayout.spacingMedium),
-            sendCodeButton.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: AppLayout.paddingHorizontal),
-            sendCodeButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -AppLayout.paddingHorizontal),
-            sendCodeButton.heightAnchor.constraint(equalToConstant: AppLayout.buttonHeight)
+            sendCodeButton.bottomAnchor.constraint(equalTo: footerView.topAnchor, constant: -AppLayout.Spacing.medium),
+            sendCodeButton.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: AppLayout.screenHorizontalMargin),
+            sendCodeButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -AppLayout.screenHorizontalMargin),
         ])
     }
     
-    private func setupViewModel() {
+    func setupViewModel() {
         viewModel.viewDelegate = self
     }
-    
-    // MARK: - Actions
-    @objc private func phoneTextChanged() {
-        let currentText = phoneTextField.text ?? ""
-        phoneTextField.text = viewModel.formatPhoneNumber(currentText)
+}
+
+// MARK: - Actions
+private extension SenderForgotPasswordViewController {
+    @objc func phoneTextChanged() {
+        phoneTextField.text = viewModel.formatPhoneNumber(phoneTextField.text ?? "")
     }
     
-    @objc private func sendCodeButtonTapped() {
+    @objc func sendCodeButtonTapped() {
         view.endEditing(true)
         phoneTextField.setError(nil)
-        
         let cleanPhone = phoneTextField.text?.components(separatedBy: CharacterSet.decimalDigits.inverted).joined() ?? ""
         viewModel.sendCode(phoneNumber: cleanPhone)
     }
 }
 
-// MARK: - ViewDelegate
+// MARK: - SenderForgotPasswordViewModelViewDelegate Implementation
 extension SenderForgotPasswordViewController: SenderForgotPasswordViewModelViewDelegate {
     func forgotPasswordViewModelDidUpdateLoading(_ viewModel: SenderForgotPasswordViewModel) {
         DispatchQueue.main.async {
@@ -204,23 +195,24 @@ extension SenderForgotPasswordViewController: SenderForgotPasswordViewModelViewD
         }
     }
     
-    func forgotPasswordViewModelDidReceiveError(_ viewModel: SenderForgotPasswordViewModel, error: AuthError) {
+    func forgotPasswordViewModelDidReceiveError(_ viewModel: SenderForgotPasswordViewModel, error: Error) {
         DispatchQueue.main.async {
-            switch error {
-            case .emptyPhoneNumber, .invalidPhoneNumber, .userNotFound:
-                self.phoneTextField.setError(error.localizedDescription)
-                self.phoneTextField.becomeFirstResponder()
-            default:
-                let alert = UIAlertController(title: "Hata", message: error.localizedDescription, preferredStyle: .alert)
-                alert.addAction(UIAlertAction(title: "Tamam", style: .default, handler: nil))
-                self.present(alert, animated: true)
+            if let authError = error as? AuthError {
+                switch authError {
+                case .emptyPhoneNumber, .invalidPhoneNumber, .userNotFound:
+                    self.phoneTextField.setError(authError.localizedDescription)
+                    self.phoneTextField.becomeFirstResponder()
+                default:
+                    ErrorBannerManager.shared.report(error)
+                }
+                return
             }
+            ErrorBannerManager.shared.report(error)
         }
     }
 }
-// MARK: - AuthFooterViewDelegate
+
+// MARK: - AuthFooterViewDelegate Implementation
 extension SenderForgotPasswordViewController: AuthFooterViewDelegate {
-    func authFooterViewDidTapAction(_ view: AuthFooterView) {
-        viewModel.didTapLogin()
-    }
+    func authFooterViewDidTapAction(_ view: AuthFooterView) { viewModel.didTapLogin() }
 }

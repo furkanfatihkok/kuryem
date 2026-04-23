@@ -12,24 +12,17 @@ enum OrderError: Error {
     case fetchFailed
     case createFailed
     case updateFailed
-    case networkError
-    case unkown
     
-    // TODO: Localization
     var localizedDescription: String {
         switch self {
         case .orderNotFound:
-            return "Order not found"
+            return Localized.Order.orderNotFound
         case .fetchFailed:
-            return "Fetch failed"
+            return Localized.Order.fetchFailed
         case .createFailed:
-            return "Create failed"
+            return Localized.Order.createFailed
         case .updateFailed:
-            return "Update failed"
-        case .networkError:
-            return "Network error. Please check your connection."
-        case .unkown:
-            return "Something went wrong. Please try again."
+            return Localized.Order.updateFailed
         }
     }
 }
