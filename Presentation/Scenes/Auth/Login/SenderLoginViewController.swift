@@ -14,10 +14,10 @@ final class SenderLoginViewController: UIViewController {
     
     // MARK: - UI Components
     private let scrollView: UIScrollView = {
-        let scrollView = UIScrollView()
-        scrollView.showsVerticalScrollIndicator = false
-        scrollView.translatesAutoresizingMaskIntoConstraints = false
-        return scrollView
+        let sv = UIScrollView()
+        sv.showsVerticalScrollIndicator = false
+        sv.translatesAutoresizingMaskIntoConstraints = false
+        return sv
     }()
     
     private let contentView: UIView = {
@@ -38,21 +38,15 @@ final class SenderLoginViewController: UIViewController {
     }()
     
     private lazy var emailTextField: CustomTextField = {
-        let textField = CustomTextField(
-            placeholder: Localized.Login.emailAddress,
-            keyboardType: .emailAddress
-        )
-        textField.translatesAutoresizingMaskIntoConstraints = false
-        return textField
+        let tf = CustomTextField(placeholder: Localized.Login.emailAddress, keyboardType: .emailAddress)
+        tf.translatesAutoresizingMaskIntoConstraints = false
+        return tf
     }()
     
     private lazy var passwordTextField: CustomTextField = {
-        let textField = CustomTextField(
-            placeholder: Localized.Login.password,
-            isSecure: true
-        )
-        textField.translatesAutoresizingMaskIntoConstraints = false
-        return textField
+        let tf = CustomTextField(placeholder: Localized.Login.password, isSecure: true)
+        tf.translatesAutoresizingMaskIntoConstraints = false
+        return tf
     }()
     
     private lazy var forgotPasswordAction: AuthInlineActionButton = {
@@ -70,17 +64,23 @@ final class SenderLoginViewController: UIViewController {
         return button
     }()
     
-    private let dividerView = OrDividerView()
+    private let dividerView: OrDividerView = {
+        let view = OrDividerView()
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
+    }()
     
     private lazy var googleButton: SocialAuthButton = {
         let button = SocialAuthButton(type: .google, title: Localized.Login.continueWithGoogle)
         button.addTarget(self, action: #selector(googleButtonTapped), for: .touchUpInside)
+        button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
     
     private lazy var appleButton: SocialAuthButton = {
         let button = SocialAuthButton(type: .apple, title: Localized.Login.continueWithApple)
         button.addTarget(self, action: #selector(appleButtonTapped), for: .touchUpInside)
+        button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
     
@@ -102,7 +102,7 @@ final class SenderLoginViewController: UIViewController {
         fatalError("init(coder:) has not been implemented")
     }
     
-    // MARK: - LifeCycle
+    // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
         setupUI()
@@ -111,8 +111,14 @@ final class SenderLoginViewController: UIViewController {
         hideKeyboardWhenTappedAround()
     }
     
-    // MARK: - Setup UI
-    private func setupUI() {
+    deinit {
+        NotificationCenter.default.removeObserver(self)
+    }
+}
+
+// MARK: - Setup UI
+private extension SenderLoginViewController {
+    func setupUI() {
         view.backgroundColor = AppColor.background
         navigationController?.setNavigationBarHidden(true, animated: false)
         
@@ -120,21 +126,25 @@ final class SenderLoginViewController: UIViewController {
         setupConstraints()
     }
     
-    private func setupHierarchy() {
+    func setupHierarchy() {
         view.addSubview(scrollView)
         scrollView.addSubview(contentView)
         
-        let subviews = [
-            headerView, emailTextField, passwordTextField, forgotPasswordAction, // Güncellendi
-            loginButton, dividerView, googleButton, appleButton, footerView // Güncellendi
-        ]
-        
-        subviews.forEach { contentView.addSubview($0) }
+        [headerView,
+        emailTextField,
+         passwordTextField,
+         forgotPasswordAction,
+         loginButton,
+         dividerView,
+         googleButton,
+         appleButton,
+         footerView].forEach {
+            contentView.addSubview($0)
+        }
     }
     
-    private func setupConstraints() {
+    func setupConstraints() {
         NSLayoutConstraint.activate([
-            // ScrollView & ContentView
             scrollView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
             scrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             scrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
@@ -145,103 +155,78 @@ final class SenderLoginViewController: UIViewController {
             contentView.trailingAnchor.constraint(equalTo: scrollView.contentLayoutGuide.trailingAnchor),
             contentView.bottomAnchor.constraint(equalTo: scrollView.contentLayoutGuide.bottomAnchor),
             contentView.widthAnchor.constraint(equalTo: scrollView.frameLayoutGuide.widthAnchor),
+            contentView.heightAnchor.constraint(greaterThanOrEqualTo: scrollView.frameLayoutGuide.heightAnchor),
             
-            // Header
-            headerView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: AppLayout.spacingMedium),
-            headerView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: AppLayout.paddingHorizontal),
-            headerView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -AppLayout.paddingHorizontal),
+            headerView.topAnchor.constraint(equalTo: contentView.topAnchor),
+            headerView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: AppLayout.screenHorizontalMargin),
+            headerView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -AppLayout.screenHorizontalMargin),
             
-            // TextFields
-            emailTextField.topAnchor.constraint(equalTo: headerView.bottomAnchor, constant: AppLayout.spacingXLarge),
-            emailTextField.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: AppLayout.paddingHorizontal),
-            emailTextField.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -AppLayout.paddingHorizontal),
+            emailTextField.topAnchor.constraint(equalTo: headerView.bottomAnchor, constant: AppLayout.Spacing.xLarge),
+            emailTextField.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: AppLayout.screenHorizontalMargin),
+            emailTextField.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -AppLayout.screenHorizontalMargin),
             
-            passwordTextField.topAnchor.constraint(equalTo: emailTextField.bottomAnchor, constant: AppLayout.spacingMedium),
-            passwordTextField.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: AppLayout.paddingHorizontal),
-            passwordTextField.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -AppLayout.paddingHorizontal),
+            passwordTextField.topAnchor.constraint(equalTo: emailTextField.bottomAnchor, constant: AppLayout.Spacing.medium),
+            passwordTextField.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: AppLayout.screenHorizontalMargin),
+            passwordTextField.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -AppLayout.screenHorizontalMargin),
             
-            // Forgot Password Button
-            forgotPasswordAction.topAnchor.constraint(equalTo: passwordTextField.bottomAnchor, constant: AppLayout.spacingSmall),
-            forgotPasswordAction.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -AppLayout.paddingHorizontal),
+            forgotPasswordAction.topAnchor.constraint(equalTo: passwordTextField.bottomAnchor, constant: AppLayout.Spacing.medium),
+            forgotPasswordAction.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -AppLayout.screenHorizontalMargin),
             
-            // Login Button
-            loginButton.topAnchor.constraint(equalTo: forgotPasswordAction.bottomAnchor, constant: AppLayout.spacingLarge),
-            loginButton.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: AppLayout.paddingHorizontal),
-            loginButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -AppLayout.paddingHorizontal),
-            loginButton.heightAnchor.constraint(equalToConstant: AppLayout.buttonHeight),
+            loginButton.topAnchor.constraint(equalTo: forgotPasswordAction.bottomAnchor, constant: AppLayout.Spacing.xLarge),
+            loginButton.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: AppLayout.screenHorizontalMargin),
+            loginButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -AppLayout.screenHorizontalMargin),
             
-            // Divider
-            dividerView.topAnchor.constraint(equalTo: loginButton.bottomAnchor, constant: AppLayout.spacingXLarge),
-            dividerView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: AppLayout.paddingHorizontal),
-            dividerView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -AppLayout.paddingHorizontal),
+            dividerView.topAnchor.constraint(equalTo: loginButton.bottomAnchor, constant: AppLayout.Spacing.large),
+            dividerView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: AppLayout.screenHorizontalMargin),
+            dividerView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -AppLayout.screenHorizontalMargin),
             
-            // Social Buttons
-            googleButton.topAnchor.constraint(equalTo: dividerView.bottomAnchor, constant: AppLayout.spacingLarge),
-            googleButton.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: AppLayout.paddingHorizontal),
-            googleButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -AppLayout.paddingHorizontal),
-            googleButton.heightAnchor.constraint(equalToConstant: AppLayout.buttonHeight),
+            googleButton.topAnchor.constraint(equalTo: dividerView.bottomAnchor, constant: AppLayout.Spacing.large),
+            googleButton.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: AppLayout.screenHorizontalMargin),
+            googleButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -AppLayout.screenHorizontalMargin),
             
-            appleButton.topAnchor.constraint(equalTo: googleButton.bottomAnchor, constant: AppLayout.spacingMedium),
-            appleButton.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: AppLayout.paddingHorizontal),
-            appleButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -AppLayout.paddingHorizontal),
-            appleButton.heightAnchor.constraint(equalToConstant: AppLayout.buttonHeight),
+            appleButton.topAnchor.constraint(equalTo: googleButton.bottomAnchor, constant: AppLayout.Spacing.large),
+            appleButton.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: AppLayout.screenHorizontalMargin),
+            appleButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -AppLayout.screenHorizontalMargin),
             
-            // Signup Button
-            footerView.topAnchor.constraint(equalTo: appleButton.bottomAnchor, constant: 160),
             footerView.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
-            footerView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -AppLayout.spacingXSmall)
+            footerView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -AppLayout.Spacing.xLarge)
         ])
     }
     
-    private func setupViewModel() {
+    func setupViewModel() {
         viewModel.viewDelegate = self
     }
-    
-    private func setupKeyboardHandling() {
-        NotificationCenter.default.addObserver(
-            self,
-            selector: #selector(keyboardWillShow),
-            name: UIResponder.keyboardWillShowNotification,
-            object: nil
-        )
-        
-        NotificationCenter.default.addObserver(
-            self,
-            selector: #selector(keyboardWillHide),
-            name: UIResponder.keyboardWillHideNotification,
-            object: nil
-        )
+}
+
+// MARK: - Actions
+private extension SenderLoginViewController {
+    @objc func didTapLoginButton() {
+        view.endEditing(true)
+        resetErrors()
+        viewModel.login(email: emailTextField.text ?? "", password: passwordTextField.text ?? "")
     }
     
-    private func resetErrors() {
+    @objc func googleButtonTapped() {
+        viewModel.loginWithGoogle()
+    }
+    
+    @objc func appleButtonTapped() {
+        viewModel.loginWithApple()
+    }
+    
+    func resetErrors() {
         emailTextField.setError(nil)
         passwordTextField.setError(nil)
     }
     
-    // MARK: - Actions
-    @objc private func didTapLoginButton() {
-        view.endEditing(true)
-        resetErrors()
-        
-        let email = emailTextField.text ?? ""
-        let password = passwordTextField.text ?? ""
-        
-        viewModel.login(email: email, password: password)
+    func setupKeyboardHandling() {
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
     }
     
-    @objc private func googleButtonTapped() {
-        viewModel.loginWithGoogle()
-    }
-    
-    @objc private func appleButtonTapped() {
-        viewModel.loginWithApple()
-    }
-    
-    @objc private func keyboardWillShow(notification: Notification) {
+    @objc func keyboardWillShow(notification: Notification) {
         guard let keyboardFrame = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? CGRect else { return }
-        
-        let keyboardHeight = keyboardFrame.height
-        let contentInsets = UIEdgeInsets(top: 0, left: 0, bottom: keyboardHeight, right: 0)
+        let contentInsets = UIEdgeInsets(top: 0, left: 0, bottom: keyboardFrame.height, right: 0)
         scrollView.contentInset = contentInsets
         scrollView.scrollIndicatorInsets = contentInsets
         
@@ -251,66 +236,47 @@ final class SenderLoginViewController: UIViewController {
         }
     }
     
-    @objc private func keyboardWillHide(notification: Notification) {
-        let contentInsets: UIEdgeInsets = .zero
-        scrollView.contentInset = contentInsets
-        scrollView.scrollIndicatorInsets = contentInsets
-    }
-    
-    deinit {
-        NotificationCenter.default.removeObserver(self)
+    @objc func keyboardWillHide() {
+        scrollView.contentInset = .zero
+        scrollView.scrollIndicatorInsets = .zero
     }
 }
 
-// MARK: - SenderLoginViewModelViewDelegate
+// MARK: - SenderLoginViewModelViewDelegate Implementation
 extension SenderLoginViewController: SenderLoginViewModelViewDelegate {
     func senderLoginViewModelDidUpdateLoading(_ viewModel: SenderLoginViewModel) {
         DispatchQueue.main.async {
             self.loginButton.setLoading(viewModel.isLoading)
             self.view.isUserInteractionEnabled = !viewModel.isLoading
-            
-            self.googleButton.isEnabled = !viewModel.isLoading
-            self.appleButton.isEnabled = !viewModel.isLoading
         }
     }
     
-    func senderLoginViewModelDidReceiveError(_ viewModel: SenderLoginViewModel, error: AuthError) {
-        DispatchQueue.main.async {
-            switch error {
-            case .emptyEmail, .invalidEmail, .userNotFound, .emailAlreadyInUse:
-                self.emailTextField.setError(error.localizedDescription)
+    func senderLoginViewModelDidReceiveError(_ viewModel: SenderLoginViewModel, error: Error) {
+        guard let authError = error as? AuthError else {
+            ErrorBannerManager.shared.report(error)
+            return
+        }
+        if let authError = error as? AuthError {
+            switch authError {
+            case .emptyEmail, .invalidEmail, .userNotFound:
+            self.emailTextField.setError(authError.localizedDescription)
                 self.emailTextField.becomeFirstResponder()
-                
-            case .emptyPassword, .weakPassword, .wrongPassword:
-                self.passwordTextField.setError(error.localizedDescription)
-                
-                if !self.emailTextField.isFirstResponder {
-                    self.passwordTextField.becomeFirstResponder()
-                }
-                // TODO: Aşağıdaki errorlar için custom error yapıp yukardan çıkar error hatasını.
-            case .networkError:
-                let alert = UIAlertController(title: "Bağlantı Hatası", message: "Lütfen internet bağlantınızı kontrol edip tekrar deneyin.", preferredStyle: .alert)
-                alert.addAction(UIAlertAction(title: "Tamam", style: .default, handler: nil))
-                self.present(alert, animated: true)
-                
+            case .emptyPassword, .wrongPassword:
+                self.passwordTextField.setError(authError.localizedDescription)
+                self.passwordTextField.becomeFirstResponder()
             default:
-                print("Auth Error: \(error.localizedDescription)")
-                let alert = UIAlertController(title: "Hata", message: error.localizedDescription, preferredStyle: .alert)
-                alert.addAction(UIAlertAction(title: "Tamam", style: .default, handler: nil))
-                self.present(alert, animated: true)
+                ErrorBannerManager.shared.report(error)
             }
+            return
         }
     }
 }
-// ... MARK: - Delegate Extension ...
+
+// MARK: - Delegate Implementations
 extension SenderLoginViewController: AuthInlineActionButtonDelegate {
-    func authInlineActionButtonDidTap(_ view: AuthInlineActionButton) {
-        viewModel.didTapForgotPassword()
-    }
+    func authInlineActionButtonDidTap(_ view: AuthInlineActionButton) { viewModel.didTapForgotPassword() }
 }
 
 extension SenderLoginViewController: AuthFooterViewDelegate {
-    func authFooterViewDidTapAction(_ view: AuthFooterView) {
-        viewModel.didTapSignup()
-    }
+    func authFooterViewDidTapAction(_ view: AuthFooterView) { viewModel.didTapSignup() }
 }

@@ -7,7 +7,7 @@
 
 import Foundation
 
-// MARK: - DELEGATE PROTOCOLS
+// MARK: - Delegate Protocols
 protocol SenderLoginViewModelDelegate: AnyObject {
     func senderLoginViewModelDidLogin(_ viewModel: SenderLoginViewModel, user: User)
     func senderLoginViewModelRequestSignup(_ viewModel: SenderLoginViewModel)
@@ -17,12 +17,12 @@ protocol SenderLoginViewModelDelegate: AnyObject {
 
 protocol SenderLoginViewModelViewDelegate: AnyObject {
     func senderLoginViewModelDidUpdateLoading(_ viewModel: SenderLoginViewModel)
-    func senderLoginViewModelDidReceiveError(_ viewModel: SenderLoginViewModel, error: AuthError)
+    func senderLoginViewModelDidReceiveError(_ viewModel: SenderLoginViewModel, error: Error)
 }
 
-// MARK: - SENDER LOGIN VIEW MODEL
+// MARK: - View Model
 final class SenderLoginViewModel {
-    // MARK: - Properties
+    // MARK: Properties
     weak var delegate: SenderLoginViewModelDelegate?
     weak var viewDelegate: SenderLoginViewModelViewDelegate?
 
@@ -31,11 +31,15 @@ final class SenderLoginViewModel {
     private let registrationRepository: RegistrationAuthRepository
 
     private(set) var isLoading: Bool = false {
-        didSet { viewDelegate?.senderLoginViewModelDidUpdateLoading(self) }
+        didSet {
+            viewDelegate?.senderLoginViewModelDidUpdateLoading(self)
+        }
     }
 
-    // MARK: - Init
-    init(validationRepository: ValidationAuthRepository, sessionRepository: SessionAuthRepository, registrationRepository: RegistrationAuthRepository) {
+    // MARK: Init
+    init(validationRepository: ValidationAuthRepository,
+         sessionRepository: SessionAuthRepository,
+         registrationRepository: RegistrationAuthRepository) {
         self.validationRepository = validationRepository
         self.sessionRepository = sessionRepository
         self.registrationRepository = registrationRepository
@@ -43,85 +47,45 @@ final class SenderLoginViewModel {
 
     // MARK: - Public Actions
     func login(email: String, password: String) {
-        var hasEmailError = false
-        
-        if email.isEmpty && password.isEmpty {
-            viewDelegate?.senderLoginViewModelDidReceiveError(self, error: .emptyEmail)
-            viewDelegate?.senderLoginViewModelDidReceiveError(self, error: .emptyPassword)
+        // 1. Local Validation
+        if let validationError = validateInputs(email: email, password: password) {
+            viewDelegate?.senderLoginViewModelDidReceiveError(self, error: validationError)
             return
         }
-        
-        if email.isEmpty {
-            viewDelegate?.senderLoginViewModelDidReceiveError(self, error: .emptyEmail)
-            hasEmailError = true
-        } else if !isValidEmail(email) {
-            viewDelegate?.senderLoginViewModelDidReceiveError(self, error: .invalidEmail)
-            hasEmailError = true
-        }
-        
-        if hasEmailError { return }
-
         isLoading = true
         
+        // 2. Remote Validation Flow (Check existence before auth)
         validationRepository.checkEmailExists(email: email) { [weak self] result in
-            guard let self else { return }
+            guard let self = self else { return }
             
             switch result {
             case .success(let exists):
                 if !exists {
-                    self.isLoading = false
-                    self.viewDelegate?.senderLoginViewModelDidReceiveError(self, error: .userNotFound)
-                    return
+                    handleAuthError(.userNotFound)
+                } else {
+                    self.performLogin(email: email, password: password)
                 }
-                
-                var hasPasswordError = false
-                
-                if password.isEmpty {
-                    self.viewDelegate?.senderLoginViewModelDidReceiveError(self, error: .emptyPassword)
-                    hasPasswordError = true
-                } else if password.count < 8 {
-                    self.viewDelegate?.senderLoginViewModelDidReceiveError(self, error: .weakPassword)
-                    hasPasswordError = true
-                }
-                
-                if hasPasswordError {
-                    self.isLoading = false
-                    return
-                }
-                self.performLogin(email: email, password: password)
-                
             case .failure(let error):
-                self.isLoading = false
-                self.viewDelegate?.senderLoginViewModelDidReceiveError(self, error: error)
+                handleError(error)
             }
         }
     }
     
     func loginWithGoogle() {
         isLoading = true
+        
         registrationRepository.signInWithGoogle { [weak self] result in
-            guard let self else { return }
-            self.isLoading = false
-            switch result {
-            case .success(let fetchedUser):
-                self.delegate?.senderLoginViewModelDidAuthenticateWithSocial(self, user: fetchedUser)
-            case .failure(let error):
-                self.viewDelegate?.senderLoginViewModelDidReceiveError(self, error: error)
-            }
+            guard let self = self else { return }
+            self.handleSocialAuthResult(result)
         }
     }
     
     func loginWithApple() {
         isLoading = true
+        
         registrationRepository.signInWithApple { [weak self] result in
-            guard let self else { return }
-            self.isLoading = false
-            switch result {
-            case .success(let fetchedUser):
-                self.delegate?.senderLoginViewModelDidAuthenticateWithSocial(self, user: fetchedUser)
-            case .failure(let error):
-                self.viewDelegate?.senderLoginViewModelDidReceiveError(self, error: error)
-            }
+            guard let self = self else { return }
+            self.handleSocialAuthResult(result)
         }
     }
     
@@ -132,23 +96,69 @@ final class SenderLoginViewModel {
     func didTapSignup() {
         delegate?.senderLoginViewModelRequestSignup(self)
     }
+}
 
-    // MARK: - Private Helpers
-    private func performLogin(email: String, password: String) {
-        sessionRepository.login(request: LoginRequest(email: email, password: password)) { [weak self] result in
-            guard let self else { return }
+// MARK: - Private Logic Flow
+private extension SenderLoginViewModel {
+    /// Giriş bilgilerini temel iş kurallarına göre denetler.
+    func validateInputs(email: String, password: String) -> AuthError? {
+        if email.isEmpty {
+            return AuthError.emptyEmail
+        }
+        
+        if !AuthValidator.isValidEmail(email) {
+            return AuthError.invalidEmail
+        }
+        
+        if password.isEmpty {
+            return AuthError.emptyPassword
+        }
+        
+        if password.count < 8 {
+            return AuthError.weakPassword
+        }
+        
+        return nil
+    }
+
+    /// Başarılı ön kontrollerden sonra session başlatır.
+    func performLogin(email: String, password: String) {
+        let request = LoginRequest(email: email, password: password)
+        
+        sessionRepository.login(request: request) { [weak self] result in
+            guard let self = self else { return }
             self.isLoading = false
+            
             switch result {
             case .success(let fetchedUser):
                 self.delegate?.senderLoginViewModelDidLogin(self, user: fetchedUser)
+                
             case .failure(let error):
                 self.viewDelegate?.senderLoginViewModelDidReceiveError(self, error: error)
             }
         }
     }
-
-    private func isValidEmail(_ email: String) -> Bool {
-        let regex = "[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,64}"
-        return NSPredicate(format: "SELF MATCHES %@", regex).evaluate(with: email)
+    
+    /// Sosyal giriş sonuçlarını yönetir.
+    func handleSocialAuthResult(_ result: Result<User, Error>) {
+        isLoading = false
+        
+        switch result {
+        case .success(let user):
+            delegate?.senderLoginViewModelDidAuthenticateWithSocial(self, user: user)
+            
+        case .failure(let error):
+            viewDelegate?.senderLoginViewModelDidReceiveError(self, error: error)
+        }
+    }
+    
+    func handleError(_ error: Error) {
+        isLoading = false
+        viewDelegate?.senderLoginViewModelDidReceiveError(self, error: error)
+    }
+    
+    func handleAuthError(_ authError: AuthError) {
+        isLoading = false
+        viewDelegate?.senderLoginViewModelDidReceiveError(self, error: authError)
     }
 }

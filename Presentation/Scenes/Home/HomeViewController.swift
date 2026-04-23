@@ -1,6 +1,6 @@
 //
 //  HomeViewController.swift
-//  DeliveryApp
+//  kuryem
 //
 //  Created by FFK on 14.04.2026.
 //

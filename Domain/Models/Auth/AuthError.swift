@@ -7,7 +7,6 @@
 
 import Foundation
 
-// MARK: - Auth Error
 enum AuthError: Error {
     // MARK: Validation Errors
     case emptyFullName
@@ -34,14 +33,9 @@ enum AuthError: Error {
     case databaseError
     case socialAuthCanceled
     case socialAuthFailed
-    
-    case networkError
-    case unknown
 
-    // MARK: - Localization
     var localizedDescription: String {
         switch self {
-        // Validation
         case .emptyFullName:
             return Localized.Validation.fullNameRequired
         case .emptyEmail:
@@ -64,7 +58,6 @@ enum AuthError: Error {
         case .invalidVerificationCode:
             return Localized.Validation.codeInvalid
             
-        // Firebase Auth & Custom
         case .emailAlreadyInUse:
             return Localized.Error.emailAlreadyInUse
         case .phoneNumberAlreadyInUse:
@@ -73,8 +66,7 @@ enum AuthError: Error {
             return Localized.Error.userNotFound
         case .wrongPassword:
             return Localized.Error.wrongPassword
-        
-        // Specific Errors
+            
         case .sessionExpired:
             return Localized.Error.sessionExpired
         case .tooManyRequests:
@@ -87,11 +79,6 @@ enum AuthError: Error {
             return Localized.Error.socialAuthCanceled
         case .socialAuthFailed:
             return Localized.Error.socialAuthFailed
-            
-        case .networkError:
-            return Localized.Error.networkError
-        case .unknown:
-            return Localized.Error.genericError
         }
     }
 }

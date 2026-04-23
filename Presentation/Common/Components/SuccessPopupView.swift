@@ -26,8 +26,10 @@ final class SuccessPopupView: UIView {
     
     private let popupContainer: UIView = {
         let view = UIView()
-        view.backgroundColor = .white
-        view.layer.cornerRadius = 24
+        view.backgroundColor = AppColor.background
+        view.layer.cornerRadius = AppLayout.Radius.medium
+        view.layer.borderColor = AppColor.border.cgColor
+        view.layer.borderWidth = AppLayout.Border.thin
         view.transform = CGAffineTransform(scaleX: 0.8, y: 0.8)
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
@@ -44,7 +46,7 @@ final class SuccessPopupView: UIView {
     private let popupTitleLabel: UILabel = {
         let label = UILabel()
         label.text = Localized.Success.successTitle
-        label.font = AppFonts.input.withSize(AppLayout.fontSizeMedium)
+        label.font = AppFonts.input
         label.textColor = AppColor.textPrimary
         label.textAlignment = .center
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -54,7 +56,7 @@ final class SuccessPopupView: UIView {
     private let popupDescLabel: UILabel = {
         let label = UILabel()
         label.text = Localized.Success.successDescription
-        label.font = AppFonts.body.withSize(AppLayout.fontSizeXSmall)
+        label.font = AppFonts.caption
         label.textColor = AppColor.textSecondary
         label.textAlignment = .center
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -104,28 +106,27 @@ final class SuccessPopupView: UIView {
             // Popup tam ortada
             popupContainer.centerXAnchor.constraint(equalTo: centerXAnchor),
             popupContainer.centerYAnchor.constraint(equalTo: centerYAnchor),
-            popupContainer.leadingAnchor.constraint(equalTo: leadingAnchor, constant: AppLayout.spacingMedium),
-            popupContainer.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -AppLayout.spacingMedium),
+            popupContainer.leadingAnchor.constraint(equalTo: leadingAnchor, constant: AppLayout.screenHorizontalMargin),
+            popupContainer.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -AppLayout.screenHorizontalMargin),
             
             // Popup İçerikleri
-            popupIconImageView.topAnchor.constraint(equalTo: popupContainer.topAnchor, constant: AppLayout.spacingMedium),
+            popupIconImageView.topAnchor.constraint(equalTo: popupContainer.topAnchor, constant: AppLayout.Spacing.medium),
             popupIconImageView.centerXAnchor.constraint(equalTo: popupContainer.centerXAnchor),
-            popupIconImageView.widthAnchor.constraint(equalToConstant: 318),
-            popupIconImageView.heightAnchor.constraint(equalToConstant: 67),
+            popupIconImageView.widthAnchor.constraint(equalToConstant: 350),
+            popupIconImageView.heightAnchor.constraint(equalToConstant: 211),
             
-            popupTitleLabel.topAnchor.constraint(equalTo: popupIconImageView.bottomAnchor, constant: AppLayout.spacingMedium),
-            popupTitleLabel.leadingAnchor.constraint(equalTo: popupContainer.leadingAnchor, constant: AppLayout.spacingMedium),
-            popupTitleLabel.trailingAnchor.constraint(equalTo: popupContainer.trailingAnchor, constant: -AppLayout.spacingMedium),
+            popupTitleLabel.topAnchor.constraint(equalTo: popupIconImageView.bottomAnchor, constant: AppLayout.Spacing.medium),
+            popupTitleLabel.leadingAnchor.constraint(equalTo: popupContainer.leadingAnchor, constant: AppLayout.Spacing.medium),
+            popupTitleLabel.trailingAnchor.constraint(equalTo: popupContainer.trailingAnchor, constant: -AppLayout.Spacing.medium),
             
-            popupDescLabel.topAnchor.constraint(equalTo: popupTitleLabel.bottomAnchor, constant: AppLayout.spacingXSmall),
-            popupDescLabel.leadingAnchor.constraint(equalTo: popupContainer.leadingAnchor, constant: AppLayout.spacingMedium),
-            popupDescLabel.trailingAnchor.constraint(equalTo: popupContainer.trailingAnchor, constant: -AppLayout.spacingMedium),
+            popupDescLabel.topAnchor.constraint(equalTo: popupTitleLabel.bottomAnchor, constant: AppLayout.Spacing.xxSmall),
+            popupDescLabel.leadingAnchor.constraint(equalTo: popupContainer.leadingAnchor, constant: AppLayout.Spacing.medium),
+            popupDescLabel.trailingAnchor.constraint(equalTo: popupContainer.trailingAnchor, constant: -AppLayout.Spacing.medium),
             
-            loginButton.topAnchor.constraint(equalTo: popupDescLabel.bottomAnchor, constant: AppLayout.spacingMedium),
-            loginButton.leadingAnchor.constraint(equalTo: popupContainer.leadingAnchor, constant: AppLayout.spacingMedium),
-            loginButton.trailingAnchor.constraint(equalTo: popupContainer.trailingAnchor, constant: -AppLayout.spacingMedium),
-            loginButton.bottomAnchor.constraint(equalTo: popupContainer.bottomAnchor, constant: -AppLayout.spacingMedium),
-            loginButton.heightAnchor.constraint(equalToConstant: AppLayout.buttonHeightPopup)
+            loginButton.topAnchor.constraint(equalTo: popupDescLabel.bottomAnchor, constant: AppLayout.Spacing.medium),
+            loginButton.leadingAnchor.constraint(equalTo: popupContainer.leadingAnchor, constant: AppLayout.Spacing.medium),
+            loginButton.trailingAnchor.constraint(equalTo: popupContainer.trailingAnchor, constant: -AppLayout.Spacing.medium),
+            loginButton.bottomAnchor.constraint(equalTo: popupContainer.bottomAnchor, constant: -AppLayout.Spacing.medium),
         ])
     }
     

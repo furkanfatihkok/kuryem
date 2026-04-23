@@ -7,6 +7,7 @@
 
 import UIKit
 
+// MARK: - Font Extension
 extension UIFont {
     enum PoppinsWeight: String {
         case regular = "Poppins-Regular"
@@ -15,7 +16,9 @@ extension UIFont {
         case bold = "Poppins-Bold"
     }
     
-    static func poppins(_ weight: PoppinsWeight, size: CGFloat) -> UIFont {
-        return UIFont(name: weight.rawValue, size: size) ?? .systemFont(ofSize: size)
+    static func poppins(_ weight: PoppinsWeight, size: CGFloat, textStyle: UIFont.TextStyle) -> UIFont {
+        let font = UIFont(name: weight.rawValue, size: size) ?? .systemFont(ofSize: size)
+        
+        return UIFontMetrics(forTextStyle: textStyle).scaledFont(for: font)
     }
 }

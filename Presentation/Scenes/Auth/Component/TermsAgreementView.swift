@@ -61,10 +61,10 @@ final class TermsAgreementView: UIView {
         NSLayoutConstraint.activate([
             checkboxButton.leadingAnchor.constraint(equalTo: leadingAnchor),
             checkboxButton.topAnchor.constraint(equalTo: topAnchor),
-            checkboxButton.widthAnchor.constraint(equalToConstant: AppLayout.spacingLarge),
-            checkboxButton.heightAnchor.constraint(equalToConstant: AppLayout.spacingLarge),
+            checkboxButton.widthAnchor.constraint(equalToConstant: AppLayout.Spacing.small),
+            checkboxButton.heightAnchor.constraint(equalToConstant: AppLayout.Spacing.small),
             
-            termsLabel.leadingAnchor.constraint(equalTo: checkboxButton.trailingAnchor, constant: AppLayout.spacingSmall),
+            termsLabel.leadingAnchor.constraint(equalTo: checkboxButton.trailingAnchor, constant: AppLayout.Spacing.xSmall),
             termsLabel.topAnchor.constraint(equalTo: topAnchor),
             termsLabel.trailingAnchor.constraint(equalTo: trailingAnchor),
             termsLabel.bottomAnchor.constraint(equalTo: bottomAnchor)

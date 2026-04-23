@@ -40,19 +40,6 @@ final class HomeViewModel {
         didSet { viewDelegate?.homeViewModelDidUpdateOrderHistory(self) }
     }
     
-    var greeting: String {
-        let hour = Calendar.current.component(.hour, from: Date())
-        
-        switch hour {
-        case 0..<12:
-            return Localized.Home.goodMorning
-        case 12..<17:
-            return Localized.Home.goodAfternoon
-        default:
-            return Localized.Home.goodEvening
-        }
-    }
-    
     var userName: String {
         return user.fullName.components(separatedBy: "").first ?? user.fullName
     }

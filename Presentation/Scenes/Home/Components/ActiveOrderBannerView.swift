@@ -22,9 +22,9 @@ final class ActiveOrderBannerView: UIView {
     private let containerView: UIView = {
         let view = UIView()
         view.backgroundColor = .white
-        view.layer.cornerRadius = AppLayout.cornerRadiusMiddle
-        view.layer.borderWidth = 1
-        view.layer.borderColor = UIColor.systemGray3.cgColor // Tasarımdaki ince çerçeve
+        view.layer.cornerRadius = AppLayout.Radius.medium
+        view.layer.borderWidth = AppLayout.Border.regular
+        view.layer.borderColor = AppColor.border.cgColor
         view.layer.shadowColor = UIColor.black.cgColor
         view.layer.shadowOffset = CGSize(width: 0, height: 4)
         view.layer.shadowRadius = 12
@@ -96,19 +96,19 @@ final class ActiveOrderBannerView: UIView {
     // MARK: Bottom Section (Courier Info)
     private let courierImageView: UIImageView = {
         let iv = UIImageView()
-        iv.image = UIImage(systemName: "person.circle.fill") // Gerçek resim gelene kadar placeholder
+        iv.image = UIImage(systemName: "person.circle.fill")
         iv.tintColor = .systemGray3
         iv.contentMode = .scaleAspectFill
         iv.clipsToBounds = true
-        iv.layer.cornerRadius = 24 // 48x48 boyutunda olacak
+        iv.layer.cornerRadius = AppLayout.Radius.circular
         iv.translatesAutoresizingMaskIntoConstraints = false
         return iv
     }()
     
     private let courierNameLabel: UILabel = {
         let label = UILabel()
-        label.font = UIFont.systemFont(ofSize: 16, weight: .semibold)
-        label.textColor = .black
+        label.font = AppFonts.input
+        label.textColor = AppColor.textPrimary
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
@@ -238,8 +238,8 @@ final class ActiveOrderBannerView: UIView {
             // Bottom Row (Courier Info)
             courierImageView.topAnchor.constraint(equalTo: dividerView.bottomAnchor, constant: 16),
             courierImageView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 20),
-            courierImageView.widthAnchor.constraint(equalToConstant: 48),
-            courierImageView.heightAnchor.constraint(equalToConstant: 48),
+            courierImageView.widthAnchor.constraint(equalToConstant: 40),
+            courierImageView.heightAnchor.constraint(equalToConstant: 40),
             courierImageView.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -20),
             
             courierNameLabel.topAnchor.constraint(equalTo: courierImageView.topAnchor, constant: 2),
@@ -276,10 +276,10 @@ final class ActiveOrderBannerView: UIView {
     
     // MARK: - Public Methods
     func configure(with order: Order) {
-        if let minutes = order.arrivingInMınutes {
+        if let minutes = order.arrivingInMinutes {
             titleLabel.text = "Arriving in \(minutes) minutes"
         } else {
-            titleLabel.text = "Your Courier is on the way" // Fallback
+            titleLabel.text = "Your Courier is on the way"
         }
         
         descriptionLabel.text = "Your Courier is on the way"
@@ -320,7 +320,7 @@ struct ActiveOrderBannerView_Previews: PreviewProvider {
             return banner
         }
         .frame(maxWidth: .infinity)
-        .previewLayout(.sizeThatFits) // view'ın kendi constraintlerine göre boyutu ayarlaması için
+        .previewLayout(.sizeThatFits)
         .padding()
     }
 }

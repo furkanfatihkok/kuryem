@@ -12,7 +12,7 @@ final class CustomTextField: UIView {
     private let mainStackView: UIStackView = {
         let stackView = UIStackView()
         stackView.axis = .vertical
-        stackView.spacing = AppLayout.spacingXSmall
+        stackView.spacing = AppLayout.Spacing.xxSmall
         stackView.translatesAutoresizingMaskIntoConstraints = false
         return stackView
     }()
@@ -20,16 +20,16 @@ final class CustomTextField: UIView {
     let containerView: UIView = {
        let view = UIView()
         view.backgroundColor = AppColor.background
-        view.layer.borderWidth = AppLayout.borderWidthThin
+        view.layer.borderWidth = AppLayout.Border.regular
         view.layer.borderColor = AppColor.textfieldBorder.cgColor
-        view.layer.cornerRadius = AppLayout.textFieldCornerRadius
+        view.layer.cornerRadius = AppLayout.Radius.small
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
     
     let textField: UITextField = {
         let textField = UITextField()
-        textField.font = AppFonts.body.withSize(AppLayout.fontSizeMedium)
+        textField.font = AppFonts.textfieldInput
         textField.textColor = AppColor.textPrimary
         textField.autocapitalizationType = .none
         textField.autocorrectionType = .no
@@ -39,7 +39,7 @@ final class CustomTextField: UIView {
     
     private let errorLabel: UILabel = {
         let label = UILabel()
-        label.font = AppFonts.caption.withSize(AppLayout.fontSizeSmall)
+        label.font = AppFonts.caption
         label.textColor = AppColor.error
         label.numberOfLines = 0
         label.isHidden = true
@@ -51,7 +51,7 @@ final class CustomTextField: UIView {
         let button = UIButton(type: .custom)
         button.setImage(UIImage(systemName: AppIcons.Signup.eye_slash), for: .normal)
         button.setImage(UIImage(systemName: AppIcons.Signup.eye), for: .selected)
-        button.tintColor = AppColor.textPlaceholder
+        button.tintColor = AppColor.textSecondary
         button.translatesAutoresizingMaskIntoConstraints = false
         button.addTarget(self, action: #selector(togglePasswordVisibility), for: .touchUpInside)
         button.isHidden = true
@@ -115,17 +115,17 @@ final class CustomTextField: UIView {
             mainStackView.trailingAnchor.constraint(equalTo: trailingAnchor),
             mainStackView.bottomAnchor.constraint(equalTo: bottomAnchor),
             
-            containerView.heightAnchor.constraint(equalToConstant: AppLayout.textFieldHeight),
+            containerView.heightAnchor.constraint(equalToConstant: AppLayout.TextField.height),
             
-            textField.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: AppLayout.paddingHorizontal),
+            textField.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: AppLayout.screenHorizontalMargin),
             textField.centerYAnchor.constraint(equalTo: containerView.centerYAnchor),
             
-            rightButton.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -AppLayout.paddingHorizontal),
+            rightButton.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -AppLayout.Spacing.xLarge), // Check
             rightButton.centerYAnchor.constraint(equalTo: containerView.centerYAnchor),
-            rightButton.widthAnchor.constraint(equalToConstant: AppLayout.spacingLarge),
-            rightButton.heightAnchor.constraint(equalToConstant: AppLayout.spacingLarge),
+            rightButton.widthAnchor.constraint(equalToConstant: 15),
+            rightButton.heightAnchor.constraint(equalToConstant: 10), // TODO:
             
-            textField.trailingAnchor.constraint(equalTo: rightButton.leadingAnchor, constant: -AppLayout.spacingSmall)
+            textField.trailingAnchor.constraint(equalTo: rightButton.leadingAnchor, constant: -AppLayout.Spacing.xSmall)
         ])
         
         textField.delegate = self
@@ -135,7 +135,7 @@ final class CustomTextField: UIView {
     private func updatePlaceholder() {
         textField.attributedPlaceholder = NSAttributedString(
             string: placeholder ?? "",
-            attributes: [.foregroundColor: AppColor.textPlaceholder]
+            attributes: [.foregroundColor: AppColor.textSecondary]
         )
     }
     

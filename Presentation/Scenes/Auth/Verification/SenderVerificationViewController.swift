@@ -1,8 +1,8 @@
 //
 //  SenderVerificationViewController.swift
-//  DeliveryApp
+//  kuryem
 //
-//  Created on 2026-02-13.
+//  Created by FFK on 2026-02-13.
 //
 
 import UIKit
@@ -24,16 +24,6 @@ final class SenderVerificationViewController: UIViewController {
         let view = UIView()
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
-    }()
-    
-    private lazy var backButton: UIButton = {
-        let button = UIButton(type: .system)
-        button.setTitle("Back", for: .normal)
-        button.setTitleColor(AppColor.textSecondary, for: .normal)
-        button.titleLabel?.font = AppFonts.body
-        button.addTarget(self, action: #selector(backButtonTapped), for: .touchUpInside)
-        button.translatesAutoresizingMaskIntoConstraints = false
-        return button
     }()
     
     private lazy var headerView: AuthHeaderView = {
@@ -59,12 +49,23 @@ final class SenderVerificationViewController: UIViewController {
     private lazy var codeInputView: CodeInputView = {
         let view = CodeInputView()
         view.delegate = self
+        view.translatesAutoresizingMaskIntoConstraints = false
         return view
+    }()
+    
+    private let errorCodeLabel: UILabel = {
+        let label = UILabel()
+        label.font = AppFonts.caption
+        label.textColor = AppColor.error
+        label.textAlignment = .center
+        label.isHidden = true
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
     }()
     
     private let resendLabel: UILabel = {
         let label = UILabel()
-        label.font = AppFonts.body
+        label.font = AppFonts.bodySmall
         label.textColor = AppColor.textSecondary
         label.textAlignment = .center
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -75,7 +76,7 @@ final class SenderVerificationViewController: UIViewController {
         let button = UIButton(type: .system)
         button.setTitle("Resend Code", for: .normal)
         button.setTitleColor(AppColor.primary, for: .normal)
-        button.titleLabel?.font = .poppins(.semiBold, size: AppLayout.fontSizeMedium)
+        button.titleLabel?.font = AppFonts.bodySmall
         button.isHidden = true
         button.addTarget(self, action: #selector(resendButtonTapped), for: .touchUpInside)
         button.translatesAutoresizingMaskIntoConstraints = false
@@ -84,8 +85,8 @@ final class SenderVerificationViewController: UIViewController {
     
     private lazy var verifyButton: PrimaryButton = {
         let button = PrimaryButton(title: Localized.CodeVerification.verify)
-        button.isEnabled = false
         button.addTarget(self, action: #selector(verifyButtonTapped), for: .touchUpInside)
+        button.isEnabled = false
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
@@ -96,7 +97,9 @@ final class SenderVerificationViewController: UIViewController {
         super.init(nibName: nil, bundle: nil)
     }
     
-    required init?(coder: NSCoder) { fatalError("init(coder:) has not been implemented") }
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
     // MARK: - Lifecycle
     override func viewDidLoad() {
@@ -111,103 +114,107 @@ final class SenderVerificationViewController: UIViewController {
         super.viewDidAppear(animated)
         codeInputView.becomeFirstResponder()
     }
-    
-    // MARK: - Setup
-    private func setupUI() {
+}
+
+// MARK: - Setup UI
+private extension SenderVerificationViewController {
+    func setupUI() {
         view.backgroundColor = AppColor.background
-        
         setupHierarchy()
         setupConstraints()
     }
     
-    private func setupHierarchy() {
+    func setupHierarchy() {
         view.addSubview(scrollView)
-        view.addSubview(verifyButton)
-        
         scrollView.addSubview(contentView)
         
-        let subviews = [headerView, backButton, verificationCodeLabel, codeInputView, resendLabel, resendButton]
-        subviews.forEach { contentView.addSubview($0) }
+        [headerView,
+         verificationCodeLabel,
+         codeInputView,
+         errorCodeLabel,
+         resendLabel,
+         resendButton,
+         verifyButton].forEach {
+            contentView.addSubview($0)
+        }
     }
     
-    private func setupConstraints() {
+    func setupConstraints() {
         NSLayoutConstraint.activate([
-            // Bottom Button
-            verifyButton.bottomAnchor.constraint(equalTo: view.keyboardLayoutGuide.topAnchor, constant: -AppLayout.spacingLarge),
-            verifyButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: AppLayout.paddingHorizontal),
-            verifyButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -AppLayout.paddingHorizontal),
-            verifyButton.heightAnchor.constraint(equalToConstant: AppLayout.buttonHeight),
-            
-            // ScrollView
             scrollView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
             scrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             scrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            scrollView.bottomAnchor.constraint(equalTo: verifyButton.topAnchor, constant: -AppLayout.spacingMedium),
+            scrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
             
-            // ContentView
-            contentView.topAnchor.constraint(equalTo: scrollView.topAnchor),
-            contentView.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor),
-            contentView.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor),
-            contentView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor),
-            contentView.widthAnchor.constraint(equalTo: scrollView.widthAnchor),
+            contentView.topAnchor.constraint(equalTo: scrollView.contentLayoutGuide.topAnchor),
+            contentView.leadingAnchor.constraint(equalTo: scrollView.contentLayoutGuide.leadingAnchor),
+            contentView.trailingAnchor.constraint(equalTo: scrollView.contentLayoutGuide.trailingAnchor),
+            contentView.bottomAnchor.constraint(equalTo: scrollView.contentLayoutGuide.bottomAnchor),
+            contentView.widthAnchor.constraint(equalTo: scrollView.frameLayoutGuide.widthAnchor),
+            contentView.heightAnchor.constraint(greaterThanOrEqualTo: scrollView.frameLayoutGuide.heightAnchor),
             
-            // Header
-            headerView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: AppLayout.spacingMedium),
-            headerView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: AppLayout.paddingHorizontal),
-            headerView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -AppLayout.paddingHorizontal),
+            headerView.topAnchor.constraint(equalTo: contentView.topAnchor),
+            headerView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: AppLayout.screenHorizontalMargin),
+            headerView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -AppLayout.screenHorizontalMargin),
             
-            backButton.topAnchor.constraint(equalTo: headerView.topAnchor),
-            backButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -AppLayout.paddingHorizontal),
+            verificationCodeLabel.topAnchor.constraint(equalTo: headerView.bottomAnchor, constant: AppLayout.Spacing.xLarge),
+            verificationCodeLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: AppLayout.screenHorizontalMargin),
             
-            // Code Input Section
-            verificationCodeLabel.topAnchor.constraint(equalTo: headerView.bottomAnchor, constant: AppLayout.spacingXLarge),
-            verificationCodeLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: AppLayout.paddingHorizontal),
-            verificationCodeLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -AppLayout.paddingHorizontal),
+            codeInputView.topAnchor.constraint(equalTo: verificationCodeLabel.bottomAnchor, constant: AppLayout.Spacing.medium),
+            codeInputView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: AppLayout.screenHorizontalMargin),
+            codeInputView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -AppLayout.screenHorizontalMargin),
             
-            codeInputView.topAnchor.constraint(equalTo: verificationCodeLabel.bottomAnchor, constant: AppLayout.spacingMedium),
-            codeInputView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: AppLayout.paddingHorizontal),
-            codeInputView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -AppLayout.paddingHorizontal),
+            errorCodeLabel.topAnchor.constraint(equalTo: codeInputView.bottomAnchor, constant: AppLayout.Spacing.xSmall),
+            errorCodeLabel.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
             
-            // Resend Elements
-            resendLabel.topAnchor.constraint(equalTo: codeInputView.bottomAnchor, constant: AppLayout.spacingLarge),
-            resendLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: AppLayout.paddingHorizontal),
-            resendLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -AppLayout.paddingHorizontal),
-            resendLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -AppLayout.spacingLarge),
+            resendLabel.topAnchor.constraint(equalTo: errorCodeLabel.bottomAnchor, constant: AppLayout.Spacing.large),
+            resendLabel.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
             
-            resendButton.topAnchor.constraint(equalTo: resendLabel.topAnchor),
-            resendButton.centerXAnchor.constraint(equalTo: contentView.centerXAnchor)
+            resendButton.centerYAnchor.constraint(equalTo: resendLabel.centerYAnchor),
+            resendButton.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
+            
+            verifyButton.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -AppLayout.Spacing.xLarge),
+            verifyButton.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: AppLayout.screenHorizontalMargin),
+            verifyButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -AppLayout.screenHorizontalMargin),
         ])
     }
     
-    private func setupViewModel() {
+    func setupViewModel() {
         viewModel.viewDelegate = self
     }
     
-    private func configureContent() {
+    func configureContent() {
         resendLabel.text = "Resend code in \(viewModel.remainingSeconds)s"
-        resendLabel.isHidden = false
-        headerView.descriptionLabel.numberOfLines = 1
+    }
+}
+
+// MARK: - Actions
+private extension SenderVerificationViewController {
+    @objc func verifyButtonTapped() {
+        viewModel.verify(code: codeInputView.code)
     }
     
-    // MARK: - Actions
-    @objc private func verifyButtonTapped() {
-        let code = codeInputView.code
-        viewModel.verify(code: code)
-    }
-    
-    @objc private func resendButtonTapped() {
+    @objc func resendButtonTapped() {
         codeInputView.clear()
+        showErrorCode(nil)
         verifyButton.isEnabled = false
         resendButton.isHidden = true
         viewModel.resendCode()
     }
     
-    @objc private func backButtonTapped() {
-        navigationController?.popViewController(animated: true)
+    func showErrorCode(_ message: String?) {
+        if let message = message {
+            errorCodeLabel.text = message
+            errorCodeLabel.isHidden = false
+            codeInputView.setError(true)
+        } else {
+            errorCodeLabel.isHidden = true
+            codeInputView.setError(false)
+        }
     }
 }
 
-// MARK: - SenderVerificationViewModelViewDelegate
+// MARK: - SenderVerificationViewModelViewDelegate Implementation
 extension SenderVerificationViewController: SenderVerificationViewModelViewDelegate {
     func verificationViewModelDidUpdateLoading(_ viewModel: SenderVerificationViewModel) {
         DispatchQueue.main.async {
@@ -216,16 +223,16 @@ extension SenderVerificationViewController: SenderVerificationViewModelViewDeleg
         }
     }
     
-    func verificationViewModelDidReceiveError(_ viewModel: SenderVerificationViewModel, error: AuthError) {
+    func verificationViewModelDidReceiveError(_ viewModel: SenderVerificationViewModel, error: Error) {
         DispatchQueue.main.async {
-            self.codeInputView.setError(true)
-            let alert = UIAlertController(title: "Error", message: error.localizedDescription, preferredStyle: .alert)
-            alert.addAction(UIAlertAction(title: "OK", style: .default) { _ in
-                self.codeInputView.setError(false)
+            if let authError = error as? AuthError, authError == .invalidVerificationCode {
+                self.showErrorCode(authError.localizedDescription)
+                self.codeInputView.becomeFirstResponder()
                 self.codeInputView.clear()
                 self.verifyButton.isEnabled = false
-            })
-            self.present(alert, animated: true)
+                return
+            }
+            ErrorBannerManager.shared.report(error)
         }
     }
     
@@ -243,7 +250,7 @@ extension SenderVerificationViewController: SenderVerificationViewModelViewDeleg
     }
 }
 
-// MARK: - CodeInputViewDelegate
+// MARK: - CodeInputViewDelegate Implementation
 extension SenderVerificationViewController: CodeInputViewDelegate {
     func codeInputView(_ view: CodeInputView, didEnterCode code: String) {
         verifyButton.isEnabled = true
@@ -251,8 +258,6 @@ extension SenderVerificationViewController: CodeInputViewDelegate {
     
     func codeInputView(_ view: CodeInputView, didChangeCode code: String) {
         verifyButton.isEnabled = code.count == 6
-        if code.count > 0 {
-            view.setError(false)
-        }
+        if code.count > 0 { showErrorCode(nil) }
     }
 }

@@ -16,8 +16,8 @@ final class AuthInlineActionButton: UIView {
     
     private lazy var actionButton: UIButton = {
         let button = UIButton(type: .system)
-        button.titleLabel?.font = AppFonts.body.withSize(AppLayout.fontSizeXSmall)
-        button.setTitleColor(AppColor.borderActive, for: .normal)
+        button.titleLabel?.font = AppFonts.caption
+        button.setTitleColor(AppColor.buttonText, for: .normal)
         button.addTarget(self, action: #selector(handleTap), for: .touchUpInside)
         button.translatesAutoresizingMaskIntoConstraints = false
         return button

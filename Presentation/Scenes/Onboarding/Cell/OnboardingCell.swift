@@ -21,7 +21,7 @@ final class OnboardingCell: UICollectionViewCell {
 
     private let titleLabel: UILabel = {
         let label = UILabel()
-        label.font = AppFonts.subTitle.withSize(AppLayout.fontSizeLarge)
+        label.font = AppFonts.h3
         label.textColor = AppColor.textPrimary
         label.textAlignment = .center
         label.numberOfLines = 0
@@ -31,7 +31,7 @@ final class OnboardingCell: UICollectionViewCell {
 
     private let descriptionLabel: UILabel = {
         let label = UILabel()
-        label.font = AppFonts.caption.withSize(AppLayout.fontSizeSmall)
+        label.font = AppFonts.bodySmall
         label.textColor = AppColor.textSecondary
         label.textAlignment = .center
         label.numberOfLines = 0
@@ -56,19 +56,18 @@ final class OnboardingCell: UICollectionViewCell {
         contentView.addSubview(descriptionLabel)
 
         NSLayoutConstraint.activate([
-            imageView.topAnchor.constraint(equalTo: contentView.topAnchor,constant: AppLayout.spacingXXLarge),
+            imageView.topAnchor.constraint(equalTo: contentView.topAnchor,constant: AppLayout.Spacing.xxLarge),
             imageView.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
-            imageView.widthAnchor.constraint( equalTo: contentView.widthAnchor,multiplier: AppLayout.onboardingImageWidthMultiplier),
-            imageView.heightAnchor.constraint(equalTo: imageView.widthAnchor,multiplier: AppLayout.onboardingImageAspectRatio),
+            imageView.widthAnchor.constraint(equalToConstant: 375),
+            imageView.heightAnchor.constraint(equalToConstant: 250),
 
+            titleLabel.topAnchor.constraint(equalTo: imageView.bottomAnchor,constant: AppLayout.Spacing.xLarge),
+            titleLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor,constant: AppLayout.Spacing.xSmall),
+            titleLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor,constant: -AppLayout.Spacing.xSmall),
 
-            titleLabel.topAnchor.constraint(equalTo: imageView.bottomAnchor,constant: AppLayout.spacingXXLarge),
-            titleLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor,constant: AppLayout.paddingHorizontal),
-            titleLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor,constant: -AppLayout.paddingHorizontal),
-
-            descriptionLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor,constant: AppLayout.spacingMedium),
-            descriptionLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor,constant: AppLayout.paddingHorizontal),
-            descriptionLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor,constant: -AppLayout.paddingHorizontal),
+            descriptionLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor,constant: AppLayout.Spacing.small),
+            descriptionLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor,constant: AppLayout.Spacing.xSmall),
+            descriptionLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor,constant: -AppLayout.Spacing.xSmall),
         ])
     }
 

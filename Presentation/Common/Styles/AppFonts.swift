@@ -8,31 +8,22 @@
 import UIKit
 
 enum AppFonts {
-    // MARK: - Titles
-    static var title: UIFont {
-        return .poppins(.bold, size: AppLayout.fontSizeXXLarge)
-    }
     
-    static var subTitle: UIFont {
-        return .poppins(.semiBold, size: AppLayout.fontSizeLarge)
-    }
+    // MARK: - Headings (Başlıklar)
+    static var h1: UIFont { .poppins(.bold, size: 28, textStyle: .largeTitle) }
+    static var h2: UIFont { .poppins(.bold, size: 24, textStyle: .title1) }
+    static var h3: UIFont { .poppins(.semiBold, size: 20, textStyle: .title2) }
+    static var h4: UIFont { .poppins(.medium, size: 18, textStyle: .title3) }
     
-    // MARK: - Content
-    static var body: UIFont {
-        return .poppins(.regular, size: AppLayout.fontSizeMedium)
-    }
+    // MARK: - Body (İçerik Metinleri)
+    static var bodyLarge: UIFont { .poppins(.regular, size: 16, textStyle: .body) }
+    static var bodyMedium: UIFont { .poppins(.regular, size: 14, textStyle: .subheadline) }
+    static var bodySmall: UIFont { .poppins(.regular, size: 12, textStyle: .footnote) }
     
-    static var input: UIFont {
-        return .poppins(.medium, size: AppLayout.fontSizeMedium)
-    }
-    
-    // MARK: - Actions
-    static var button: UIFont {
-        return .poppins(.medium, size: AppLayout.fontSizeMedium)
-    }
-    
-    // MARK: - Helper
-    static var caption: UIFont {
-        return .poppins(.regular, size: AppLayout.fontSizeSmall)
-    }
+    // MARK: - Components (Aksiyon ve Bileşen Metinleri)
+    static var buttonPrimary: UIFont { .poppins(.semiBold, size: 14, textStyle: .headline) }
+    static var input: UIFont { .poppins(.medium, size: 14, textStyle: .body) }
+    static var textfieldInput: UIFont { .poppins(.regular, size: 14, textStyle: .body) }
+    static var caption: UIFont { .poppins(.regular, size: 10, textStyle: .body) }
+    static var buttonText: UIFont { .poppins(.semiBold, size: 10, textStyle: .caption1) }
 }
