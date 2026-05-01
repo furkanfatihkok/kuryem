@@ -43,14 +43,6 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
-		0282223F2F867824001B99A4 /* Exceptions for "Presentation" folder in "kuryemTests" target */ = {
-			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
-			membershipExceptions = (
-				Scenes/Auth/Component/AuthFooterView.swift,
-				Scenes/Auth/Component/AuthInlineActionButton.swift,
-			);
-			target = 0292B9862F46FD7E0095BB50 /* kuryemTests */;
-		};
 		0292B9992F46FD7E0095BB50 /* Exceptions for "kuryem" folder in "kuryem" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
@@ -73,6 +65,14 @@
 				kuryemUITestsLaunchTests.swift,
 			);
 			target = 0292B9902F46FD7E0095BB50 /* kuryemUITests */;
+		};
+		02AB805B2F9F89070012BAF6 /* Exceptions for "Features" folder in "kuryemTests" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Authentication/Components/AuthFooterView.swift,
+				Authentication/Components/AuthInlineActionButton.swift,
+			);
+			target = 0292B9862F46FD7E0095BB50 /* kuryemTests */;
 		};
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
@@ -100,24 +100,6 @@
 			path = App;
 			sourceTree = "<group>";
 		};
-		0292BA092F4713D90095BB50 /* Domain */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			path = Domain;
-			sourceTree = "<group>";
-		};
-		0292BA0A2F4713E30095BB50 /* Data */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			path = Data;
-			sourceTree = "<group>";
-		};
-		0292BA0B2F4713EC0095BB50 /* Presentation */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			exceptions = (
-				0282223F2F867824001B99A4 /* Exceptions for "Presentation" folder in "kuryemTests" target */,
-			);
-			path = Presentation;
-			sourceTree = "<group>";
-		};
 		0292BA242F4714C70095BB50 /* kuryemUITests */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
@@ -130,6 +112,14 @@
 		0292BA2E2F47155C0095BB50 /* Resources */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			path = Resources;
+			sourceTree = "<group>";
+		};
+		02AB7FF82F9A3AA90012BAF6 /* Features */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				02AB805B2F9F89070012BAF6 /* Exceptions for "Features" folder in "kuryemTests" target */,
+			);
+			path = Features;
 			sourceTree = "<group>";
 		};
 /* End PBXFileSystemSynchronizedRootGroup section */
@@ -174,9 +164,7 @@
 			children = (
 				0292BA072F47138F0095BB50 /* App */,
 				020886B32F472AA60054E125 /* Core */,
-				0292BA092F4713D90095BB50 /* Domain */,
-				0292BA0A2F4713E30095BB50 /* Data */,
-				0292BA0B2F4713EC0095BB50 /* Presentation */,
+				02AB7FF82F9A3AA90012BAF6 /* Features */,
 				0292B9732F46FD7D0095BB50 /* kuryem */,
 				0292B98A2F46FD7E0095BB50 /* kuryemTests */,
 				0292BA242F4714C70095BB50 /* kuryemUITests */,
@@ -215,10 +203,8 @@
 				020886B32F472AA60054E125 /* Core */,
 				0292B9732F46FD7D0095BB50 /* kuryem */,
 				0292BA072F47138F0095BB50 /* App */,
-				0292BA092F4713D90095BB50 /* Domain */,
-				0292BA0A2F4713E30095BB50 /* Data */,
-				0292BA0B2F4713EC0095BB50 /* Presentation */,
 				0292BA2E2F47155C0095BB50 /* Resources */,
+				02AB7FF82F9A3AA90012BAF6 /* Features */,
 			);
 			name = kuryem;
 			packageProductDependencies = (
