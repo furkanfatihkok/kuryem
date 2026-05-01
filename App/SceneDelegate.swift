@@ -45,23 +45,15 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
             contextProvider: self
         )
         
-        let orderRepository: OrderRepositoryProtocol = FirebaseOrderRepository(
-            persistenceService: orderPersistenceService
-        )
-
-        // MARK: - 4. Factory & Coordinator Setup
-        let factory: DependencyFactory = DependencyFactory(
-            onboardingRepository: OnboardingRepository(),
-            roleSelectionRepository: RoleSelectionRepository(),
-            authRepository: authRepository,
-            orderRepository: orderRepository
-        )
+                 let orderRepository: OrderRepositoryProtocol =
+                     FirebaseOrderRepository(persistenceService: orderPersistenceService)
 
         let rootNavigationController = UINavigationController()
 
         appCoordinator = AppCoordinator(
             navigationController: rootNavigationController,
-            factory: factory
+            authRepository: authRepository,
+            orderRepository: orderRepository
         )
 
         // MARK: - 5. Window Setup
@@ -85,7 +77,6 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
 // MARK: - Proactive System Checks
 private extension SceneDelegate {
-    
     func checkInitialSystemState() {
         // Eğer uygulama açıldığında internet yoksa, kullanıcıyı hemen uyar
         if !NetworkMonitor.shared.isConnected {
