@@ -225,14 +225,17 @@ extension SenderVerificationViewController: SenderVerificationViewModelViewDeleg
     
     func verificationViewModelDidReceiveError(_ viewModel: SenderVerificationViewModel, error: Error) {
         DispatchQueue.main.async {
-            if let authError = error as? AuthError, authError == .invalidVerificationCode {
-                self.showErrorCode(authError.localizedDescription)
-                self.codeInputView.becomeFirstResponder()
-                self.codeInputView.clear()
-                self.verifyButton.isEnabled = false
-                return
-            }
             ErrorBannerManager.shared.report(error)
+        }
+    }
+    
+    func verificationViewModelDidReceiveCodeError(_ viewModel: SenderVerificationViewModel, error: any Error) {
+        DispatchQueue.main.async {
+            guard let authError = error as? AuthError else { return }
+            self.showErrorCode(authError.localizedDescription)
+            self.codeInputView.becomeFirstResponder()
+            self.codeInputView.clear()
+            self.verifyButton.isEnabled = false
         }
     }
     

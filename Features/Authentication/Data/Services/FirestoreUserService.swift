@@ -19,20 +19,14 @@ final class FirestoreUserService: UserPersistenceService {
     }
  
     // MARK: - Init
-    init(
-        firestore: Firestore = Firestore.firestore(),
-        errorMapper: FirestoreErrorMapper = FirebaseOrderErrorMapper()
-    ) {
+    init(firestore: Firestore = Firestore.firestore(),errorMapper: FirestoreErrorMapper = FirebaseOrderErrorMapper()) {
         self.firestore   = firestore
         self.errorMapper = errorMapper
     }
  
     // MARK: - Save
-    func save(
-        user: User,
-        completion: @escaping (Result<User, Error>) -> Void
-    ) {
-        let data = UserMapper.toFirestore(from: user)   // ← rename: mapToFirestore → toFirestore
+    func save(user: User, completion: @escaping (Result<User, Error>) -> Void) {
+        let data = UserMapper.toFirestore(from: user)
  
         usersCollection.document(user.id).setData(data) { [weak self] error in
             guard let self = self else { return }
@@ -47,10 +41,7 @@ final class FirestoreUserService: UserPersistenceService {
     }
  
     // MARK: - Fetch
-    func fetch(
-        uid: String,
-        completion: @escaping (Result<User, Error>) -> Void
-    ) {
+    func fetch(uid: String,completion: @escaping (Result<User, Error>) -> Void) {
         usersCollection.document(uid).getDocument { [weak self] snapshot, error in
             guard let self = self else { return }
  
@@ -58,8 +49,6 @@ final class FirestoreUserService: UserPersistenceService {
                 completion(.failure(self.errorMapper.map(error)))
                 return
             }
- 
-            // Pipeline: DocumentSnapshot → DTO → Domain Entity
             guard let snapshot = snapshot,
                   snapshot.exists,
                   let dto  = UserMapper.toDTO(from: snapshot),
@@ -74,11 +63,7 @@ final class FirestoreUserService: UserPersistenceService {
     }
  
     // MARK: - Check Exists
-    func checkExists(
-        field: String,
-        value: String,
-        completion: @escaping (Bool) -> Void
-    ) {
+    func checkExists(field: String, value: String, completion: @escaping (Bool) -> Void) {
         usersCollection
             .whereField(field, isEqualTo: value)
             .getDocuments { snapshot, _ in

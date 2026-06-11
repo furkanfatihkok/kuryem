@@ -18,12 +18,14 @@ protocol SenderLoginViewModelDelegate: AnyObject {
 protocol SenderLoginViewModelViewDelegate: AnyObject {
     func senderLoginViewModelDidUpdateLoading(_ viewModel: SenderLoginViewModel)
     func senderLoginViewModelDidReceiveError(_ viewModel: SenderLoginViewModel, error: Error)
+    func senderLoginViewModelDidValidationError(_ viewModel: SenderLoginViewModel, error: Error, field: LoginField)
 }
 
 // MARK: - ViewModel
 final class SenderLoginViewModel {
     // MARK: - Dependencies
     private let useCase: LoginUseCaseProtocol
+    private let validationUseCase: LoginValidationUseCaseProtocol
 
     // MARK: - Delegates
     weak var delegate: SenderLoginViewModelDelegate?
@@ -33,14 +35,15 @@ final class SenderLoginViewModel {
     private(set) var isLoading: Bool = false
 
     // MARK: - Init
-    init(useCase: LoginUseCaseProtocol) {
+    init(useCase: LoginUseCaseProtocol, validationUseCase: LoginValidationUseCaseProtocol) {
         self.useCase = useCase
+        self.validationUseCase = validationUseCase
     }
 
     // MARK: - Public Actions
     func login(email: String, password: String) {
-        if let validationError = validateInputs(email: email, password: password) {
-            notifyError(validationError)
+        if let result = validationUseCase.validate(email: email, password: password) {
+            viewDelegate?.senderLoginViewModelDidValidationError(self, error: result.error, field: result.field)
             return
         }
         
@@ -51,7 +54,7 @@ final class SenderLoginViewModel {
             switch result {
             case .success(let exists):
                 if !exists {
-                    self.notifyError(AuthError.userNotFound)
+                    self.notifyValidationError(AuthError.userNotFound, field: .email)
                 } else {
                     self.performLogin(email: email, password: password)
                 }
@@ -114,7 +117,11 @@ private extension SenderLoginViewModel {
             case .success(let user):
                 self.delegate?.senderLoginViewModelDidLogin(self, user: user)
             case .failure(let error):
-                self.notifyError(error)
+                if let authError = error as? AuthError ,authError == .wrongPassword {
+                    self.notifyValidationError(authError, field: .password)
+                } else {
+                    self.notifyError(error)
+                }
             }
         }
     }
@@ -137,5 +144,10 @@ private extension SenderLoginViewModel {
     func notifyError(_ error: Error) {
         setLoading(false)
         viewDelegate?.senderLoginViewModelDidReceiveError(self, error: error)
+    }
+    
+    func notifyValidationError(_ error: Error, field: LoginField) {
+        setLoading(false)
+        viewDelegate?.senderLoginViewModelDidValidationError(self, error: error, field: field)
     }
 }

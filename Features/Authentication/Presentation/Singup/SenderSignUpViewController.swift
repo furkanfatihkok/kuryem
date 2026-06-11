@@ -356,48 +356,31 @@ extension SenderSignupViewController: SenderSignupViewModelViewDelegate {
     
     func senderSignupViewModelDidReceiveError(_ viewModel: SenderSignupViewModel, error: Error) {
         DispatchQueue.main.async {
+            ErrorBannerManager.shared.report(error)
+        }
+    }
+    
+    func senderSignupViewModelDidValidationError(_ viewModel: SenderSignupViewModel, error: any Error, field: SignupField) {
+        DispatchQueue.main.async {
             if let authError = error as? AuthError {
-                switch authError {
-                case .emptyFullName:
+                switch field {
+                case .fullName:
                     self.fullNameTextField.setError(authError.localizedDescription)
                     self.fullNameTextField.becomeFirstResponder()
-                    
-                case .emptyEmail,
-                     .invalidEmail,
-                     .emailAlreadyInUse:
+                case .email:
                     self.emailTextField.setError(authError.localizedDescription)
-                    if !self.fullNameTextField.isFirstResponder {
-                        self.emailTextField.becomeFirstResponder()
-                    }
-                    
-                case .emptyPhoneNumber,
-                     .invalidPhoneNumber,
-                     .phoneNumberAlreadyInUse:
+                    self.emailTextField.becomeFirstResponder()
+                case .phone:
                     self.phoneTextField.setError(authError.localizedDescription)
-                    if !self.fullNameTextField.isFirstResponder &&
-                        !self.emailTextField.isFirstResponder {
-                        self.phoneTextField.becomeFirstResponder()
-                    }
-                    
-                case .emptyPassword,
-                     .weakPassword:
+                    self.phoneTextField.becomeFirstResponder()
+                case .password:
                     self.passwordTextField.setError(authError.localizedDescription)
-                    if !self.fullNameTextField.isFirstResponder &&
-                        !self.emailTextField.isFirstResponder &&
-                        !self.phoneTextField.isFirstResponder {
-                        self.passwordTextField.becomeFirstResponder()
-                    }
-                    
-                case .passwordsDoNotMatch:
+                    self.passwordTextField.becomeFirstResponder()
+                case .confirmPassword:
                     self.confirmPasswordTextField.setError(authError.localizedDescription)
-                    
-                default:
-                    let appError = AppError.authentication(authError.localizedDescription)
-                    ErrorBannerManager.shared.report(appError)
+                    self.confirmPasswordTextField.becomeFirstResponder()
                 }
-                return
             }
-            ErrorBannerManager.shared.report(error)
         }
     }
 }

@@ -16,6 +16,7 @@ protocol SenderCreateNewPasswordViewModelDelegate: AnyObject {
 protocol SenderCreateNewPasswordViewModelViewDelegate: AnyObject {
     func createNewPasswordViewModelDidUpdateLoading(_ viewModel: SenderCreateNewPasswordViewModel)
     func createNewPasswordViewModelDidReceiveError(_ viewModel: SenderCreateNewPasswordViewModel, error: Error)
+    func createNewPasswordViewModelDidValidationError(_ viewModel: SenderCreateNewPasswordViewModel, error: Error, field: CreateNewPasswordField)
     func createNewPasswordViewModelShowSuccessPopup(_ viewModel: SenderCreateNewPasswordViewModel)
 }
 
@@ -24,6 +25,7 @@ final class SenderCreateNewPasswordViewModel {
 
     // MARK: - Dependencies
     private let useCase: CreateNewPasswordUseCaseProtocol
+    private let validationUseCase: CreateNewPasswordUseCaseValidationProtocol
 
     // MARK: - Delegates
     weak var delegate: SenderCreateNewPasswordViewModelDelegate?
@@ -33,17 +35,18 @@ final class SenderCreateNewPasswordViewModel {
     private(set) var isLoading: Bool = false
 
     // MARK: - Init
-    init(useCase: CreateNewPasswordUseCaseProtocol) {
+    init(useCase: CreateNewPasswordUseCaseProtocol, validationUseCase: CreateNewPasswordUseCaseValidationProtocol) {
         self.useCase = useCase
+        self.validationUseCase = validationUseCase
     }
 
     // MARK: - Public Actions
     func resetPassword(password: String, confirm: String) {
-        if let validationError = validateInputs(password: password, confirm: confirm) {
-            notifyError(validationError)
+        if let result = validationUseCase.validate(password: password, confirmPassword: confirm) {
+            notifyValidationError(result.error, field: result.field)
             return
         }
-
+        
         setLoading(true)
 
         useCase.updatePassword(password: password) { [weak self] result in
@@ -89,7 +92,12 @@ private extension SenderCreateNewPasswordViewModel {
     }
 
     func notifyError(_ error: Error) {
-        isLoading = false
+        setLoading(false)
         viewDelegate?.createNewPasswordViewModelDidReceiveError(self, error: error)
+    }
+    
+    func notifyValidationError(_ error: Error, field: CreateNewPasswordField) {
+        setLoading(false)
+        viewDelegate?.createNewPasswordViewModelDidValidationError(self, error: error, field: field)
     }
 }

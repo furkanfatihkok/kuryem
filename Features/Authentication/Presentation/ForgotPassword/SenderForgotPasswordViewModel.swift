@@ -16,6 +16,7 @@ protocol SenderForgotPasswordViewModelDelegate: AnyObject {
 protocol SenderForgotPasswordViewModelViewDelegate: AnyObject {
     func forgotPasswordViewModelDidUpdateLoading(_ viewModel: SenderForgotPasswordViewModel)
     func forgotPasswordViewModelDidReceiveError(_ viewModel: SenderForgotPasswordViewModel, error: Error)
+    func forgotPasswordViewModelDidValidationError(_ viewModel: SenderForgotPasswordViewModel, error: Error)
 }
 
 // MARK: - ViewModel
@@ -23,6 +24,7 @@ final class SenderForgotPasswordViewModel {
 
     // MARK: - Dependencies
     private let useCase: ForgotPasswordUseCaseProtocol
+    private let validationUseCase: ForgotPasswordValidationUseCaseProtocol
 
     // MARK: - Delegates
     weak var delegate: SenderForgotPasswordViewModelDelegate?
@@ -32,29 +34,28 @@ final class SenderForgotPasswordViewModel {
     private(set) var isLoading: Bool = false
 
     // MARK: - Init
-    init(useCase: ForgotPasswordUseCaseProtocol) {
+    init(useCase: ForgotPasswordUseCaseProtocol, validationUseCase: ForgotPasswordValidationUseCaseProtocol) {
         self.useCase = useCase
+        self.validationUseCase = validationUseCase
     }
 
     // MARK: - Public Actions
     func sendCode(phoneNumber: String) {
-        if let validationError = validatePhoneNumber(phoneNumber) {
-            notifyError(validationError)
+        let cleanNumber = PhoneNumberFormatter.clean(phoneNumber)
+        if let validationError = validatePhoneNumber(cleanNumber) {
+            notifyValidationError(validationError)
             return
         }
 
         setLoading(true)
-
-        let cleanNumber = PhoneNumberFormatter.clean(phoneNumber)
         let phoneWithCountryCode = "+90\(cleanNumber)"
-
+        
         useCase.checkPhoneExists(phoneNumber: phoneWithCountryCode) { [weak self] result in
             guard let self = self else { return }
-            
             switch result {
             case .success(let exists):
                 if !exists {
-                    self.notifyError(AuthError.userNotFound)
+                    self.notifyValidationError(AuthError.userNotFound)
                 } else {
                     self.requestSmsCode(for: phoneWithCountryCode)
                 }
@@ -75,7 +76,6 @@ final class SenderForgotPasswordViewModel {
 
 // MARK: - Private Helpers
 private extension SenderForgotPasswordViewModel {
-
     func validatePhoneNumber(_ phone: String) -> AuthError? {
         if phone.isEmpty {
             return .emptyPhoneNumber
@@ -96,7 +96,11 @@ private extension SenderForgotPasswordViewModel {
             case .success:
                 self.delegate?.forgotPasswordViewModelDidSendCode(self, phoneNumber: request)
             case .failure(let error):
-                self.notifyError(error)
+                if let authError = error as? AuthError ,authError == .invalidPhoneNumber {
+                    self.notifyValidationError(authError)
+                } else {
+                    self.notifyError(error)
+                }
             }
         }
     }
@@ -107,7 +111,12 @@ private extension SenderForgotPasswordViewModel {
     }
 
     func notifyError(_ error: Error) {
-        isLoading = false
+        setLoading(false)
         viewDelegate?.forgotPasswordViewModelDidReceiveError(self, error: error)
+    }
+    
+    func notifyValidationError(_ error: Error) {
+        setLoading(false)
+        viewDelegate?.forgotPasswordViewModelDidValidationError(self, error: error)
     }
 }
