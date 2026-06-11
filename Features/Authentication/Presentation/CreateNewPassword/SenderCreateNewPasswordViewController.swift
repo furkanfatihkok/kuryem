@@ -179,20 +179,21 @@ extension SenderCreateNewPasswordViewController: SenderCreateNewPasswordViewMode
     
     func createNewPasswordViewModelDidReceiveError(_ viewModel: SenderCreateNewPasswordViewModel, error: Error) {
         DispatchQueue.main.async {
-            if let authError = error as? AuthError {
-                switch authError {
-                case .emptyPassword, .weakPassword:
-                    self.newPasswordTextField.setError(authError.localizedDescription)
-                    self.newPasswordTextField.becomeFirstResponder()
-                case .passwordsDoNotMatch:
-                    self.confirmPasswordTextField.setError(authError.localizedDescription)
-                    self.confirmPasswordTextField.becomeFirstResponder()
-                default:
-                    ErrorBannerManager.shared.report(error)
-                }
-                return
-            }
             ErrorBannerManager.shared.report(error)
+        }
+    }
+    
+    func createNewPasswordViewModelDidValidationError(_ viewModel: SenderCreateNewPasswordViewModel, error: any Error, field: CreateNewPasswordField) {
+        DispatchQueue.main.async {
+            guard let authError = error as? AuthError else { return }
+            switch field {
+            case .newPassword:
+                self.newPasswordTextField.setError(authError.localizedDescription)
+                self.newPasswordTextField.becomeFirstResponder()
+            case .confirmPassword:
+                self.confirmPasswordTextField.setError(authError.localizedDescription)
+                self.confirmPasswordTextField.becomeFirstResponder()
+            }
         }
     }
     

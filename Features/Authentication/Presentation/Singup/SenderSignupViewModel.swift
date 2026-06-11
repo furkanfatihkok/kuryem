@@ -17,12 +17,14 @@ protocol SenderSignupViewModelDelegate: AnyObject {
 protocol SenderSignupViewModelViewDelegate: AnyObject {
     func senderSignupViewModelDidUpdateLoading(_ viewModel: SenderSignupViewModel)
     func senderSignupViewModelDidReceiveError(_ viewModel: SenderSignupViewModel, error: Error)
+    func senderSignupViewModelDidValidationError(_ viewModel: SenderSignupViewModel, error: Error, field: SignupField)
 }
 
 // MARK: - ViewModel
 final class SenderSignupViewModel {
     // MARK: - Dependencies
     private let useCase: SignupUseCaseProtocol
+    private let validationUseCase: SignupValidationUseCaseProtocol
 
     // MARK: - Delegates
     weak var delegate: SenderSignupViewModelDelegate?
@@ -33,19 +35,28 @@ final class SenderSignupViewModel {
     private(set) var isLoading: Bool = false
 
     // MARK: - Init
-    init(useCase: SignupUseCaseProtocol) {
+    init(useCase: SignupUseCaseProtocol, validationUseCase: SignupValidationUseCaseProtocol) {
         self.useCase = useCase
+        self.validationUseCase = validationUseCase
     }
 
     // MARK: - Public Actions
     func signup(fullName: String, email: String, phoneNumber: String, password: String, confirmPassword: String) {
-        if let validationError = validateFields(fullName: fullName, email: email, phone: phoneNumber, password: password, confirm: confirmPassword) {
-            notifyError(validationError)
+        if let result = validationUseCase.validate(
+            fullName: fullName,
+            email: email,
+            phone: phoneNumber,
+            password: password,
+            confirmPassword: confirmPassword
+        ){
+            viewDelegate?.senderSignupViewModelDidValidationError(self, error: result.error, field: result.field)
             return
         }
         
         setLoading(true)
-        let phoneWithCountryCode = "+90\(phoneNumber)"
+        let cleanNumber = PhoneNumberFormatter.clean(phoneNumber)
+        let phoneWithCountryCode = "+90\(cleanNumber)"
+        
         let request = SignupRequest(fullName: fullName, email: email, phoneNumber: phoneWithCountryCode, password: password, role: selectedRole)
         checkEmailAvailability(for: request)
     }
@@ -54,7 +65,6 @@ final class SenderSignupViewModel {
         setLoading(true)
         useCase.signInWithGoogle { [weak self] result in
             guard let self = self else { return }
-            
             self.handleSocialResult(result)
         }
     }
@@ -81,11 +91,10 @@ private extension SenderSignupViewModel {
     func checkEmailAvailability(for request: SignupRequest) {
         useCase.checkEmailAvailability(email: request.email) { [weak self] result in
             guard let self = self else { return }
-            
             switch result {
             case .success(let exists):
                 if exists {
-                    self.notifyError(AuthError.emailAlreadyInUse)
+                    self.notifyValidationError(AuthError.emailAlreadyInUse, field: .email)
                 } else {
                     self.checkPhoneAvailability(for: request)
                 }
@@ -98,11 +107,10 @@ private extension SenderSignupViewModel {
     func checkPhoneAvailability(for request: SignupRequest) {
         useCase.checkPhoneAvailability(phoneNumber: request.phoneNumber) { [weak self] result in
             guard let self = self else { return }
-            
             switch result {
             case .success(let exists):
                 if exists {
-                    self.notifyError(AuthError.phoneNumberAlreadyInUse)
+                    self.notifyValidationError(AuthError.phoneNumberAlreadyInUse, field: .phone)
                 } else {
                     self.sendVerificationCode(for: request)
                 }
@@ -116,7 +124,6 @@ private extension SenderSignupViewModel {
         let phoneReq = PhoneVerificationRequest(phoneNumber: request.phoneNumber)
         useCase.sendVerificationCode(request: phoneReq) { [weak self] result in
             guard let self = self else { return }
-            
             self.setLoading(false)
             switch result {
             case .success:
@@ -130,34 +137,6 @@ private extension SenderSignupViewModel {
 
 // MARK: - Private Helpers
 private extension SenderSignupViewModel {
-    func validateFields(fullName: String, email: String, phone: String, password: String, confirm: String) -> AuthError? {
-        if fullName.trimmingCharacters(in: .whitespaces).isEmpty {
-            return .emptyFullName
-        }
-        if email.isEmpty {
-            return .emptyEmail
-        }
-        if !AuthValidator.isValidEmail(email) {
-            return .invalidEmail
-        }
-        if phone.isEmpty {
-            return .emptyPhoneNumber
-        }
-        if PhoneNumberFormatter.clean(phone).count < 10 {
-            return .invalidPhoneNumber
-        }
-        if password.isEmpty {
-            return .emptyPassword
-        }
-        if password.count < 8 {
-            return .weakPassword
-        }
-        if password != confirm {
-            return .passwordsDoNotMatch
-        }
-        return nil
-    }
-
     func handleSocialResult(_ result: Result<User, Error>) {
         setLoading(false)
         switch result {
@@ -176,5 +155,10 @@ private extension SenderSignupViewModel {
     func notifyError(_ error: Error) {
         setLoading(false)
         viewDelegate?.senderSignupViewModelDidReceiveError(self, error: error)
+    }
+    
+    func notifyValidationError(_ error: Error, field: SignupField) {
+        setLoading(false)
+        viewDelegate?.senderSignupViewModelDidValidationError(self, error: error, field: field)
     }
 }

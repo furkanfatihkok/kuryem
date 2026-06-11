@@ -270,22 +270,20 @@ extension SenderLoginViewController: SenderLoginViewModelViewDelegate {
 
     func senderLoginViewModelDidReceiveError(_ viewModel: SenderLoginViewModel, error: Error) {
         DispatchQueue.main.async {
-            guard let authError = error as? AuthError else {
-                ErrorBannerManager.shared.report(error)
-                return
-            }
-
-            switch authError {
-            case .emptyEmail, .invalidEmail, .userNotFound:
+            ErrorBannerManager.shared.report(error)
+        }
+    }
+    
+    func senderLoginViewModelDidValidationError(_ viewModel: SenderLoginViewModel, error: Error, field: LoginField) {
+        DispatchQueue.main.async {
+            guard let authError = error as? AuthError else { return }
+            switch field {
+            case .email:
                 self.emailTextField.setError(authError.localizedDescription)
                 self.emailTextField.becomeFirstResponder()
-
-            case .emptyPassword, .wrongPassword, .weakPassword:
+            case .password:
                 self.passwordTextField.setError(authError.localizedDescription)
                 self.passwordTextField.becomeFirstResponder()
-
-            default:
-                ErrorBannerManager.shared.report(authError)
             }
         }
     }

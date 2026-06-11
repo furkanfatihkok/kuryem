@@ -11,7 +11,8 @@ enum AuthBuilder {
     // MARK: - Signup
     static func makeSignup(role: UserRole, authRepository: AuthRepository, delegate: SenderSignupViewModelDelegate) -> UIViewController {
         let useCase = buildSignupUseCase(authRepository: authRepository)
-        let viewModel = SenderSignupViewModel(useCase: useCase)
+        let validationUseCase = SignupValidationUseCase()
+        let viewModel = SenderSignupViewModel(useCase: useCase, validationUseCase: validationUseCase)
         viewModel.selectedRole = role
         viewModel.delegate = delegate
         return SenderSignupViewController(viewModel: viewModel)
@@ -20,7 +21,8 @@ enum AuthBuilder {
     // MARK: - Login
     static func makeLogin(authRepository: AuthRepository, delegate: SenderLoginViewModelDelegate) -> UIViewController {
         let useCase = buildLoginUseCase(authRepository: authRepository)
-        let viewModel = SenderLoginViewModel(useCase: useCase)
+        let validationUseCase = LoginValidationUseCase()
+        let viewModel = SenderLoginViewModel(useCase: useCase, validationUseCase: validationUseCase)
         viewModel.delegate = delegate
         return SenderLoginViewController(viewModel: viewModel)
     }
@@ -36,7 +38,8 @@ enum AuthBuilder {
     // MARK: - Forgot Password
     static func makeForgotPassword(authRepository: AuthRepository, delegate: SenderForgotPasswordViewModelDelegate) -> UIViewController {
         let useCase = buildForgotPasswordUseCase(authRepository: authRepository)
-        let viewModel = SenderForgotPasswordViewModel(useCase: useCase)
+        let validationUseCase = ForgotPasswordValidationUseCase()
+        let viewModel = SenderForgotPasswordViewModel(useCase: useCase, validationUseCase: validationUseCase)
         viewModel.delegate = delegate
         return SenderForgotPasswordViewController(viewModel: viewModel)
     }
@@ -44,7 +47,8 @@ enum AuthBuilder {
     // MARK: - Create New Password
     static func makeCreateNewPassword(authRepository: AuthRepository, delegate: SenderCreateNewPasswordViewModelDelegate) -> UIViewController {
         let useCase = buildCreateNewPasswordUseCase(authRepository: authRepository)
-        let viewModel = SenderCreateNewPasswordViewModel(useCase: useCase)
+        let validationUseCase = CreateNewPasswordValidationUseCase()
+        let viewModel = SenderCreateNewPasswordViewModel(useCase: useCase, validationUseCase: validationUseCase)
         viewModel.delegate = delegate
         return SenderCreateNewPasswordViewController(viewModel: viewModel)
     }

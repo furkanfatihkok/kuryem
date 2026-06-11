@@ -15,6 +15,7 @@ protocol SenderVerificationViewModelDelegate: AnyObject {
 protocol SenderVerificationViewModelViewDelegate: AnyObject {
     func verificationViewModelDidUpdateLoading(_ viewModel: SenderVerificationViewModel)
     func verificationViewModelDidReceiveError(_ viewModel: SenderVerificationViewModel, error: Error)
+    func verificationViewModelDidReceiveCodeError(_ viewModel: SenderVerificationViewModel, error: Error)
     func verificationViewModelDidUpdateTimer(_ viewModel: SenderVerificationViewModel, seconds: Int)
 }
 
@@ -67,12 +68,10 @@ final class SenderVerificationViewModel {
         }
         
         setLoading(true)
-        
         switch verificationType {
         case .signupVerification(let request):
             useCase.verifyAndSignUp(request: request, code: code) { [weak self] result in
                 guard let self = self else { return }
-                
                 self.handleResult(result)
             }
 
@@ -80,7 +79,6 @@ final class SenderVerificationViewModel {
             let request = CodeVerificationRequest(phoneNumber: phoneNumber, code: code)
             useCase.verifyPhoneCode(request: request) { [weak self] result in
                 guard let self = self else { return }
-                
                 self.handleResult(result)
             }
         }
@@ -90,7 +88,6 @@ final class SenderVerificationViewModel {
         let request = PhoneVerificationRequest(phoneNumber: phoneNumber)
         useCase.sendPhoneVerificationCode(request: request) { [weak self] result in
             guard let self = self else { return }
-            
             switch result {
             case .success:
                 self.resetTimer()
@@ -147,6 +144,11 @@ private extension SenderVerificationViewModel {
 
     func notifyError(_ error: Error) {
         setLoading(false)
-        viewDelegate?.verificationViewModelDidReceiveError(self, error: error)
+        
+        if let authError = error as? AuthError, authError == .invalidVerificationCode {
+            viewDelegate?.verificationViewModelDidReceiveCodeError(self, error: authError)
+        } else {
+            viewDelegate?.verificationViewModelDidReceiveError(self, error: error)
+        }
     }
 }

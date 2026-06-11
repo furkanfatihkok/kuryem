@@ -197,17 +197,15 @@ extension SenderForgotPasswordViewController: SenderForgotPasswordViewModelViewD
     
     func forgotPasswordViewModelDidReceiveError(_ viewModel: SenderForgotPasswordViewModel, error: Error) {
         DispatchQueue.main.async {
-            if let authError = error as? AuthError {
-                switch authError {
-                case .emptyPhoneNumber, .invalidPhoneNumber, .userNotFound:
-                    self.phoneTextField.setError(authError.localizedDescription)
-                    self.phoneTextField.becomeFirstResponder()
-                default:
-                    ErrorBannerManager.shared.report(error)
-                }
-                return
-            }
             ErrorBannerManager.shared.report(error)
+        }
+    }
+    
+    func forgotPasswordViewModelDidValidationError(_ viewModel: SenderForgotPasswordViewModel, error: any Error) {
+        DispatchQueue.main.async {
+            guard let authError = error as? AuthError else { return }
+            self.phoneTextField.setError(authError.localizedDescription)
+            self.phoneTextField.becomeFirstResponder()
         }
     }
 }
