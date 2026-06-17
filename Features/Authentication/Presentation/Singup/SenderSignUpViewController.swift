@@ -70,10 +70,8 @@ final class SenderSignupViewController: UIViewController {
     }()
     
     private lazy var phoneTextField: CustomTextField = {
-        let tf = CustomTextField(
-            placeholder: "5XX XXX XXX",
-            keyboardType: .phonePad
-        )
+        let tf = CustomTextField(placeholder: "5XX XXX XXX", keyboardType: .phonePad)
+        tf.isPhoneNumberField = true
         tf.translatesAutoresizingMaskIntoConstraints = false
         return tf
     }()

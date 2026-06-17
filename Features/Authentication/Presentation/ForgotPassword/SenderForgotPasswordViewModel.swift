@@ -42,7 +42,7 @@ final class SenderForgotPasswordViewModel {
     // MARK: - Public Actions
     func sendCode(phoneNumber: String) {
         let cleanNumber = PhoneNumberFormatter.clean(phoneNumber)
-        if let validationError = validatePhoneNumber(cleanNumber) {
+        if let validationError = validationUseCase.validate(phone:cleanNumber) {
             notifyValidationError(validationError)
             return
         }
@@ -76,16 +76,6 @@ final class SenderForgotPasswordViewModel {
 
 // MARK: - Private Helpers
 private extension SenderForgotPasswordViewModel {
-    func validatePhoneNumber(_ phone: String) -> AuthError? {
-        if phone.isEmpty {
-            return .emptyPhoneNumber
-        }
-        if phone.count < 10 {
-            return .invalidPhoneNumber
-        }
-        return nil
-    }
-
     func requestSmsCode(for phoneNumber: String) {
         let request = PhoneVerificationRequest(phoneNumber: phoneNumber)
         useCase.sendVerificationCode(request: request) { [weak self] result in

@@ -80,6 +80,8 @@ final class CustomTextField: UIView {
         }
     }
     
+    var isPhoneNumberField: Bool = false
+    
     // MARK: - Initialization
     init(placeholder: String? = nil, keyboardType: UIKeyboardType = .default, isSecure: Bool = false) {
         super.init(frame: .zero)
@@ -185,5 +187,30 @@ extension CustomTextField: UITextFieldDelegate {
         if errorLabel.isHidden {
             containerView.layer.borderColor = AppColor.textfieldBorder.cgColor
         }
+    }
+    
+    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+        guard isPhoneNumberField else { return true }
+        
+        guard let currentText = textField.text,
+              let textRange = Range(range, in: currentText) else { return true }
+        
+        let isDeleting = string.isEmpty
+        let deletedText = String(currentText[textRange])
+        
+        var textToFormat = currentText.replacingCharacters(in: textRange, with: string)
+        
+        if isDeleting && deletedText.rangeOfCharacter(from: .decimalDigits) == nil {
+            var cleanText = PhoneNumberFormatter.clean(currentText)
+            if !cleanText.isEmpty {
+                cleanText.removeLast()
+                textToFormat = cleanText
+            }
+        }
+        
+        textField.text = PhoneNumberFormatter.format(text: textToFormat)
+        textField.sendActions(for: .editingChanged)
+        
+        return false
     }
 }
