@@ -13,7 +13,12 @@ final class PhoneValidationRule: ValidationStrategy {
             return .emptyPhoneNumber
         }
         
-        guard PhoneNumberFormatter.clean(value).count >= 10 else {
+        let cleanValue = PhoneNumberFormatter.clean(value)
+        
+        let phoneRegex = "5[0-9]{9}$"
+        let phonePredicate = NSPredicate(format: "SELF MATCHES %@", phoneRegex)
+        
+        guard phonePredicate.evaluate(with: cleanValue) else {
             return .invalidPhoneNumber
         }
         

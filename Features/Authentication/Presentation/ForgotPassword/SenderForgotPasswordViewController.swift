@@ -66,6 +66,7 @@ final class SenderForgotPasswordViewController: UIViewController {
     
     private lazy var phoneTextField: CustomTextField = {
         let tf = CustomTextField(placeholder: "(5XX) XXX XXX", keyboardType: .phonePad)
+        tf.isPhoneNumberField = true
         tf.addTarget(self, action: #selector(phoneTextChanged), for: .editingChanged)
         tf.translatesAutoresizingMaskIntoConstraints = false
         return tf
